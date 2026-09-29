@@ -147,14 +147,26 @@
         return lyrics.text ? Object.assign(credits, { synced: false, lines: plainLines(lyrics.text) }) : null;
     }
 
+    // LRCLIB asks clients to say who they are; a page cannot set User-Agent,
+    // hence its Lrclib-Client alternative. After a 429 it must be left alone
+    // for the Retry-After it gives.
+    const LRCLIB_CLIENT = 'Deezer Plasmoid 0.1.0 (https://github.com/rcspam)';
+    let lrclibPausedUntil = 0;
+
     async function lrclibLyrics(song) {
+        if (Date.now() < lrclibPausedUntil) {
+            return null;
+        }
         const params = new URLSearchParams({
             artist_name: song.ART_NAME || '',
             track_name: song.SNG_TITLE || '',
             album_name: song.ALB_TITLE || '',
             duration: String(song.DURATION || ''),
         });
-        const response = await fetch('https://lrclib.net/api/get?' + params);
+        const response = await fetch('https://lrclib.net/api/get?' + params, { headers: { 'Lrclib-Client': LRCLIB_CLIENT } });
+        if (response.status === 429) {
+            lrclibPausedUntil = Date.now() + (Number(response.headers.get('Retry-After')) || 60) * 1000;
+        }
         if (!response.ok) {
             return null;
         }
