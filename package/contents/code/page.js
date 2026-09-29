@@ -73,6 +73,23 @@
     }
     checkSession();
 
+    // On load Deezer first queues a placeholder (the account's welcome playlist,
+    // context player_default_playlist), then swaps in the listener's last queue
+    // a couple of seconds later. The placeholder is only shown if nothing better
+    // comes (an account without history) or if the user plays it.
+    const RESTORE_TIMEOUT = 10000;
+    let playerSince = 0;
+    let restored = false;
+    function queueRestored(p, song) {
+        if (!restored) {
+            playerSince = playerSince || Date.now();
+            const context = p.getContext() || {};
+            const placeholder = !song.SNG_ID || context.TYPE === 'player_default_playlist';
+            restored = !placeholder || p.isPlaying() || Date.now() - playerSince > RESTORE_TIMEOUT;
+        }
+        return restored;
+    }
+
     h.snapshot = () => {
         const p = player();
         if (document.querySelector('[data-testid="topbar-profile"]')) {
@@ -85,6 +102,9 @@
             return JSON.stringify({ ready: false, session });
         }
         const song = p.getCurrentSong() || {};
+        if (session === 'in' && !queueRestored(p, song)) {
+            return JSON.stringify({ ready: false, pending: true, session });
+        }
         const meta = navigator.mediaSession && navigator.mediaSession.metadata;
         let cover = coverUrl(song.ALB_PICTURE, 1000);
         if (!cover && meta && meta.artwork && meta.artwork.length) {

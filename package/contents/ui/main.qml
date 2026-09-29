@@ -32,6 +32,8 @@ PlasmoidItem {
     // Gives the page a moment to restore the last track after sign-in,
     // so "Nothing playing" does not flash before the player shows up.
     property bool settled: false
+    // The page still waits for Deezer to restore the listener's last queue.
+    property bool pending: false
     property bool playing: false
     property string songId: ""
     property string title: ""
@@ -98,6 +100,7 @@ PlasmoidItem {
                 return;
             }
             root.session = state.session;
+            root.pending = state.pending === true;
             if (!state.ready) {
                 return;
             }
@@ -267,7 +270,7 @@ PlasmoidItem {
                 // Only states we are sure about get a message; anything
                 // still loading or being checked gets the spinner.
                 readonly property bool signedOut: root.pageLoaded && root.session === "out"
-                readonly property bool idle: root.pageLoaded && root.loggedIn && root.settled
+                readonly property bool idle: root.pageLoaded && root.loggedIn && root.settled && !root.pending
 
                 PlasmaComponents.BusyIndicator {
                     anchors.centerIn: parent
