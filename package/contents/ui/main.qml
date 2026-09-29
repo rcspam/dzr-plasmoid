@@ -22,6 +22,8 @@ PlasmoidItem {
     readonly property int pagePlayer: 0
     readonly property int pageQueue: 1
     readonly property int pageWeb: 2
+    // Windows the Deezer page opens (Google or Apple sign-in, outside links).
+    readonly property int pagePopup: 3
     property int page: pagePlayer
 
     // Player state mirrored from the page.
@@ -213,8 +215,10 @@ PlasmoidItem {
     }
 
     fullRepresentation: ColumnLayout {
-        Layout.preferredWidth: Kirigami.Units.gridUnit * (root.page === root.pageWeb ? 56 : 22)
-        Layout.preferredHeight: Kirigami.Units.gridUnit * (root.page === root.pageWeb ? 40 : 38)
+        readonly property bool webPage: root.page === root.pageWeb || root.page === root.pagePopup
+
+        Layout.preferredWidth: Kirigami.Units.gridUnit * (webPage ? 56 : 22)
+        Layout.preferredHeight: Kirigami.Units.gridUnit * (webPage ? 40 : 38)
         Layout.minimumWidth: Kirigami.Units.gridUnit * 18
         Layout.minimumHeight: Kirigami.Units.gridUnit * 28
         spacing: Kirigami.Units.smallSpacing
@@ -225,14 +229,17 @@ PlasmoidItem {
             PlasmaComponents.ToolButton {
                 visible: root.page !== root.pagePlayer
                 icon.name: "go-previous"
-                text: i18n("Player")
-                onClicked: root.page = root.pagePlayer
+                text: root.page === root.pagePopup ? i18n("Deezer") : i18n("Player")
+                onClicked: root.page = root.page === root.pagePopup ? root.pageWeb : root.pagePlayer
             }
 
             Kirigami.Heading {
                 Layout.fillWidth: true
                 level: 4
-                text: root.page === root.pageQueue ? i18n("Queue") : "Deezer"
+                elide: Text.ElideRight
+                text: root.page === root.pageQueue ? i18n("Queue")
+                    : root.page === root.pagePopup ? popupView.title
+                    : "Deezer"
             }
 
             PlasmaComponents.ToolButton {
@@ -674,6 +681,12 @@ PlasmoidItem {
                         refreshSoon.restart();
                     }
                 }
+                // Sign-in with Google or Apple opens a window that reports back
+                // to this page, so it has to be a real view sharing the profile.
+                onNewWindowRequested: request => {
+                    request.openIn(popupView);
+                    root.page = root.pagePopup;
+                }
                 onRenderProcessTerminated: (status, code) => {
                     console.warn("[deezer] render process terminated", status, code, "- reloading");
                     root.pageLoaded = false;
@@ -685,6 +698,17 @@ PlasmoidItem {
                     if (root.webView === web) {
                         root.webView = null;
                     }
+                }
+            }
+
+            // pagePopup
+            WebEngineView {
+                id: popupView
+                profile: web.profile
+
+                onWindowCloseRequested: {
+                    root.page = root.pageWeb;
+                    url = "about:blank";
                 }
             }
         }

@@ -19,7 +19,8 @@ targets = json.load(urllib.request.urlopen(f"http://127.0.0.1:{port}/json/list")
 page = next(t for t in targets if t["type"] == "page" and "deezer.com" in t["url"])
 ws = websocket.create_connection(page["webSocketDebuggerUrl"], timeout=30, suppress_origin=True)
 ws.send(json.dumps({"id": 1, "method": "Runtime.evaluate",
-                    "params": {"expression": sys.stdin.read(), "awaitPromise": True, "returnByValue": True}}))
+                    "params": {"expression": sys.stdin.read(), "awaitPromise": True, "returnByValue": True,
+                               "userGesture": True}}))
 while True:
     msg = json.loads(ws.recv())
     if msg.get("id") == 1:
