@@ -807,7 +807,8 @@ PlasmoidItem {
 
                         width: ListView.view.width
                         highlighted: current
-                        onClicked: root.act("playQueueIndex", [index])
+                        // Double click, as in most players: a single click is easy to make by accident.
+                        onDoubleClicked: root.act("playQueueIndex", [index])
 
                         contentItem: RowLayout {
                             spacing: Kirigami.Units.smallSpacing
