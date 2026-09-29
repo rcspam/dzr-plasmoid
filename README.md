@@ -119,3 +119,13 @@ translation engine (Google, a LibreTranslate or an Ollama server, or none),
 whether Deezer's own lyrics may be sent to it, the lyrics look, and the
 translation cache. Storage: the web engine's HTTP cache, its limit and a
 button to empty it.
+
+## License
+
+Copyright 2026 rcspam. This program is free software, under the GNU General
+Public License, version 3 or (at your option) any later version; see
+[LICENSE](LICENSE).
+
+Not covered by it: the panel icon, which is deezer.com's favicon and belongs
+to Deezer SA, and the karaoke microphone icons, which come from SVG Repo
+under CC0.

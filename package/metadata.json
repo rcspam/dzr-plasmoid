@@ -1,5 +1,10 @@
 {
     "KPlugin": {
+        "Authors": [
+            {
+                "Name": "rcspam"
+            }
+        ],
         "Category": "Multimedia",
         "Description": "Deezer player for the Plasma panel",
         "Description[fr]": "Lecteur Deezer pour le tableau de bord Plasma",
@@ -8,7 +13,11 @@
         "Name": "Deezer",
         "Name[fr]": "Deezer",
         "Version": "0.1.0",
-        "EnabledByDefault": true
+        "EnabledByDefault": true,
+        "Copyright": "2026 rcspam",
+        "License": "GPL-3.0-or-later",
+        "Website": "https://github.com/rcspam/dzr-plasmoid",
+        "BugReportUrl": "https://github.com/rcspam/dzr-plasmoid/issues"
     },
     "X-Plasma-API-Minimum-Version": "6.0",
     "KPackageStructure": "Plasma/Applet"
