@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.rcspam.deezerplasmoid\n"
 "Report-Msgid-Bugs-To: https://github.com/rcspam\n"
-"POT-Creation-Date: 2026-09-29 18:50+0200\n"
+"POT-Creation-Date: 2026-09-29 19:27+0200\n"
 "PO-Revision-Date: 2026-09-29 16:01+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -70,15 +70,19 @@ msgstr "Impossible de traduire les paroles."
 msgid "Lyrics by LRCLIB"
 msgstr "Paroles par LRCLIB"
 
-#: package/contents/ui/LyricsView.qml:209
+#: package/contents/ui/LyricsView.qml:210
+msgid "Lyrics not synced"
+msgstr "Paroles non synchronisées"
+
+#: package/contents/ui/LyricsView.qml:213
 msgid "Translated by %1"
 msgstr "Traduit par %1"
 
-#: package/contents/ui/LyricsView.qml:228
+#: package/contents/ui/LyricsView.qml:232
 msgid "Translate"
 msgstr "Traduire"
 
-#: package/contents/ui/LyricsView.qml:251
+#: package/contents/ui/LyricsView.qml:255
 msgid "No lyrics for this track"
 msgstr "Pas de paroles pour ce titre"
 
@@ -100,12 +104,12 @@ msgid "Player"
 msgstr "Lecteur"
 
 #: package/contents/ui/main.qml:546
-msgid "Queue"
-msgstr "File d'attente"
-
-#: package/contents/ui/main.qml:555
 msgid "Show the Deezer page"
 msgstr "Afficher la page Deezer"
+
+#: package/contents/ui/main.qml:558
+msgid "Queue"
+msgstr "File d'attente"
 
 #: package/contents/ui/main.qml:568
 msgid "Keep Open"
@@ -355,7 +359,10 @@ msgid ""
 "The Deezer page caches what it loads, like any browser: mostly tracks "
 "(encrypted) and covers. Above the limit, the oldest files go. Emptying it "
 "does not sign you out."
-msgstr "La page Deezer garde en cache ce qu'elle charge, comme tout navigateur : surtout des morceaux (chiffrés) et des pochettes. Au-delà de la limite, les fichiers les plus anciens partent. Le vider ne vous déconnecte pas."
+msgstr ""
+"La page Deezer garde en cache ce qu'elle charge, comme tout navigateur : "
+"surtout des morceaux (chiffrés) et des pochettes. Au-delà de la limite, les "
+"fichiers les plus anciens partent. Le vider ne vous déconnecte pas."
 
 #: package/contents/config/config.qml:6
 msgid "General"
@@ -368,6 +375,3 @@ msgstr "Paroles"
 #: package/contents/config/config.qml:16
 msgid "Storage"
 msgstr "Stockage"
-
-
-

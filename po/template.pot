@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.rcspam.deezerplasmoid\n"
 "Report-Msgid-Bugs-To: https://github.com/rcspam\n"
-"POT-Creation-Date: 2026-09-29 18:50+0200\n"
+"POT-Creation-Date: 2026-09-29 19:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -70,15 +70,19 @@ msgstr ""
 msgid "Lyrics by LRCLIB"
 msgstr ""
 
-#: package/contents/ui/LyricsView.qml:209
+#: package/contents/ui/LyricsView.qml:210
+msgid "Lyrics not synced"
+msgstr ""
+
+#: package/contents/ui/LyricsView.qml:213
 msgid "Translated by %1"
 msgstr ""
 
-#: package/contents/ui/LyricsView.qml:228
+#: package/contents/ui/LyricsView.qml:232
 msgid "Translate"
 msgstr ""
 
-#: package/contents/ui/LyricsView.qml:251
+#: package/contents/ui/LyricsView.qml:255
 msgid "No lyrics for this track"
 msgstr ""
 
@@ -100,11 +104,11 @@ msgid "Player"
 msgstr ""
 
 #: package/contents/ui/main.qml:546
-msgid "Queue"
+msgid "Show the Deezer page"
 msgstr ""
 
-#: package/contents/ui/main.qml:555
-msgid "Show the Deezer page"
+#: package/contents/ui/main.qml:558
+msgid "Queue"
 msgstr ""
 
 #: package/contents/ui/main.qml:568

@@ -205,6 +205,10 @@ Item {
                 if (view.lyrics && view.lyrics.source === "lrclib") {
                     sources.push(i18n("Lyrics by LRCLIB"));
                 }
+                // Plain text: no timing, so no following, seeking or fade.
+                if (view.lyrics && !view.synced) {
+                    sources.push(i18n("Lyrics not synced"));
+                }
                 if (view.showTranslation && !view.hasTranslation && view.machineState === "done") {
                     sources.push(i18n("Translated by %1", view.machineEngine));
                 }
