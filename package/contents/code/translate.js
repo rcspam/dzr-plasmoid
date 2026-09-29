@@ -147,6 +147,13 @@ var ENGINES = {
 // lines}: lines has one translation per input line ("" for empty ones),
 // sameLanguage is true when the engine found the lyrics mostly in the target
 // language already.
+// Lower case, without accents, spaces or punctuation: tells a line the
+// engine gave back as it was, give or take a comma.
+function bare(text) {
+    return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
+        .replace(/[\s.,;:!?'"\u2019\u00ab\u00bb()\[\]\-\u2013\u2014\u2026]+/g, "");
+}
+
 function translateLines(lines, target, options, callback) {
     var engine = ENGINES[options.engine];
     var indexes = [];
@@ -167,10 +174,19 @@ function translateLines(lines, target, options, callback) {
             return;
         }
         var translated = lines.map(function () { return ""; });
+        // A line given back as it was is already in the target language: no
+        // copy of it under itself. Ollama does not say which language it read,
+        // so these lines also tell when the lyrics are mostly in it already.
+        var unchanged = 0;
         indexes.forEach(function (lineIndex, n) {
-            translated[lineIndex] = result.texts[n] || "";
+            var text = result.texts[n] || "";
+            if (text !== "" && bare(text) === bare(texts[n])) {
+                unchanged++;
+                text = "";
+            }
+            translated[lineIndex] = text;
         });
         var same = result.languages.filter(function (lang) { return lang === target; }).length;
-        callback({ engine: engine.name, sameLanguage: same > texts.length / 2, lines: translated });
+        callback({ engine: engine.name, sameLanguage: Math.max(same, unchanged) > texts.length / 2, lines: translated });
     });
 }

@@ -292,7 +292,9 @@ PlasmoidItem {
         const target = Qt.locale().name.split("_")[0];
         // Song, lyrics source, language and engine: each gives other lines.
         const setup = translationSetup;
-        const cacheKey = [key.split(":")[0], lyrics.source, target, setup].join(":");
+        // Last, the version of what is stored: 2 since lines given back as
+        // they were are dropped (French no longer "translated" into French).
+        const cacheKey = [key.split(":")[0], lyrics.source, target, setup, "2"].join(":");
         const cached = translationCache.get(cacheKey);
         if (cached && (cached.sameLanguage || cached.lines.length === lyrics.lines.length)) {
             applyTranslation(cached);
