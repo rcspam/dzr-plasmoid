@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Effects
+import QtQuick.Layouts
 import org.kde.plasma.components as PlasmaComponents
 import org.kde.kirigami as Kirigami
 
@@ -80,9 +81,9 @@ Item {
         id: list
         anchors.fill: parent
         anchors.margins: Kirigami.Units.largeSpacing
-        // Below the translate button rather than under it.
-        anchors.topMargin: translateButton.visible ? translateButton.height + Kirigami.Units.smallSpacing * 2
-                                                   : Kirigami.Units.largeSpacing
+        // Below the top bar rather than under it.
+        anchors.topMargin: topBar.visible ? topBar.height + Kirigami.Units.smallSpacing * 2
+                                          : Kirigami.Units.largeSpacing
         clip: true
         model: view.lines
         spacing: Kirigami.Units.largeSpacing
@@ -144,9 +145,6 @@ Item {
                 if (!view.lyrics) {
                     return "";
                 }
-                if (view.lyrics.source === "lrclib") {
-                    return i18n("Lyrics from LRCLIB");
-                }
                 const credits = [];
                 if (view.lyrics.writers) {
                     credits.push(i18n("Writers: %1", view.lyrics.writers));
@@ -154,44 +152,66 @@ Item {
                 if (view.lyrics.licence) {
                     credits.push(view.lyrics.licence);
                 }
-                if (view.showTranslation && !view.hasTranslation) {
-                    if (view.machineState === "done") {
-                        credits.push(i18n("Translation: %1", view.machineEngine));
-                    } else if (view.machineState === "failed") {
-                        credits.push(i18n("The lyrics could not be translated."));
-                    }
+                if (view.showTranslation && !view.hasTranslation && view.machineState === "failed") {
+                    credits.push(i18n("The lyrics could not be translated."));
                 }
                 return credits.join("\n");
             }
         }
     }
 
-    PlasmaComponents.ToolButton {
-        id: translateButton
+    // Top bar: says where the lyrics and their translation come from when
+    // not from Deezer, so nobody takes them for Deezer's; then Translate.
+    RowLayout {
+        id: topBar
         anchors.top: parent.top
+        anchors.left: parent.left
         anchors.right: parent.right
         anchors.margins: Kirigami.Units.smallSpacing
-        // Hidden for lyrics already in the user's language.
-        visible: view.status === "ready" && view.lines.length > 0 && (view.hasTranslation || view.machineState !== "same")
-        checkable: true
-        checked: view.showTranslation
-        icon.name: "translate"
-        text: i18n("Translate")
-        onToggled: {
-            view.showTranslation = checked;
-            if (checked && !view.hasTranslation && view.machineState !== "done") {
-                view.translateRequested();
+        visible: view.status === "ready" && (sourceLabel.text !== "" || translateButton.visible)
+        spacing: Kirigami.Units.smallSpacing
+
+        PlasmaComponents.Label {
+            id: sourceLabel
+            Layout.fillWidth: true
+            horizontalAlignment: Text.AlignRight
+            elide: Text.ElideLeft
+            color: Qt.rgba(1, 1, 1, 0.75)
+            font: Kirigami.Theme.smallFont
+            text: {
+                const sources = [];
+                if (view.lyrics && view.lyrics.source === "lrclib") {
+                    sources.push(i18n("Lyrics by LRCLIB"));
+                }
+                if (view.showTranslation && !view.hasTranslation && view.machineState === "done") {
+                    sources.push(i18n("Translated by %1", view.machineEngine));
+                }
+                return sources.join(" · ");
             }
         }
-    }
 
-    PlasmaComponents.BusyIndicator {
-        anchors.verticalCenter: translateButton.verticalCenter
-        anchors.right: translateButton.left
-        width: translateButton.height
-        height: width
-        visible: view.showTranslation && view.machineState === "working"
-        running: visible
+        PlasmaComponents.BusyIndicator {
+            Layout.preferredWidth: translateButton.implicitHeight
+            Layout.preferredHeight: translateButton.implicitHeight
+            visible: view.showTranslation && view.machineState === "working"
+            running: visible
+        }
+
+        PlasmaComponents.ToolButton {
+            id: translateButton
+            // Hidden for lyrics already in the user's language.
+            visible: view.lines.length > 0 && (view.hasTranslation || view.machineState !== "same")
+            checkable: true
+            checked: view.showTranslation
+            icon.name: "translate"
+            text: i18n("Translate")
+            onToggled: {
+                view.showTranslation = checked;
+                if (checked && !view.hasTranslation && view.machineState !== "done") {
+                    view.translateRequested();
+                }
+            }
+        }
     }
 
     PlasmaComponents.BusyIndicator {

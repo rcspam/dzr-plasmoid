@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.rcspam.deezerplasmoid\n"
 "Report-Msgid-Bugs-To: https://github.com/rcspam\n"
-"POT-Creation-Date: 2026-09-29 17:07+0200\n"
+"POT-Creation-Date: 2026-09-29 17:11+0200\n"
 "PO-Revision-Date: 2026-09-29 16:01+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -42,27 +42,27 @@ msgstr "Normaliser le volume"
 msgid "Sync the queue"
 msgstr "Synchronisation de la file d'attente"
 
-#: package/contents/ui/LyricsView.qml:148
-msgid "Lyrics from LRCLIB"
-msgstr "Paroles issues de LRCLIB"
-
-#: package/contents/ui/LyricsView.qml:152
+#: package/contents/ui/LyricsView.qml:150
 msgid "Writers: %1"
 msgstr "Auteurs : %1"
 
-#: package/contents/ui/LyricsView.qml:159
-msgid "Translation: %1"
-msgstr "Traduction : %1"
-
-#: package/contents/ui/LyricsView.qml:161
+#: package/contents/ui/LyricsView.qml:156
 msgid "The lyrics could not be translated."
 msgstr "Impossible de traduire les paroles."
 
-#: package/contents/ui/LyricsView.qml:179
+#: package/contents/ui/LyricsView.qml:184
+msgid "Lyrics by LRCLIB"
+msgstr "Paroles par LRCLIB"
+
+#: package/contents/ui/LyricsView.qml:187
+msgid "Translated by %1"
+msgstr "Traduit par %1"
+
+#: package/contents/ui/LyricsView.qml:207
 msgid "Translate"
 msgstr "Traduire"
 
-#: package/contents/ui/LyricsView.qml:210
+#: package/contents/ui/LyricsView.qml:230
 msgid "No lyrics for this track"
 msgstr "Pas de paroles pour ce titre"
 
@@ -199,3 +199,5 @@ msgstr "Afficher la pochette"
 #: package/contents/ui/main.qml:854
 msgid "Show the lyrics"
 msgstr "Afficher les paroles"
+
+
