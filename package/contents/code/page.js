@@ -204,6 +204,74 @@
     }
     h.lyrics = () => JSON.stringify(h.lyricsState);
 
+    // Audio settings, read and changed through Deezer's own "Audio" panel: it
+    // saves the choices to the account and only offers what the plan allows.
+    // Null until read; queueSync is null when the account has no such option.
+    h.audio = null;
+    let audioReadAt = 0;
+    const AUDIO_QUALITIES = { standard: 'quality_standard', high: 'quality_hq', lossless: 'quality_loseless' };
+    const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+    function readAudioPanel(menu) {
+        const input = prefix => menu.querySelector(`[data-testid^="${prefix}"] input`);
+        const audio = { quality: '', qualities: {}, normalize: false, queueSync: null };
+        for (const [name, prefix] of Object.entries(AUDIO_QUALITIES)) {
+            const radio = input(prefix);
+            audio.qualities[name] = !!radio && !radio.disabled;
+            if (radio && radio.checked) {
+                audio.quality = name;
+            }
+        }
+        const normalize = input('normalize_button');
+        audio.normalize = !!normalize && normalize.checked;
+        const queueSync = input('synchronised_button');
+        audio.queueSync = queueSync ? queueSync.checked : null;
+        return audio;
+    }
+
+    // Opens the panel if needed, runs change(menu), reads it back, restores it.
+    async function withAudioPanel(change) {
+        const button = document.querySelector('[data-testid="audio_settings_button"]');
+        if (!button) {
+            return;
+        }
+        const openMenu = () => document.querySelector('[data-testid="audio_settings_menu"]');
+        const wasOpen = !!openMenu();
+        if (!wasOpen) {
+            button.click();
+        }
+        for (let i = 0; i < 20 && !openMenu(); i++) {
+            await sleep(50);
+        }
+        const menu = openMenu();
+        if (menu) {
+            if (change) {
+                change(menu);
+                await sleep(300);
+            }
+            h.audio = readAudioPanel(menu);
+        }
+        if (!wasOpen && openMenu()) {
+            button.click();
+        }
+    }
+
+    h.readAudio = () => withAudioPanel(null);
+    h.setQuality = quality => withAudioPanel(menu => {
+        const radio = menu.querySelector(`[data-testid^="${AUDIO_QUALITIES[quality]}"] input`);
+        if (radio && !radio.disabled && !radio.checked) {
+            radio.click();
+        }
+    });
+    const toggleAudioSwitch = prefix => withAudioPanel(menu => {
+        const checkbox = menu.querySelector(`[data-testid^="${prefix}"] input`);
+        if (checkbox) {
+            checkbox.click();
+        }
+    });
+    h.toggleNormalize = () => toggleAudioSwitch('normalize_button');
+    h.toggleQueueSync = () => toggleAudioSwitch('synchronised_button');
+
     h.snapshot = () => {
         const p = player();
         if (document.querySelector('[data-testid="topbar-profile"]')) {
@@ -231,12 +299,18 @@
         const fav = favoriteButton();
         if (session === 'in') {
             loadLyrics(song);
+            // The player bar may not be there yet: retried until read.
+            if (!h.audio && Date.now() - audioReadAt > 5000) {
+                audioReadAt = Date.now();
+                h.readAudio();
+            }
         }
         return JSON.stringify({
             ready: true,
             session,
             lyricsSongId: h.lyricsState.songId,
             lyricsStatus: h.lyricsState.status,
+            audio: h.audio,
             playing: p.isPlaying(),
             songId: String(song.SNG_ID || ''),
             title,

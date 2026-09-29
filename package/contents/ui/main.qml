@@ -56,12 +56,15 @@ PlasmoidItem {
     property string lyricsStatus: ""
     property var lyrics: null
     property bool lyricsShown: false
+    // Deezer's audio settings as the page last read them (see AudioMenu).
+    property var audio: null
 
     // Change detection, so list models are not rebuilt on every poll.
     property string queueJson: ""
     property string playlistsJson: ""
     property int lastNoticeId: -1
     property string lyricsKey: ""
+    property string audioJson: ""
     property bool playlistsRequested: false
 
     readonly property bool hasTrack: title !== ""
@@ -145,6 +148,12 @@ PlasmoidItem {
                 if (state.lyricsStatus === "ready") {
                     root.refreshLyrics();
                 }
+            }
+
+            const audio = JSON.stringify(state.audio);
+            if (audio !== root.audioJson) {
+                root.audioJson = audio;
+                root.audio = state.audio;
             }
 
             if (root.loggedIn && !root.playlistsRequested) {
@@ -714,6 +723,30 @@ PlasmoidItem {
                         Layout.alignment: Qt.AlignHCenter
                         Layout.fillWidth: false
                         spacing: Kirigami.Units.smallSpacing
+
+                        PlasmaComponents.ToolButton {
+                            id: audioButton
+                            icon.name: "media-eq-symbolic"
+                            display: QQC2.AbstractButton.IconOnly
+                            text: i18n("Audio settings")
+                            onClicked: {
+                                // Read again: the settings may have changed in another player.
+                                root.act("readAudio");
+                                audioMenu.popup(audioButton, 0, audioButton.height);
+                            }
+
+                            PlasmaComponents.ToolTip {
+                                text: parent.text
+                            }
+
+                            AudioMenu {
+                                id: audioMenu
+                                audio: root.audio
+                                onQualityRequested: quality => root.act("setQuality", [quality])
+                                onNormalizeToggled: root.act("toggleNormalize")
+                                onQueueSyncToggled: root.act("toggleQueueSync")
+                            }
+                        }
 
                         PlasmaComponents.ToolButton {
                             Layout.rightMargin: Kirigami.Units.gridUnit * 1.5
