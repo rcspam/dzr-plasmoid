@@ -192,6 +192,15 @@ PlasmoidItem {
         act("setVolume", [level]);
     }
 
+    // Keyboard seek, in seconds, kept within the track.
+    function seekBy(seconds) {
+        if (duration <= 0) {
+            return;
+        }
+        position = Math.max(0, Math.min(duration, position + seconds));
+        act("seek", [position / duration]);
+    }
+
     function refresh() {
         run(Deezer.call("snapshot", [{ extendedLyrics: Plasmoid.configuration.extendedLyrics }]), function (result) {
             if (typeof result !== "string") {
@@ -511,6 +520,85 @@ PlasmoidItem {
 
         readonly property bool webPage: root.page === root.pageWeb || root.page === root.pagePopup
 
+        // Keyboard, as in most players. Off on the Deezer page, where keys
+        // belong to the site; a text field keeps the keys it uses.
+        readonly property bool keysEnabled: !webPage && root.hasTrack
+
+        function withKey(text, shortcut) {
+            return i18nc("@info:tooltip a button's name, then its keyboard shortcut", "%1 (%2)", text, shortcut.nativeText);
+        }
+
+        Shortcut {
+            id: playPauseShortcut
+            sequence: "Space"
+            enabled: full.keysEnabled
+            autoRepeat: false
+            onActivated: root.act("togglePause")
+        }
+        Shortcut {
+            id: seekBackShortcut
+            sequence: "Left"
+            enabled: full.keysEnabled
+            onActivated: root.seekBy(-5)
+        }
+        Shortcut {
+            id: seekForwardShortcut
+            sequence: "Right"
+            enabled: full.keysEnabled
+            onActivated: root.seekBy(5)
+        }
+        Shortcut {
+            id: previousShortcut
+            sequence: "Shift+Left"
+            enabled: full.keysEnabled
+            autoRepeat: false
+            onActivated: root.act("previous")
+        }
+        Shortcut {
+            id: nextShortcut
+            sequence: "Shift+Right"
+            enabled: full.keysEnabled
+            autoRepeat: false
+            onActivated: root.act("next")
+        }
+        Shortcut {
+            id: volumeUpShortcut
+            sequence: "Up"
+            enabled: full.keysEnabled
+            onActivated: root.changeVolume(Plasmoid.configuration.wheelStep / 100)
+        }
+        Shortcut {
+            id: volumeDownShortcut
+            sequence: "Down"
+            enabled: full.keysEnabled
+            onActivated: root.changeVolume(-Plasmoid.configuration.wheelStep / 100)
+        }
+        Shortcut {
+            id: muteShortcut
+            sequence: "M"
+            enabled: full.keysEnabled
+            autoRepeat: false
+            onActivated: root.act("toggleMute")
+        }
+        // From the queue too: back on the player, with the lyrics.
+        Shortcut {
+            id: lyricsShortcut
+            sequence: "L"
+            enabled: full.keysEnabled && (root.lyricsStatus === "ready" || root.lyricsShown)
+            autoRepeat: false
+            onActivated: {
+                root.lyricsShown = root.page !== root.pagePlayer || !root.lyricsShown;
+                root.page = root.pagePlayer;
+            }
+        }
+        Shortcut {
+            id: favoriteShortcut
+            sequence: "F"
+            enabled: full.keysEnabled && root.favoriteAvailable
+            autoRepeat: false
+            onActivated: root.act("toggleFavorite")
+        }
+
         // The saved size of the view, so that libplasma, when it follows the
         // preferred size, resizes to the same value as restoreSize() below.
         Layout.preferredWidth: targetWidth
@@ -779,7 +867,7 @@ PlasmoidItem {
                             onClicked: root.act("toggleFavorite")
 
                             PlasmaComponents.ToolTip {
-                                text: parent.text
+                                text: full.withKey(parent.text, favoriteShortcut)
                             }
                         }
 
@@ -938,6 +1026,10 @@ PlasmoidItem {
                             display: QQC2.AbstractButton.IconOnly
                             text: i18n("Previous track")
                             onClicked: root.act("previous")
+
+                            PlasmaComponents.ToolTip {
+                                text: full.withKey(parent.text, previousShortcut)
+                            }
                         }
 
                         PlasmaComponents.ToolButton {
@@ -947,6 +1039,10 @@ PlasmoidItem {
                             display: QQC2.AbstractButton.IconOnly
                             text: root.playing ? i18n("Pause") : i18n("Play")
                             onClicked: root.act("togglePause")
+
+                            PlasmaComponents.ToolTip {
+                                text: full.withKey(parent.text, playPauseShortcut)
+                            }
                         }
 
                         PlasmaComponents.ToolButton {
@@ -956,6 +1052,10 @@ PlasmoidItem {
                             display: QQC2.AbstractButton.IconOnly
                             text: i18n("Next track")
                             onClicked: root.act("next")
+
+                            PlasmaComponents.ToolTip {
+                                text: full.withKey(parent.text, nextShortcut)
+                            }
                         }
 
                         PlasmaComponents.ToolButton {
@@ -1035,6 +1135,10 @@ PlasmoidItem {
                                 display: QQC2.AbstractButton.IconOnly
                                 text: root.muted ? i18n("Unmute") : i18n("Mute")
                                 onClicked: root.act("toggleMute")
+
+                                PlasmaComponents.ToolTip {
+                                    text: full.withKey(parent.text, muteShortcut)
+                                }
                             }
 
                             ThinSlider {
@@ -1080,7 +1184,7 @@ PlasmoidItem {
                             onClicked: root.lyricsShown = !root.lyricsShown
 
                             PlasmaComponents.ToolTip {
-                                text: parent.text
+                                text: full.withKey(parent.text, lyricsShortcut)
                             }
                         }
                     }

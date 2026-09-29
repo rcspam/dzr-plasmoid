@@ -23,7 +23,10 @@ the panel:
 - a click on the icon shows the player, the queue and the lyrics, with their
   translation when you want it;
 - hovering the icon shows the track with its controls, and the mouse wheel
-  on it sets the volume.
+  on it sets the volume;
+- in the popup, the usual keys: Space to play or pause, Left and Right to go
+  back or forward 5 seconds, with Shift for the previous or next track, Up and
+  Down for the volume, M to mute, L for the lyrics and F for the favorites.
 
 It also goes further than the website for lyrics:
 
@@ -117,12 +120,15 @@ not when `plasmoidviewer` runs the source folder.
 ## Settings
 
 General: the Deezer site language (the system's by default, English when
-Deezer does not have it) and the panel icon's wheel. Lyrics: the machine
-lyrics sources (extended sources through lrcmux, off by default), the
-translation engine (Google, a LibreTranslate or an Ollama server, or none),
-whether Deezer's own lyrics may be sent to it, the lyrics look, and the
-translation cache. Storage: the web engine's HTTP cache, its limit and a
-button to empty it.
+Deezer does not have it) and the panel icon's wheel. Lyrics: how they look,
+over the blurred cover with a text color to suit it, or black on white, or
+white on black, with the cover blur, text size and fade. Non-Deezer
+services: everything sent elsewhere than Deezer, that is the lyrics sources
+(LRCLIB, and the extended sources through lrcmux, off by default), the
+translation engine (Google, a LibreTranslate or an Ollama server with an
+editable prompt, or none), whether Deezer's own lyrics may be sent to it,
+and the translation cache. Storage: the web engine's HTTP cache, its limit
+and a button to empty it.
 
 ## License
 
