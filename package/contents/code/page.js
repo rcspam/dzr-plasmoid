@@ -182,7 +182,7 @@
         }
         const pick = results => {
             const close = (results || []).filter(r => !duration || Math.abs(r.duration - duration) <= 3);
-            return close.find(r => r.syncedLyrics) || close.find(r => r.plainLyrics) || null;
+            return close.find(r => r.syncedLyrics) || close.find(r => r.plainLyrics) || close.find(r => r.instrumental) || null;
         };
         const found = pick(await lrclibCall('search', { artist_name: artist, track_name: title }));
         const bare = title.replace(/\s*[(\[][^)\]]*[)\]]/g, '').trim();
@@ -199,6 +199,9 @@
         const data = await lrclibFind(song);
         if (!data) {
             return null;
+        }
+        if (data.instrumental) {
+            return { source: 'lrclib', instrumental: true };
         }
         const credits = { source: 'lrclib', writers: '', licence: '' };
         const lines = [];
@@ -283,6 +286,11 @@
         }
         if (lrclib && lrclib.synced) {
             return lrclib;
+        }
+        // LRCLIB knows the song has no words. KuGou, through lrcmux, gives
+        // the album's credits for some instrumentals, as if they were lyrics.
+        if (lrclib && lrclib.instrumental) {
+            return deezer;
         }
         if (h.options.extendedLyrics) {
             try {
