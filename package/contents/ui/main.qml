@@ -437,19 +437,50 @@ PlasmoidItem {
                         }
                     }
 
-                    PlasmaComponents.ProgressBar {
+                    PlasmaComponents.Slider {
+                        id: seekSlider
                         Layout.fillWidth: true
                         Layout.topMargin: Kirigami.Units.smallSpacing
                         from: 0
                         to: Math.max(root.duration, 1)
-                        value: root.position
+                        enabled: root.duration > 0
+
+                        // Where the user asked to go, kept apart from value: on release the
+                        // Binding below may reset value before onPressedChanged runs.
+                        property real target: -1
+
+                        function seek() {
+                            // Shown right away, so the handle does not jump back until the next poll.
+                            root.position = target;
+                            root.act("seek", [target / root.duration]);
+                            target = -1;
+                        }
+
+                        // Follows the track, except while the user drags the handle.
+                        Binding on value {
+                            value: root.position
+                            when: !seekSlider.pressed
+                            restoreMode: Binding.RestoreNone
+                        }
+                        // Mouse: seek on release. Keyboard moves come without a press.
+                        onMoved: {
+                            target = value;
+                            if (!pressed) {
+                                seek();
+                            }
+                        }
+                        onPressedChanged: {
+                            if (!pressed && target >= 0) {
+                                seek();
+                            }
+                        }
                     }
 
                     RowLayout {
                         Layout.fillWidth: true
 
                         PlasmaComponents.Label {
-                            text: Deezer.formatTime(root.position)
+                            text: Deezer.formatTime(seekSlider.pressed ? seekSlider.value : root.position)
                             opacity: 0.7
                             font: Kirigami.Theme.smallFont
                         }

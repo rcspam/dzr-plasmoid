@@ -146,6 +146,8 @@
         }
     };
     h.toggleMute = () => player().control.mute(!player().isMuted());
+    // Deezer's player takes a fraction of the track (seek({percent}), capped at 1).
+    h.seek = fraction => player().control.seek(Math.max(0, Math.min(1, fraction)));
     h.playQueueIndex = index => player().playTrackAtIndex(index);
 
     // Clicking Deezer's own heart lets the page pick the right API
