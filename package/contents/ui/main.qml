@@ -447,7 +447,7 @@ PlasmoidItem {
                         }
                     }
 
-                    // Heart and "+" centred at a quarter of the width from each
+                    // Heart and "+" centred at a fifth of the width from each
                     // edge, the track text between them.
                     Item {
                         Layout.fillWidth: true
@@ -456,7 +456,7 @@ PlasmoidItem {
 
                         PlasmaComponents.ToolButton {
                             id: favoriteButton
-                            x: Math.round(parent.width / 4 - width / 2)
+                            x: Math.round(parent.width / 5 - width / 2)
                             anchors.verticalCenter: parent.verticalCenter
                             enabled: root.favoriteAvailable
                             // Filled heart when the track is in the favorites, outline otherwise.
@@ -508,7 +508,7 @@ PlasmoidItem {
 
                         PlasmaComponents.ToolButton {
                             id: addButton
-                            x: Math.round(parent.width * 3 / 4 - width / 2)
+                            x: Math.round(parent.width * 4 / 5 - width / 2)
                             anchors.verticalCenter: parent.verticalCenter
                             icon.name: "list-add"
                             display: QQC2.AbstractButton.IconOnly
@@ -674,7 +674,7 @@ PlasmoidItem {
                         spacing: Kirigami.Units.smallSpacing
 
                         PlasmaComponents.ToolButton {
-                            Layout.rightMargin: Kirigami.Units.largeSpacing
+                            Layout.rightMargin: Kirigami.Units.gridUnit * 1.5
                             icon.name: "playlist-symbolic"
                             display: QQC2.AbstractButton.IconOnly
                             text: i18n("Show your playlists")
@@ -716,7 +716,7 @@ PlasmoidItem {
                         }
 
                         PlasmaComponents.ToolButton {
-                            Layout.leftMargin: Kirigami.Units.largeSpacing
+                            Layout.leftMargin: Kirigami.Units.gridUnit * 1.5
                             icon.name: "view-media-playlist"
                             display: QQC2.AbstractButton.IconOnly
                             text: i18n("Show the queue")
