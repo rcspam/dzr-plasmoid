@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0 http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
+    <kcfgfile name=""/>
+
+    <!-- Popup size of each view, in pixels; 0 means not resized yet. -->
+    <group name="General">
+        <entry name="playerWidth" type="Int">
+            <default>0</default>
+        </entry>
+        <entry name="playerHeight" type="Int">
+            <default>0</default>
+        </entry>
+        <entry name="webWidth" type="Int">
+            <default>0</default>
+        </entry>
+        <entry name="webHeight" type="Int">
+            <default>0</default>
+        </entry>
+    </group>
+</kcfg>

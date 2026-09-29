@@ -220,13 +220,83 @@ PlasmoidItem {
     }
 
     fullRepresentation: ColumnLayout {
+        id: full
+
         readonly property bool webPage: root.page === root.pageWeb || root.page === root.pagePopup
 
-        Layout.preferredWidth: Kirigami.Units.gridUnit * (webPage ? 56 : 22)
-        Layout.preferredHeight: Kirigami.Units.gridUnit * (webPage ? 40 : 38)
+        // The saved size of the view, so that libplasma, when it follows the
+        // preferred size, resizes to the same value as restoreSize() below.
+        Layout.preferredWidth: targetWidth
+        Layout.preferredHeight: targetHeight
         Layout.minimumWidth: Kirigami.Units.gridUnit * 18
         Layout.minimumHeight: Kirigami.Units.gridUnit * 28
         spacing: Kirigami.Units.smallSpacing
+
+        // The player and the web page each keep their own popup size. libplasma
+        // stores a single size and then ignores preferred size changes, so the
+        // popup window is resized by hand when the view changes.
+        property bool restoringSize: false
+        // Set when the view changes or the popup opens, not bound to the saved
+        // sizes: those change while the user resizes, which would loop.
+        property int targetWidth: viewWidth(false)
+        property int targetHeight: viewHeight(false)
+
+        function viewWidth(web) {
+            return (web ? Plasmoid.configuration.webWidth : Plasmoid.configuration.playerWidth)
+                || Kirigami.Units.gridUnit * (web ? 56 : 22);
+        }
+
+        function viewHeight(web) {
+            return (web ? Plasmoid.configuration.webHeight : Plasmoid.configuration.playerHeight)
+                || Kirigami.Units.gridUnit * (web ? 40 : 38);
+        }
+
+        function saveSize() {
+            if (restoringSize || !Window.window || !Window.window.visible) {
+                return;
+            }
+            if (webPage) {
+                Plasmoid.configuration.webWidth = Math.round(width);
+                Plasmoid.configuration.webHeight = Math.round(height);
+            } else {
+                Plasmoid.configuration.playerWidth = Math.round(width);
+                Plasmoid.configuration.playerHeight = Math.round(height);
+            }
+        }
+
+        function restoreSize() {
+            const popup = Window.window;
+            if (!popup) {
+                return;
+            }
+            const w = viewWidth(webPage);
+            const h = viewHeight(webPage);
+            // Raised first: setting the targets makes libplasma resize at once,
+            // which must not be saved as this view's size.
+            restoringSize = true;
+            targetWidth = w;
+            targetHeight = h;
+            // Size only: Plasma places the popup itself. The window also holds
+            // the popup margins.
+            popup.width = Math.round(targetWidth + popup.width - width);
+            popup.height = Math.round(targetHeight + popup.height - height);
+            restoringSize = false;
+        }
+
+        onWebPageChanged: restoreSize()
+        onWidthChanged: saveSize()
+        onHeightChanged: saveSize()
+
+        Connections {
+            target: root
+            // The popup reopens at the size it was closed with, which may belong
+            // to the other view (the page is not remembered across restarts).
+            function onExpandedChanged() {
+                if (root.expanded) {
+                    full.restoreSize();
+                }
+            }
+        }
 
         RowLayout {
             Layout.fillWidth: true
