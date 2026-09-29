@@ -104,6 +104,13 @@ PlasmoidItem {
         refreshSoon.restart();
     }
 
+    // Volume change from the panel icon's wheel, shown at once and clamped.
+    function changeVolume(delta) {
+        const level = Math.max(0, Math.min(1, (muted ? 0 : volume) + delta));
+        volume = level;
+        act("setVolume", [level]);
+    }
+
     function refresh() {
         run(Deezer.call("snapshot"), function (result) {
             if (typeof result !== "string") {
@@ -269,6 +276,8 @@ PlasmoidItem {
 
     compactRepresentation: MouseArea {
         property bool wasExpanded: false
+        // Wheel travel not yet turned into volume steps (touchpads send bits).
+        property real wheelDelta: 0
 
         acceptedButtons: Qt.LeftButton | Qt.MiddleButton
         hoverEnabled: true
@@ -278,6 +287,26 @@ PlasmoidItem {
                 root.act("togglePause");
             } else {
                 root.expanded = !wasExpanded;
+            }
+        }
+        // Wheel up raises the volume. angleDelta.y is positive when the wheel
+        // turns up, and flipped by natural scrolling, which wheel.inverted
+        // tells. One notch (120) is 5 %.
+        onWheel: wheel => {
+            const delta = (wheel.inverted ? -1 : 1) * wheel.angleDelta.y;
+            if (delta === 0) {
+                wheel.accepted = false;
+                return;
+            }
+            wheelDelta += delta;
+            let steps = 0;
+            while (Math.abs(wheelDelta) >= 120) {
+                const step = wheelDelta > 0 ? 1 : -1;
+                steps += step;
+                wheelDelta -= step * 120;
+            }
+            if (steps !== 0) {
+                root.changeVolume(steps * 0.05);
             }
         }
 
