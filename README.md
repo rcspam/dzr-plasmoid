@@ -26,3 +26,10 @@ kpackagetool6 -t Plasma/Applet -u package/   # update
 
 Sign in once through the globe button in the popup. The session is stored in
 the `deezer-plasmoid` QtWebEngine profile of the host process.
+
+## Translations
+
+`tools/i18n.sh` extracts the `i18n()` strings into `po/template.pot`, merges
+them into each `po/<lang>.po` and compiles the `.mo` files into
+`package/contents/locale`. Plasma only loads them from an installed package,
+not when `plasmoidviewer` runs the source folder.

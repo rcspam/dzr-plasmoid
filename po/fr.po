@@ -1,0 +1,141 @@
+# French translations for io.github.rcspam.deezerplasmoid package
+# Traductions françaises du paquet io.github.rcspam.deezerplasmoid.
+# Copyright (C) 2026 THE io.github.rcspam.deezerplasmoid'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the io.github.rcspam.deezerplasmoid package.
+# Automatically generated, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: io.github.rcspam.deezerplasmoid\n"
+"Report-Msgid-Bugs-To: https://github.com/rcspam\n"
+"POT-Creation-Date: 2026-09-29 16:01+0200\n"
+"PO-Revision-Date: 2026-09-29 16:01+0200\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: package/contents/ui/main.qml:70 package/contents/ui/main.qml:372
+msgid "Nothing playing"
+msgstr "Aucune lecture en cours"
+
+#: package/contents/ui/main.qml:308
+msgid "Deezer"
+msgstr "Deezer"
+
+#: package/contents/ui/main.qml:308
+msgid "Player"
+msgstr "Lecteur"
+
+#: package/contents/ui/main.qml:316
+msgid "Queue"
+msgstr "File d'attente"
+
+#: package/contents/ui/main.qml:325
+msgid "Show the Deezer page"
+msgstr "Afficher la page Deezer"
+
+#: package/contents/ui/main.qml:338
+msgid "Keep Open"
+msgstr "Garder ouvert"
+
+#: package/contents/ui/main.qml:372
+msgid "Not signed in"
+msgstr "Non connecté"
+
+#: package/contents/ui/main.qml:375
+msgid "Open Deezer"
+msgstr "Ouvrir Deezer"
+
+#: package/contents/ui/main.qml:375
+msgid "Sign in"
+msgstr "Se connecter"
+
+#: package/contents/ui/main.qml:442
+msgid "Added to %1"
+msgstr "Ajouté à %1"
+
+#: package/contents/ui/main.qml:443
+msgid "Could not add to %1"
+msgstr "Impossible d'ajouter à %1"
+
+#: package/contents/ui/main.qml:468
+msgid "Remove from favorites"
+msgstr "Retirer des coups de cœur"
+
+#: package/contents/ui/main.qml:468
+msgid "Add to favorites"
+msgstr "Ajouter aux coups de cœur"
+
+#: package/contents/ui/main.qml:515
+msgid "Add to a playlist"
+msgstr "Ajouter à une playlist"
+
+#: package/contents/ui/main.qml:532
+msgid "No playlist"
+msgstr "Aucune playlist"
+
+#: package/contents/ui/main.qml:532
+msgid "Loading playlists…"
+msgstr "Chargement des playlists…"
+
+#: package/contents/ui/main.qml:539
+msgid "%2 (%1 track)"
+msgid_plural "%2 (%1 tracks)"
+msgstr[0] "%2 (%1 titre)"
+msgstr[1] "%2 (%1 titres)"
+
+#: package/contents/ui/main.qml:616
+msgid "Shuffle: on"
+msgstr "Lecture aléatoire : activée"
+
+#: package/contents/ui/main.qml:616
+msgid "Shuffle: off"
+msgstr "Lecture aléatoire : désactivée"
+
+#: package/contents/ui/main.qml:629
+msgid "Previous track"
+msgstr "Piste précédente"
+
+#: package/contents/ui/main.qml:638
+msgid "Pause"
+msgstr "Pause"
+
+#: package/contents/ui/main.qml:638
+msgid "Play"
+msgstr "Lecture"
+
+#: package/contents/ui/main.qml:647
+msgid "Next track"
+msgstr "Piste suivante"
+
+#: package/contents/ui/main.qml:656
+msgid "Repeat: current track"
+msgstr "Répétition : titre en cours"
+
+#: package/contents/ui/main.qml:657
+msgid "Repeat: all"
+msgstr "Répétition : tout"
+
+#: package/contents/ui/main.qml:658
+msgid "Repeat: off"
+msgstr "Répétition : désactivée"
+
+#: package/contents/ui/main.qml:680
+msgid "Show your playlists"
+msgstr "Afficher vos playlists"
+
+#: package/contents/ui/main.qml:702
+msgid "Unmute"
+msgstr "Rétablir le son"
+
+#: package/contents/ui/main.qml:702
+msgid "Mute"
+msgstr "Couper le son"
+
+#: package/contents/ui/main.qml:722
+msgid "Show the queue"
+msgstr "Afficher la file d'attente"

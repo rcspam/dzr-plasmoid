@@ -2,9 +2,11 @@
     "KPlugin": {
         "Category": "Multimedia",
         "Description": "Deezer player for the Plasma panel",
+        "Description[fr]": "Lecteur Deezer pour le tableau de bord Plasma",
         "Icon": "images/dzplasmoid-logo.png",
         "Id": "io.github.rcspam.deezerplasmoid",
         "Name": "Deezer",
+        "Name[fr]": "Deezer",
         "Version": "0.1.0",
         "EnabledByDefault": true
     },
