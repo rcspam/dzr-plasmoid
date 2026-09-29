@@ -155,27 +155,51 @@
     const LRCLIB_CLIENT = 'Deezer Plasmoid 0.1.0 (https://github.com/rcspam)';
     let lrclibPausedUntil = 0;
 
-    async function lrclibLyrics(song) {
-        if (Date.now() < lrclibPausedUntil) {
-            return null;
-        }
-        const params = new URLSearchParams({
-            artist_name: song.ART_NAME || '',
-            track_name: song.SNG_TITLE || '',
-            album_name: song.ALB_TITLE || '',
-            duration: String(song.DURATION || ''),
-        });
-        const response = await fetch('https://lrclib.net/api/get?' + params, {
+    // One LRCLIB call; the parsed answer, or null (404, error, 429).
+    async function lrclibCall(path, params) {
+        const response = await fetch(`https://lrclib.net/api/${path}?` + new URLSearchParams(params), {
             cache: 'no-store',
             headers: { 'Lrclib-Client': LRCLIB_CLIENT },
         });
         if (response.status === 429) {
             lrclibPausedUntil = Date.now() + (Number(response.headers.get('Retry-After')) || 60) * 1000;
         }
-        if (!response.ok) {
+        return response.ok ? response.json() : null;
+    }
+
+    // The exact signature first. Deezer and LRCLIB often file a song under
+    // different albums (a compilation, a best-of), so then a search on title
+    // and artist, kept to results of about the same length, and again with
+    // the title stripped of what Deezer adds in brackets ("(Remastered)").
+    // Calls go one after the other, only when the previous one found nothing.
+    async function lrclibFind(song) {
+        const artist = song.ART_NAME || '';
+        const title = song.SNG_TITLE || '';
+        const duration = Number(song.DURATION) || 0;
+        const exact = await lrclibCall('get', { artist_name: artist, track_name: title, album_name: song.ALB_TITLE || '', duration: String(duration) });
+        if (exact) {
+            return exact;
+        }
+        const pick = results => {
+            const close = (results || []).filter(r => !duration || Math.abs(r.duration - duration) <= 3);
+            return close.find(r => r.syncedLyrics) || close.find(r => r.plainLyrics) || null;
+        };
+        const found = pick(await lrclibCall('search', { artist_name: artist, track_name: title }));
+        const bare = title.replace(/\s*[(\[][^)\]]*[)\]]/g, '').trim();
+        if (found || !bare || bare === title || Date.now() < lrclibPausedUntil) {
+            return found;
+        }
+        return pick(await lrclibCall('search', { artist_name: artist, track_name: bare }));
+    }
+
+    async function lrclibLyrics(song) {
+        if (Date.now() < lrclibPausedUntil) {
             return null;
         }
-        const data = await response.json();
+        const data = await lrclibFind(song);
+        if (!data) {
+            return null;
+        }
         const credits = { source: 'lrclib', writers: '', licence: '' };
         const lines = [];
         for (const raw of (data.syncedLyrics || '').split('\n')) {
