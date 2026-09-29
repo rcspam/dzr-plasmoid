@@ -200,19 +200,20 @@ Item {
             elide: Text.ElideLeft
             color: Qt.rgba(1, 1, 1, 0.75)
             font: Kirigami.Theme.smallFont
+            // Short, e.g. "LRCLIB - No Sync - Trad Google".
             text: {
-                const sources = [];
+                const parts = [];
                 if (view.lyrics && view.lyrics.source === "lrclib") {
-                    sources.push(i18n("Lyrics by LRCLIB"));
+                    parts.push("LRCLIB");
                 }
                 // Plain text: no timing, so no following, seeking or fade.
                 if (view.lyrics && !view.synced) {
-                    sources.push(i18n("Lyrics not synced"));
+                    parts.push(i18n("No sync"));
                 }
                 if (view.showTranslation && !view.hasTranslation && view.machineState === "done") {
-                    sources.push(i18n("Translated by %1", view.machineEngine));
+                    parts.push(i18n("Transl. %1", view.machineEngine));
                 }
-                return sources.join(" · ");
+                return parts.join(" - ");
             }
         }
 
