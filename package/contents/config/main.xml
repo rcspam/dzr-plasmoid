@@ -72,6 +72,10 @@
         <entry name="lyricsBackground" type="String">
             <default>cover</default>
         </entry>
+        <!-- How much the cover is blurred behind the lyrics, 0 to 100. -->
+        <entry name="lyricsBlur" type="Int">
+            <default>100</default>
+        </entry>
 
         <!-- Web engine HTTP cache limit, in megabytes. -->
         <entry name="webCacheLimit" type="Int">

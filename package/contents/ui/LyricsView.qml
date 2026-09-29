@@ -23,10 +23,12 @@ Item {
     // Whether these lyrics may go to the translation engine (settings).
     property bool machineAllowed: true
     // Settings: text size factor, fade strength around the sung line (0 to 1),
-    // and what is behind the lyrics: "cover", "light" or "dark".
+    // what is behind the lyrics ("cover", "light" or "dark") and how much the
+    // cover is blurred (0 to 1).
     property real fontScale: 1
     property real fadeStrength: 1
     property string background: "cover"
+    property real blurStrength: 1
 
     signal seekRequested(real seconds)
     signal translateRequested()
@@ -122,7 +124,7 @@ Item {
         source: backdrop
         visible: view.background === "cover"
         blurEnabled: true
-        blur: 1
+        blur: view.blurStrength
         blurMax: 64
         brightness: view.lightBackground ? 0.2 : -0.2
     }

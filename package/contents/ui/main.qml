@@ -692,6 +692,7 @@ PlasmoidItem {
                             fontScale: Plasmoid.configuration.lyricsFontScale
                             fadeStrength: Plasmoid.configuration.lyricsFade / 100
                             background: Plasmoid.configuration.lyricsBackground
+                            blurStrength: Plasmoid.configuration.lyricsBlur / 100
                             onTranslateRequested: root.translateLyrics()
                             position: root.position
                             onSeekRequested: seconds => {

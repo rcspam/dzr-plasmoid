@@ -18,6 +18,7 @@ KCM.SimpleKCM {
     property real cfg_lyricsFontScale
     property alias cfg_lyricsFade: fade.value
     property string cfg_lyricsBackground
+    property alias cfg_lyricsBlur: blur.value
 
     // Same database as the widget: the settings run in its process.
     Ui.TranslationCache {
@@ -169,6 +170,23 @@ KCM.SimpleKCM {
         BackgroundButton {
             mode: "dark"
             text: i18n("White on black")
+        }
+
+        RowLayout {
+            Kirigami.FormData.label: i18n("Cover blur:")
+            enabled: page.cfg_lyricsBackground === "cover"
+
+            QQC2.Slider {
+                id: blur
+                Layout.preferredWidth: Kirigami.Units.gridUnit * 10
+                from: 0
+                to: 100
+                stepSize: 10
+            }
+
+            QQC2.Label {
+                text: i18nc("percentage", "%1 %", blur.value)
+            }
         }
 
         RowLayout {
