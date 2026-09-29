@@ -60,7 +60,9 @@ PlasmoidItem {
 
     preferredRepresentation: compactRepresentation
     // deezer.com favicon (240x240), shipped: not every icon theme has a Deezer icon.
-    Plasmoid.icon: Qt.resolvedUrl("../images/deezer.png")
+    // Packaged images need names no icon theme uses: Kirigami.Icon looks the file's
+    // base name up in the icon theme first ("deezer" gave WhiteSur's app icon).
+    Plasmoid.icon: Qt.resolvedUrl("../images/dzplasmoid-logo.png")
     toolTipMainText: hasTrack ? title : Plasmoid.title
     toolTipSubText: hasTrack ? artist : i18n("Nothing playing")
 
@@ -367,7 +369,7 @@ PlasmoidItem {
                             // Filled heart when the track is in the favorites, outline otherwise.
                             // The filled heart ships with the package: icon themes rarely have a real one.
                             icon.name: root.favorite ? "" : "love-symbolic"
-                            icon.source: root.favorite ? Qt.resolvedUrl("../images/heart-filled.svg") : ""
+                            icon.source: root.favorite ? Qt.resolvedUrl("../images/dzplasmoid-heart-filled.svg") : ""
                             icon.color: Kirigami.Theme.textColor
                             display: QQC2.AbstractButton.IconOnly
                             text: root.favorite ? i18n("Remove from favorites") : i18n("Add to favorites")
