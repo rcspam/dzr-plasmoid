@@ -449,7 +449,7 @@ PlasmoidItem {
                         }
                     }
 
-                    PlasmaComponents.Slider {
+                    ThinSlider {
                         id: seekSlider
                         Layout.fillWidth: true
                         Layout.topMargin: Kirigami.Units.smallSpacing
@@ -580,7 +580,7 @@ PlasmoidItem {
                             onClicked: root.act("toggleMute")
                         }
 
-                        PlasmaComponents.Slider {
+                        ThinSlider {
                             Layout.fillWidth: true
                             from: 0
                             to: 1
