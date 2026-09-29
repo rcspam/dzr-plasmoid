@@ -57,6 +57,8 @@ PlasmoidItem {
     readonly property bool hasTrack: title !== ""
 
     preferredRepresentation: compactRepresentation
+    // Shipped with the package: not every icon theme has a Deezer icon.
+    Plasmoid.icon: Qt.resolvedUrl("../images/deezer.svg")
     toolTipMainText: hasTrack ? title : Plasmoid.title
     toolTipSubText: hasTrack ? artist : i18n("Nothing playing")
 
