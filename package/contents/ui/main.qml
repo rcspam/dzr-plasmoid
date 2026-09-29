@@ -57,6 +57,7 @@ PlasmoidItem {
     property string lyricsStatus: ""
     property var lyrics: null
     property bool lyricsShown: false
+    property bool toolTipShown: false
     // Machine translation of lyrics Deezer does not translate, one entry per
     // line. State: "", "working", "done", "same" (already in the user's
     // language) or "failed".
@@ -92,17 +93,18 @@ PlasmoidItem {
         album: root.album
         cover: root.cover
         playing: root.playing
-        volume: root.volume
-        muted: root.muted
+        position: root.position
+        duration: root.duration
         emptyText: root.session === "out" ? i18n("Not signed in") : i18n("Nothing playing")
         onPlayPauseRequested: root.act("togglePause")
         onNextRequested: root.act("next")
         onPreviousRequested: root.act("previous")
-        onMuteRequested: root.act("toggleMute")
-        onVolumeRequested: value => {
-            root.volume = value;
-            root.act("setVolume", [value]);
+        onSeekRequested: seconds => {
+            root.position = seconds;
+            root.act("seek", [seconds / root.duration]);
         }
+        // Polled faster while shown, for a progress bar that moves.
+        onShownChanged: root.toolTipShown = shown
     }
 
     signal notice(string kind, string text)
@@ -298,7 +300,7 @@ PlasmoidItem {
 
     Timer {
         // Faster while the lyrics follow the song.
-        interval: !root.expanded ? 2000 : root.lyricsShown ? 250 : 500
+        interval: root.expanded ? (root.lyricsShown ? 250 : 500) : root.toolTipShown ? 1000 : 2000
         running: root.webView !== null
         repeat: true
         triggeredOnStart: true

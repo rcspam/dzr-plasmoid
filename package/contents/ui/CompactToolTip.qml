@@ -4,8 +4,10 @@ import QtQuick.Controls as QQC2
 import org.kde.plasma.components as PlasmaComponents
 import org.kde.kirigami as Kirigami
 
+import "../code/deezer.js" as Deezer
+
 // The panel icon's tooltip, as in Radioglobe: the cover and the track, then
-// the transport and volume controls. Plasma shows it through
+// the transport controls and the track's progress. Plasma shows it through
 // PlasmoidItem.toolTipItem; the icon makes the hosting tooltip area
 // interactive so the controls can be used.
 Item {
@@ -17,16 +19,18 @@ Item {
     property string album
     property url cover
     property bool playing: false
-    property real volume: 1
-    property bool muted: false
+    property real position: 0
+    property real duration: 0
     // Shown under the name when there is no track.
     property string emptyText
 
     signal playPauseRequested()
     signal nextRequested()
     signal previousRequested()
-    signal muteRequested()
-    signal volumeRequested(real value)
+    signal seekRequested(real seconds)
+
+    // Whether the tooltip is on screen: the item alone always reads as visible.
+    readonly property bool shown: Window.window !== null && Window.window.visible
 
     implicitWidth: Math.max(column.implicitWidth, Kirigami.Units.gridUnit * 18) + Kirigami.Units.smallSpacing * 2
     implicitHeight: column.implicitHeight + Kirigami.Units.smallSpacing * 2
@@ -81,7 +85,7 @@ Item {
             }
         }
 
-        // Transport, then mute, volume and its percentage.
+        // Transport, then the track's progress.
         RowLayout {
             Layout.fillWidth: true
             spacing: 0
@@ -110,34 +114,47 @@ Item {
                 onClicked: tip.nextRequested()
             }
 
-            PlasmaComponents.ToolButton {
-                icon.name: tip.muted || tip.volume <= 0 ? "audio-volume-muted" : "audio-volume-high"
-                display: QQC2.AbstractButton.IconOnly
-                text: tip.muted ? i18n("Unmute") : i18n("Mute")
-                onClicked: tip.muteRequested()
-            }
-
+            // Seeks on release, or on keyboard moves, as the player's own bar.
             ThinSlider {
-                Layout.fillWidth: true
-                Layout.minimumWidth: Kirigami.Units.gridUnit * 4
-                from: 0
-                to: 1
-                value: tip.muted ? 0 : tip.volume
-                onMoved: tip.volumeRequested(value)
-            }
+                id: progress
 
-            TextMetrics {
-                id: percentMetrics
-                font: percentLabel.font
-                text: "100 %"
+                // Where the user asked to go: on release the Binding below may
+                // reset value before onPressedChanged runs.
+                property real target: -1
+
+                function seek() {
+                    tip.seekRequested(target);
+                    target = -1;
+                }
+
+                Layout.fillWidth: true
+                Layout.minimumWidth: Kirigami.Units.gridUnit * 6
+                from: 0
+                to: Math.max(tip.duration, 1)
+                enabled: tip.hasTrack && tip.duration > 0
+
+                Binding on value {
+                    value: tip.position
+                    when: !progress.pressed
+                    restoreMode: Binding.RestoreNone
+                }
+                onMoved: {
+                    target = value;
+                    if (!pressed) {
+                        seek();
+                    }
+                }
+                onPressedChanged: {
+                    if (!pressed && target >= 0) {
+                        seek();
+                    }
+                }
             }
 
             PlasmaComponents.Label {
-                id: percentLabel
-                Layout.minimumWidth: percentMetrics.width
-                horizontalAlignment: Text.AlignRight
                 opacity: 0.75
-                text: i18nc("volume percentage", "%1 %", Math.round((tip.muted ? 0 : tip.volume) * 100))
+                font: Kirigami.Theme.smallFont
+                text: Deezer.formatTime(progress.pressed ? progress.value : tip.position) + " / " + Deezer.formatTime(tip.duration)
             }
         }
     }
