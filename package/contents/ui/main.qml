@@ -6,6 +6,7 @@ import org.kde.plasma.plasmoid
 import org.kde.plasma.components as PlasmaComponents
 import org.kde.plasma.extras as PlasmaExtras
 import org.kde.kirigami as Kirigami
+import org.kde.kitemmodels as KItemModels
 
 import "../code/deezer.js" as Deezer
 import "../code/translate.js" as Translate
@@ -56,6 +57,34 @@ PlasmoidItem {
     }
     // A whole new queue: the list goes back to the current track.
     signal queueReset()
+
+    // The queue as listed: only the tracks matching the search, if any.
+    // Rows here are not queue positions: see queuePosition().
+    KItemModels.KSortFilterProxyModel {
+        id: queueFilter
+        sourceModel: queueModel
+        filterRowCallback: (row, parent) => {
+            const search = root.foldText(filterString);
+            if (search === "") {
+                return true;
+            }
+            const track = queueModel.get(row);
+            return root.foldText(track.title + " " + track.artist).includes(search);
+        }
+    }
+
+    // Lower case, without accents: "Beyoncé" is found by "beyonce".
+    function foldText(text) {
+        return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+    }
+
+    // Queue position of a listed row, and the other way round (-1 if hidden).
+    function queuePosition(row) {
+        return queueFilter.mapToSource(queueFilter.index(row, 0)).row;
+    }
+    function listedRow(position) {
+        return queueFilter.mapFromSource(queueModel.index(position, 0)).row;
+    }
     property var playlists: null
     // Lyrics of the current track, loaded by the page on each track change:
     // status is "loading", "ready" or "missing".
@@ -1030,99 +1059,136 @@ PlasmoidItem {
             }
 
             // pageQueue
-            PlasmaComponents.ScrollView {
-                ListView {
-                    id: queueView
-                    clip: true
-                    model: queueModel
-                    currentIndex: root.queueIndex
-                    // On the current track when a new queue comes or the page opens,
-                    // not when a track is removed.
-                    onVisibleChanged: {
-                        if (visible) {
-                            positionViewAtIndex(root.queueIndex, ListView.Center);
+            ColumnLayout {
+                spacing: Kirigami.Units.smallSpacing
+
+                PlasmaExtras.SearchField {
+                    id: queueSearch
+                    Layout.fillWidth: true
+                    onTextChanged: {
+                        queueFilter.filterString = text;
+                        // Back on the current track when the search is cleared.
+                        if (text === "") {
+                            queueView.showCurrent();
                         }
                     }
-
-                    Connections {
-                        target: root
-                        function onQueueReset() {
-                            queueView.positionViewAtIndex(root.queueIndex, ListView.Center);
+                    Keys.onEscapePressed: event => {
+                        if (text !== "") {
+                            text = "";
+                            event.accepted = true;
+                        } else {
+                            event.accepted = false;
                         }
                     }
+                }
 
-                    delegate: PlasmaComponents.ItemDelegate {
-                        id: trackDelegate
-                        required property int index
-                        required property string title
-                        required property string artist
-                        required property string cover
-                        required property real duration
-                        required property bool favorite
-                        readonly property bool current: index === root.queueIndex
+                PlasmaComponents.ScrollView {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
 
-                        width: ListView.view.width
-                        highlighted: current
-                        // Double click, as in most players: a single click is easy to make by accident.
-                        onDoubleClicked: root.act("playQueueIndex", [index])
+                    ListView {
+                        id: queueView
+                        clip: true
+                        model: queueFilter
+                        currentIndex: root.listedRow(root.queueIndex)
 
-                        contentItem: RowLayout {
-                            spacing: Kirigami.Units.smallSpacing
-
-                            Image {
-                                Layout.preferredWidth: Kirigami.Units.gridUnit * 2
-                                Layout.preferredHeight: Kirigami.Units.gridUnit * 2
-                                source: trackDelegate.cover
-                                asynchronous: true
-                                fillMode: Image.PreserveAspectCrop
+                        function showCurrent() {
+                            const row = root.listedRow(root.queueIndex);
+                            if (row >= 0) {
+                                positionViewAtIndex(row, ListView.Center);
                             }
+                        }
 
-                            ColumnLayout {
-                                Layout.fillWidth: true
-                                spacing: 0
+                        // On the current track when a new queue comes or the page opens,
+                        // not when a track is removed.
+                        onVisibleChanged: {
+                            if (visible) {
+                                showCurrent();
+                            }
+                        }
 
-                                PlasmaComponents.Label {
-                                    Layout.fillWidth: true
-                                    elide: Text.ElideRight
-                                    font.bold: trackDelegate.current
-                                    text: trackDelegate.title
+                        Connections {
+                            target: root
+                            function onQueueReset() {
+                                queueView.showCurrent();
+                            }
+                        }
+
+                        delegate: PlasmaComponents.ItemDelegate {
+                            id: trackDelegate
+                            required property int index
+                            required property string title
+                            required property string artist
+                            required property string cover
+                            required property real duration
+                            required property bool favorite
+                            // The row's place in the queue, which the page's actions need.
+                            readonly property int position: root.queuePosition(index)
+                            readonly property bool current: position === root.queueIndex
+
+                            width: ListView.view.width
+                            highlighted: current
+                            // Double click, as in most players: a single click is easy to make by accident.
+                            onDoubleClicked: root.act("playQueueIndex", [position])
+
+                            contentItem: RowLayout {
+                                spacing: Kirigami.Units.smallSpacing
+
+                                Image {
+                                    Layout.preferredWidth: Kirigami.Units.gridUnit * 2
+                                    Layout.preferredHeight: Kirigami.Units.gridUnit * 2
+                                    source: trackDelegate.cover
+                                    asynchronous: true
+                                    fillMode: Image.PreserveAspectCrop
                                 }
-                                PlasmaComponents.Label {
+
+                                ColumnLayout {
                                     Layout.fillWidth: true
-                                    elide: Text.ElideRight
+                                    spacing: 0
+
+                                    PlasmaComponents.Label {
+                                        Layout.fillWidth: true
+                                        elide: Text.ElideRight
+                                        font.bold: trackDelegate.current
+                                        text: trackDelegate.title
+                                    }
+                                    PlasmaComponents.Label {
+                                        Layout.fillWidth: true
+                                        elide: Text.ElideRight
+                                        opacity: 0.7
+                                        font: Kirigami.Theme.smallFont
+                                        text: trackDelegate.artist
+                                    }
+                                }
+
+                                PlasmaComponents.Label {
                                     opacity: 0.7
                                     font: Kirigami.Theme.smallFont
-                                    text: trackDelegate.artist
+                                    text: Deezer.formatTime(trackDelegate.duration)
                                 }
-                            }
 
-                            PlasmaComponents.Label {
-                                opacity: 0.7
-                                font: Kirigami.Theme.smallFont
-                                text: Deezer.formatTime(trackDelegate.duration)
-                            }
+                                // Heart and removal, as in deezer.com's queue.
+                                PlasmaComponents.ToolButton {
+                                    icon.name: trackDelegate.favorite ? "" : "love-symbolic"
+                                    icon.source: trackDelegate.favorite ? Qt.resolvedUrl("../images/dzplasmoid-heart-filled.svg") : ""
+                                    display: QQC2.AbstractButton.IconOnly
+                                    text: trackDelegate.favorite ? i18n("Remove from favorites") : i18n("Add to favorites")
+                                    onClicked: root.actOnQueue("toggleQueueFavorite", [trackDelegate.position])
 
-                            // Heart and removal, as in deezer.com's queue.
-                            PlasmaComponents.ToolButton {
-                                icon.name: trackDelegate.favorite ? "" : "love-symbolic"
-                                icon.source: trackDelegate.favorite ? Qt.resolvedUrl("../images/dzplasmoid-heart-filled.svg") : ""
-                                display: QQC2.AbstractButton.IconOnly
-                                text: trackDelegate.favorite ? i18n("Remove from favorites") : i18n("Add to favorites")
-                                onClicked: root.actOnQueue("toggleQueueFavorite", [trackDelegate.index])
-
-                                PlasmaComponents.ToolTip {
-                                    text: parent.text
+                                    PlasmaComponents.ToolTip {
+                                        text: parent.text
+                                    }
                                 }
-                            }
 
-                            PlasmaComponents.ToolButton {
-                                icon.name: "window-close-symbolic"
-                                display: QQC2.AbstractButton.IconOnly
-                                text: i18n("Remove from the queue")
-                                onClicked: root.actOnQueue("removeFromQueue", [trackDelegate.index])
+                                PlasmaComponents.ToolButton {
+                                    icon.name: "window-close-symbolic"
+                                    display: QQC2.AbstractButton.IconOnly
+                                    text: i18n("Remove from the queue")
+                                    onClicked: root.actOnQueue("removeFromQueue", [trackDelegate.position])
 
-                                PlasmaComponents.ToolTip {
-                                    text: parent.text
+                                    PlasmaComponents.ToolTip {
+                                        text: parent.text
+                                    }
                                 }
                             }
                         }
