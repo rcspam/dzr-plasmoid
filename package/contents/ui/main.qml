@@ -82,8 +82,28 @@ PlasmoidItem {
     // Packaged images need names no icon theme uses: Kirigami.Icon looks the file's
     // base name up in the icon theme first ("deezer" gave WhiteSur's app icon).
     Plasmoid.icon: Qt.resolvedUrl("../images/dzplasmoid-logo.png")
+    // Plain texts: the fallback when the shell ignores toolTipItem.
     toolTipMainText: hasTrack ? title : Plasmoid.title
     toolTipSubText: hasTrack ? artist : i18n("Nothing playing")
+    toolTipItem: CompactToolTip {
+        hasTrack: root.hasTrack
+        title: root.title
+        artist: root.artist
+        album: root.album
+        cover: root.cover
+        playing: root.playing
+        volume: root.volume
+        muted: root.muted
+        emptyText: root.session === "out" ? i18n("Not signed in") : i18n("Nothing playing")
+        onPlayPauseRequested: root.act("togglePause")
+        onNextRequested: root.act("next")
+        onPreviousRequested: root.act("previous")
+        onMuteRequested: root.act("toggleMute")
+        onVolumeRequested: value => {
+            root.volume = value;
+            root.act("setVolume", [value]);
+        }
+    }
 
     signal notice(string kind, string text)
 
@@ -278,6 +298,23 @@ PlasmoidItem {
         property bool wasExpanded: false
         // Wheel travel not yet turned into volume steps (touchpads send bits).
         property real wheelDelta: 0
+
+        // The shell hosts this icon in its ToolTipArea, which shows toolTipItem
+        // but closes it as soon as the pointer leaves the icon. As in
+        // Radioglobe, walk up to it and make it interactive, so the tooltip's
+        // controls can be used.
+        function makeToolTipAreaInteractive() {
+            let item = parent;
+            for (let depth = 0; item && depth < 8; depth++) {
+                if ("interactive" in item && "mainItem" in item) {
+                    item.interactive = true;
+                    return;
+                }
+                item = item.parent;
+            }
+        }
+        onParentChanged: makeToolTipAreaInteractive()
+        Component.onCompleted: makeToolTipAreaInteractive()
 
         acceptedButtons: Qt.LeftButton | Qt.MiddleButton
         hoverEnabled: true
