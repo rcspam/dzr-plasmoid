@@ -103,13 +103,18 @@ Item {
             required property int index
             required property var modelData
             readonly property bool current: index === view.currentLine
+            // Lines fade out with their distance to the sung one, sung ones faster.
+            readonly property int distance: Math.abs(index - view.currentLine)
 
             width: ListView.view.width
-            opacity: !view.synced || current ? 1 : index < view.currentLine ? 0.45 : 0.7
+            opacity: !view.synced || current ? 1
+                : index < view.currentLine ? Math.max(0.12, 0.35 - 0.08 * (distance - 1))
+                : Math.max(0.15, 0.6 - 0.15 * (distance - 1))
 
             Behavior on opacity {
                 OpacityAnimator {
-                    duration: Kirigami.Units.shortDuration
+                    duration: Kirigami.Units.veryLongDuration
+                    easing.type: Easing.InOutQuad
                 }
             }
 
