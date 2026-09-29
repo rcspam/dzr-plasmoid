@@ -116,6 +116,26 @@
 
     const plainLines = text => text.split(/\r?\n/).map(line => ({ time: -1, text: line, translation: '' }));
 
+    // Liner notes filed as lyrics, for some instrumentals: half the lines or
+    // more name an instrument or a studio job, three different ones at least
+    // (a song can repeat "bass" all along), like LRCLIB's "FZ lead guitar" and
+    // "Engineer: Alan P." (Pink Napkins) or KuGou's "Drums background vocals"
+    // through lrcmux (Black Napkins).
+    const LINER_NOTE = /\b(guitars?|bass|drums|keyboards?|piano|vocals?|saxophones?|sax|trumpets?|trombones?|marimba|vibraphone|percussions?|violins?|cello|synthesizers?|organ|harmonica|harp|flutes?|clarinets?|engineer|producer|mixed|mastered|recorded|arranged)\b/gi;
+    function looksLikeLinerNotes(lines) {
+        const texts = lines.map(line => (line.text || '').trim()).filter(text => text);
+        const words = new Set();
+        let notes = 0;
+        for (const text of texts) {
+            const found = text.toLowerCase().match(LINER_NOTE);
+            if (found) {
+                notes++;
+                found.forEach(word => words.add(word.replace(/s$/, '')));
+            }
+        }
+        return words.size >= 3 && notes * 2 >= texts.length;
+    }
+
     async function deezerLyrics(song) {
         const request = async renew => fetch('https://pipe.deezer.com/api', {
             method: 'POST',
@@ -204,17 +224,21 @@
             return { source: 'lrclib', instrumental: true };
         }
         const credits = { source: 'lrclib', writers: '', licence: '' };
-        const lines = [];
+        const synced = [];
         for (const raw of (data.syncedLyrics || '').split('\n')) {
             const m = /^\[(\d+):(\d+(?:\.\d+)?)\]\s?(.*)$/.exec(raw);
             if (m) {
-                lines.push({ time: Number(m[1]) * 60 + Number(m[2]), text: m[3], translation: '' });
+                synced.push({ time: Number(m[1]) * 60 + Number(m[2]), text: m[3], translation: '' });
             }
         }
-        if (lines.length) {
-            return Object.assign(credits, { synced: true, lines });
+        const lines = synced.length ? synced : data.plainLyrics ? plainLines(data.plainLyrics) : [];
+        if (!lines.length) {
+            return null;
         }
-        return data.plainLyrics ? Object.assign(credits, { synced: false, lines: plainLines(data.plainLyrics) }) : null;
+        if (looksLikeLinerNotes(lines)) {
+            return { source: 'lrclib', instrumental: true };
+        }
+        return Object.assign(credits, { synced: synced.length > 0, lines });
     }
 
     // lrcmux (optional, "extended sources"): an aggregator that picks the best
@@ -248,7 +272,7 @@
         }
         const data = await response.json();
         const lines = (data.lines || []).filter(line => typeof line.start === 'number');
-        if (!data.meta || data.meta.level === 'none' || lines.length === 0) {
+        if (!data.meta || data.meta.level === 'none' || lines.length === 0 || looksLikeLinerNotes(lines)) {
             return null;
         }
         return {
@@ -287,8 +311,8 @@
         if (lrclib && lrclib.synced) {
             return lrclib;
         }
-        // LRCLIB knows the song has no words. KuGou, through lrcmux, gives
-        // the album's credits for some instrumentals, as if they were lyrics.
+        // LRCLIB knows the song has no words, or only has liner notes for it.
+        // KuGou, through lrcmux, gives such notes too for some instrumentals.
         if (lrclib && lrclib.instrumental) {
             return deezer;
         }
