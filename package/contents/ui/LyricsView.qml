@@ -41,12 +41,16 @@ Item {
     // Whether to offer Translate: not for lyrics already in the user's language.
     readonly property bool canTranslate: lines.length > 0 && (hasTranslation || (machineAllowed && machineState !== "same"))
 
-    // With Translate on, the lyrics of the next tracks get translated too.
-    onLyricsChanged: {
+    // With Translate on, the lyrics of the next tracks get translated too, and
+    // the current ones again when their translation is reset (other engine).
+    function translateIfShown() {
         if (showTranslation && lyrics && !hasTranslation && machineState === "") {
             translateRequested();
         }
     }
+    onLyricsChanged: translateIfShown()
+    // Later: the request sets the state again, from within this change.
+    onMachineStateChanged: Qt.callLater(translateIfShown)
 
     function translationAt(index) {
         if (hasTranslation) {

@@ -107,6 +107,12 @@ PlasmoidItem {
     property var lyricsMachine: null
     property string lyricsMachineState: ""
     property string lyricsMachineEngine: ""
+    // Another engine: the current lyrics are translated again, with it.
+    onTranslationEngineChanged: {
+        lyricsMachine = null;
+        lyricsMachineState = "";
+        lyricsMachineEngine = "";
+    }
     // Deezer's audio settings as the page last read them (see AudioMenu).
     property var audio: null
 
@@ -292,8 +298,8 @@ PlasmoidItem {
             ollamaModel: Plasmoid.configuration.ollamaModel,
         };
         Translate.translateLines(lyrics.lines.map(line => line.text), target, options, result => {
-            if (key !== root.lyricsKey) {
-                return; // Another track by now.
+            if (key !== root.lyricsKey || options.engine !== root.translationEngine) {
+                return; // Another track, or another engine, by now.
             }
             if (!result) {
                 root.lyricsMachineState = "failed";
