@@ -15,7 +15,7 @@ xgettext --from-code=UTF-8 --language=JavaScript --add-comments=i18n \
 
 for po in po/*.po; do
     lang=$(basename "$po" .po)
-    msgmerge --quiet --update --backup=none "$po" po/template.pot
+    msgmerge --quiet --update --backup=none --no-fuzzy-matching "$po" po/template.pot
     mkdir -p "package/contents/locale/$lang/LC_MESSAGES"
     msgfmt --check -o "package/contents/locale/$lang/LC_MESSAGES/$DOMAIN.mo" "$po"
     echo "$lang: $(msgfmt --statistics -o /dev/null "$po" 2>&1)"

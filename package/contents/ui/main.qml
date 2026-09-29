@@ -51,11 +51,17 @@ PlasmoidItem {
     property int queueIndex: 0
     property var queueTracks: []
     property var playlists: null
+    // Lyrics of the current track, loaded by the page on each track change:
+    // status is "loading", "ready" or "missing".
+    property string lyricsStatus: ""
+    property var lyrics: null
+    property bool lyricsShown: false
 
     // Change detection, so list models are not rebuilt on every poll.
     property string queueJson: ""
     property string playlistsJson: ""
     property int lastNoticeId: -1
+    property string lyricsKey: ""
     property bool playlistsRequested: false
 
     readonly property bool hasTrack: title !== ""
@@ -131,9 +137,29 @@ PlasmoidItem {
             }
             root.lastNoticeId = state.notice.id;
 
+            const lyricsKey = state.lyricsSongId + ":" + state.lyricsStatus;
+            if (lyricsKey !== root.lyricsKey) {
+                root.lyricsKey = lyricsKey;
+                root.lyricsStatus = state.lyricsStatus;
+                root.lyrics = null;
+                if (state.lyricsStatus === "ready") {
+                    root.refreshLyrics();
+                }
+            }
+
             if (root.loggedIn && !root.playlistsRequested) {
                 root.playlistsRequested = true;
                 root.act("loadPlaylists");
+            }
+        });
+    }
+
+    function refreshLyrics() {
+        run(Deezer.call("lyrics"), function (result) {
+            try {
+                root.lyrics = JSON.parse(result).data;
+            } catch (e) {
+                console.warn("[deezer] bad lyrics:", result);
             }
         });
     }
@@ -178,7 +204,8 @@ PlasmoidItem {
     }
 
     Timer {
-        interval: root.expanded ? 500 : 2000
+        // Faster while the lyrics follow the song.
+        interval: !root.expanded ? 2000 : root.lyricsShown ? 250 : 500
         running: root.webView !== null
         repeat: true
         triggeredOnStart: true
@@ -397,15 +424,30 @@ PlasmoidItem {
                             radius: Kirigami.Units.cornerRadius
                             shadow.size: Kirigami.Units.largeSpacing
                             shadow.color: Qt.rgba(0, 0, 0, 0.4)
+                            visible: !root.lyricsShown
                         }
 
                         Kirigami.Icon {
                             anchors.centerIn: parent
                             width: Kirigami.Units.iconSizes.enormous
                             height: width
-                            visible: coverImage.status !== Image.Ready
+                            visible: coverImage.status !== Image.Ready && !root.lyricsShown
                             source: "media-album-cover"
                             fallback: "audio-headphones"
+                        }
+
+                        // In the cover's place, over the cover blurred.
+                        LyricsView {
+                            anchors.fill: coverImage
+                            visible: root.lyricsShown
+                            cover: root.cover
+                            status: root.lyricsStatus
+                            lyrics: root.lyrics
+                            position: root.position
+                            onSeekRequested: seconds => {
+                                root.position = seconds;
+                                root.act("seek", [seconds / root.duration]);
+                            }
                         }
 
                         // Short-lived feedback, e.g. after adding to a playlist.
@@ -724,6 +766,21 @@ PlasmoidItem {
                                 root.page = root.pageQueue;
                                 root.refreshQueue();
                             }
+
+                            PlasmaComponents.ToolTip {
+                                text: parent.text
+                            }
+                        }
+
+                        PlasmaComponents.ToolButton {
+                            checkable: true
+                            checked: root.lyricsShown
+                            // Stays usable while shown, to go back to the cover.
+                            enabled: root.lyricsStatus === "ready" || root.lyricsShown
+                            icon.name: "audio-input-microphone-symbolic"
+                            display: QQC2.AbstractButton.IconOnly
+                            text: root.lyricsShown ? i18n("Show the cover") : i18n("Show the lyrics")
+                            onToggled: root.lyricsShown = checked
 
                             PlasmaComponents.ToolTip {
                                 text: parent.text

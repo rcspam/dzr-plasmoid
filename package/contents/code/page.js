@@ -90,6 +90,120 @@
         return restored;
     }
 
+    // Lyrics of the current track: Deezer's own first (the web app's GetLyrics
+    // query, lines translated into the page language when Deezer has it), then
+    // LRCLIB, a free lyrics database. Loaded on each track change.
+    const LYRICS_QUERY = 'query GetLyrics($trackId: String!) { track(trackId: $trackId) { id lyrics { id text '
+        + 'synchronizedLines { line lineTranslated milliseconds } licence copyright writers } } }';
+    const JWT_LIFETIME = 3 * 60 * 1000;
+    let pipeJwt = '';
+    let pipeJwtTime = 0;
+
+    // Short-lived token for pipe.deezer.com, renewed like the web app does.
+    async function pipeToken(renew) {
+        if (renew || !pipeJwt || Date.now() - pipeJwtTime > JWT_LIFETIME) {
+            const response = await fetch('https://auth.deezer.com/login/renew?jo=p&rto=c&i=c',
+                                         { method: 'POST', credentials: 'include' });
+            pipeJwt = (await response.json()).jwt || '';
+            pipeJwtTime = Date.now();
+        }
+        return pipeJwt;
+    }
+
+    const plainLines = text => text.split(/\r?\n/).map(line => ({ time: -1, text: line, translation: '' }));
+
+    async function deezerLyrics(song) {
+        const request = async renew => fetch('https://pipe.deezer.com/api', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                // Deezer only translates the lines when told the language.
+                'Accept-Language': navigator.language,
+                Authorization: 'Bearer ' + await pipeToken(renew),
+            },
+            body: JSON.stringify({ operationName: 'GetLyrics', query: LYRICS_QUERY, variables: { trackId: String(song.SNG_ID) } }),
+        });
+        let response = await request(false);
+        if (response.status === 401) {
+            response = await request(true);
+        }
+        const data = await response.json();
+        const lyrics = data.data && data.data.track && data.data.track.lyrics;
+        if (!lyrics) {
+            return null;
+        }
+        const credits = { source: 'deezer', writers: lyrics.writers || '', licence: lyrics.licence || '' };
+        const synced = lyrics.synchronizedLines || [];
+        if (synced.length) {
+            return Object.assign(credits, {
+                synced: true,
+                lines: synced.map(l => ({ time: l.milliseconds / 1000, text: l.line || '', translation: l.lineTranslated || '' })),
+            });
+        }
+        return lyrics.text ? Object.assign(credits, { synced: false, lines: plainLines(lyrics.text) }) : null;
+    }
+
+    async function lrclibLyrics(song) {
+        const params = new URLSearchParams({
+            artist_name: song.ART_NAME || '',
+            track_name: song.SNG_TITLE || '',
+            album_name: song.ALB_TITLE || '',
+            duration: String(song.DURATION || ''),
+        });
+        const response = await fetch('https://lrclib.net/api/get?' + params);
+        if (!response.ok) {
+            return null;
+        }
+        const data = await response.json();
+        const credits = { source: 'lrclib', writers: '', licence: '' };
+        const lines = [];
+        for (const raw of (data.syncedLyrics || '').split('\n')) {
+            const m = /^\[(\d+):(\d+(?:\.\d+)?)\]\s?(.*)$/.exec(raw);
+            if (m) {
+                lines.push({ time: Number(m[1]) * 60 + Number(m[2]), text: m[3], translation: '' });
+            }
+        }
+        if (lines.length) {
+            return Object.assign(credits, { synced: true, lines });
+        }
+        return data.plainLyrics ? Object.assign(credits, { synced: false, lines: plainLines(data.plainLyrics) }) : null;
+    }
+
+    // Resolves to the lyrics of a dzPlayer song object, or null. Also handy
+    // from the dev tools.
+    h.fetchLyrics = async song => {
+        try {
+            const lyrics = await deezerLyrics(song);
+            if (lyrics) {
+                return lyrics;
+            }
+        } catch (e) {
+            console.warn('[dzPlasmoid] Deezer lyrics failed', e);
+        }
+        try {
+            return await lrclibLyrics(song);
+        } catch (e) {
+            console.warn('[dzPlasmoid] LRCLIB lyrics failed', e);
+            return null;
+        }
+    };
+
+    // status: 'loading', 'ready' or 'missing'.
+    h.lyricsState = { songId: '', status: '', data: null };
+    function loadLyrics(song) {
+        const songId = String(song.SNG_ID || '');
+        if (!songId || songId === h.lyricsState.songId) {
+            return;
+        }
+        h.lyricsState = { songId, status: 'loading', data: null };
+        h.fetchLyrics(song).then(data => {
+            if (h.lyricsState.songId === songId) {
+                h.lyricsState = { songId, status: data ? 'ready' : 'missing', data };
+            }
+        });
+    }
+    h.lyrics = () => JSON.stringify(h.lyricsState);
+
     h.snapshot = () => {
         const p = player();
         if (document.querySelector('[data-testid="topbar-profile"]')) {
@@ -115,9 +229,14 @@
             title += ' ' + song.VERSION;
         }
         const fav = favoriteButton();
+        if (session === 'in') {
+            loadLyrics(song);
+        }
         return JSON.stringify({
             ready: true,
             session,
+            lyricsSongId: h.lyricsState.songId,
+            lyricsStatus: h.lyricsState.status,
             playing: p.isPlaying(),
             songId: String(song.SNG_ID || ''),
             title,
