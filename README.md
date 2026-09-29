@@ -1,11 +1,52 @@
-# Deezer Plasmoid
+# dzr-plasmoid
 
-A Plasma 6 panel widget for Deezer. The Deezer web page runs hidden inside the
-widget (QtWebEngine) and plays the audio; the popup shows a native player
-(large cover, title, progress, previous / play-pause / next).
+An unofficial Plasma 6 panel widget to listen to Deezer with your own account.
 
-The widget drives the page through `window.dzPlayer`, which is not a public
-Deezer API. All page-side scripts live in `package/contents/code/deezer.js`.
+> **Not affiliated with Deezer.** This is a personal project. It is not made,
+> endorsed or supported by Deezer SA, and has no link with the company.
+> "Deezer" is a trademark of Deezer SA; the name only says which service the
+> widget works with.
+
+## What it is
+
+The widget is a small web browser. It opens the regular Deezer website,
+https://www.deezer.com, in an embedded Chromium view (QtWebEngine), where you
+sign in with your own Deezer account. The website plays the music, as it
+would in a browser tab, under your subscription and with its own protection
+of the streams. The popup shows what that page offers (cover, title, queue,
+lyrics) in native Plasma controls, and presses the page's buttons for you.
+
+What it does not do:
+
+- It does not download, record or convert music, and does not touch the
+  protection of the streams.
+- It contains no code or content from Deezer. Covers and lyrics are fetched
+  by the page for your session and are not kept on disk; only the optional
+  machine translations of lyrics are, on your computer.
+- It does not give access to anything your Deezer plan does not include.
+
+Using it, you remain bound by Deezer's Terms of Use, which allow personal,
+private use only. The widget relies on the website's internal interfaces,
+which are not a public API: Deezer may change them at any time, and the
+widget may then stop working. Should Deezer ask for it, this project will be
+taken down.
+
+Lyrics come from Deezer (licensed by LyricFind) or, when Deezer has none or
+no synced version, from LRCLIB, whose lyrics are contributed by its users.
+Machine translation is optional: it sends the lyrics to the engine chosen in
+the settings (Google, or your own LibreTranslate or Ollama server).
+
+The panel icon is deezer.com's favicon, used here for personal use; it has
+to be replaced before any public distribution.
+
+This software is provided as is, without any warranty.
+
+## How it works
+
+The Deezer page runs hidden inside the widget and plays the audio; the popup
+shows a native player fed by polling the page. The widget drives the page
+through `window.dzPlayer` and the site's own calls, none of which is a public
+Deezer API. All page-side scripts live in `package/contents/code/page.js`.
 
 ## Run for development
 
@@ -24,8 +65,9 @@ kpackagetool6 -t Plasma/Applet -i package/   # first time
 kpackagetool6 -t Plasma/Applet -u package/   # update
 ```
 
-Sign in once through the globe button in the popup. The session is stored in
-the `deezer-plasmoid` QtWebEngine profile of the host process.
+Sign in once through the Deezer page button at the top of the popup. The
+session is stored in the `deezer-plasmoid` QtWebEngine profile of the host
+process.
 
 ## Translations
 
