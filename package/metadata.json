@@ -1,0 +1,13 @@
+{
+    "KPlugin": {
+        "Category": "Multimedia",
+        "Description": "Deezer player for the Plasma panel",
+        "Icon": "audio-headphones",
+        "Id": "io.github.rcspam.deezerplasmoid",
+        "Name": "Deezer",
+        "Version": "0.1.0",
+        "EnabledByDefault": true
+    },
+    "X-Plasma-API-Minimum-Version": "6.0",
+    "KPackageStructure": "Plasma/Applet"
+}
