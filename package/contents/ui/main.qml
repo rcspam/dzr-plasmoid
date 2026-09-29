@@ -124,6 +124,12 @@ PlasmoidItem {
         refreshSoon.restart();
     }
 
+    // Same for an action on the queue, which has its own refresh.
+    function actOnQueue(name, args) {
+        run(Deezer.call(name, args));
+        queueRefreshSoon.restart();
+    }
+
     // Volume change from the panel icon's wheel, shown at once and clamped.
     function changeVolume(delta) {
         const level = Math.max(0, Math.min(1, (muted ? 0 : volume) + delta));
@@ -311,6 +317,12 @@ PlasmoidItem {
         id: refreshSoon
         interval: 250
         onTriggered: root.refresh()
+    }
+
+    Timer {
+        id: queueRefreshSoon
+        interval: 300
+        onTriggered: root.refreshQueue()
     }
 
     compactRepresentation: MouseArea {
@@ -1003,6 +1015,30 @@ PlasmoidItem {
                                 opacity: 0.7
                                 font: Kirigami.Theme.smallFont
                                 text: Deezer.formatTime(trackDelegate.modelData.duration)
+                            }
+
+                            // Heart and removal, as in deezer.com's queue.
+                            PlasmaComponents.ToolButton {
+                                icon.name: trackDelegate.modelData.favorite ? "" : "love-symbolic"
+                                icon.source: trackDelegate.modelData.favorite ? Qt.resolvedUrl("../images/dzplasmoid-heart-filled.svg") : ""
+                                display: QQC2.AbstractButton.IconOnly
+                                text: trackDelegate.modelData.favorite ? i18n("Remove from favorites") : i18n("Add to favorites")
+                                onClicked: root.actOnQueue("toggleQueueFavorite", [trackDelegate.index])
+
+                                PlasmaComponents.ToolTip {
+                                    text: parent.text
+                                }
+                            }
+
+                            PlasmaComponents.ToolButton {
+                                icon.name: "window-close-symbolic"
+                                display: QQC2.AbstractButton.IconOnly
+                                text: i18n("Remove from the queue")
+                                onClicked: root.actOnQueue("removeFromQueue", [trackDelegate.index])
+
+                                PlasmaComponents.ToolTip {
+                                    text: parent.text
+                                }
                             }
                         }
                     }

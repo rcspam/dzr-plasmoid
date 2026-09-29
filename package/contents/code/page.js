@@ -18,6 +18,8 @@
         notice: { id: 0, kind: '', text: '' },
         token: '',
         user: null,
+        // Feature switches of the account (__DZR_GATEKEEPS__ of getUserData).
+        gatekeeps: {},
     };
 
     const player = () => window.dzPlayer;
@@ -39,6 +41,7 @@
             const data = await rawCall('deezer.getUserData', '', {});
             h.token = data.results.checkForm;
             h.user = data.results.USER;
+            h.gatekeeps = data.results.__DZR_GATEKEEPS__ || {};
         }
         const data = await rawCall(method, h.token, body);
         if (data.error && Object.keys(data.error).length) {
@@ -64,6 +67,7 @@
                 h.session = 'in';
                 h.user = user;
                 h.token = data.results.checkForm;
+                h.gatekeeps = data.results.__DZR_GATEKEEPS__ || {};
             } else {
                 h.session = 'out';
             }
@@ -304,6 +308,10 @@
             title += ' ' + song.VERSION;
         }
         const fav = favoriteButton();
+        if (fav && song.SNG_ID) {
+            // The heart may have changed on the page or in another player.
+            setFavorite(String(song.SNG_ID), !/_off$/.test(fav.dataset.testid));
+        }
         if (session === 'in') {
             loadLyrics(song);
             // The player bar may not be there yet: retried until read.
@@ -338,12 +346,72 @@
         });
     };
 
+    // Loved tracks, for the hearts of the queue. Same calls as the site, which
+    // picks them from the account's unlimited_favorite_tracks gatekeep.
+    h.favorites = new Set();
+    let favoritesAt = 0;
+    const unlimitedFavorites = () => h.gatekeeps.unlimited_favorite_tracks !== false;
+
+    async function loadFavorites() {
+        favoritesAt = Date.now();
+        try {
+            if (!h.user) {
+                await gw('deezer.getUserData', {});
+            }
+            const results = unlimitedFavorites()
+                ? await gw('song.getFavoriteIds', { start: 0, nb: 10000 })
+                : await gw('playlist.getSongs', { playlist_id: String(h.user.LOVEDTRACKS_ID), start: 0, nb: 10000 });
+            h.favorites = new Set((results.data || []).map(song => String(song.SNG_ID)));
+        } catch (e) {
+            console.warn('[dzPlasmoid] loadFavorites failed', e);
+        }
+    }
+
+    function setFavorite(id, loved) {
+        if (loved) {
+            h.favorites.add(id);
+        } else {
+            h.favorites.delete(id);
+        }
+    }
+
+    h.toggleQueueFavorite = async index => {
+        const p = player();
+        const song = (p.getTrackList() || [])[index];
+        if (!song) {
+            return;
+        }
+        const id = String(song.SNG_ID);
+        const loved = h.favorites.has(id);
+        // Shown at once, undone if Deezer refuses.
+        setFavorite(id, !loved);
+        try {
+            if (index === Number(p.getIndexSong())) {
+                // The player's own heart keeps Deezer's page in step.
+                h.toggleFavorite();
+            } else if (unlimitedFavorites()) {
+                await gw(loved ? 'song.removeFavorites' : 'song.addFavorites', { IDS: [id] });
+            } else {
+                await gw(loved ? 'favorite_song.remove' : 'favorite_song.add', { SNG_ID: id });
+            }
+        } catch (e) {
+            console.warn('[dzPlasmoid] toggleQueueFavorite failed', e);
+            setFavorite(id, loved);
+        }
+    };
+
+    h.removeFromQueue = index => player().removeTracks(index, 1);
+
     h.queue = () => {
         const p = player();
         const tracks = (p && p.getTrackList()) || [];
+        if (h.session === 'in' && Date.now() - favoritesAt > 60000) {
+            loadFavorites();
+        }
         return JSON.stringify({
             index: p ? Number(p.getIndexSong()) || 0 : 0,
             tracks: tracks.map(s => ({
+                favorite: h.favorites.has(String(s.SNG_ID)),
                 title: s.SNG_TITLE + (s.VERSION ? ' ' + s.VERSION : ''),
                 artist: s.ART_NAME || '',
                 cover: coverUrl(s.ALB_PICTURE, 120),
