@@ -25,6 +25,21 @@ the panel:
 - hovering the icon shows the track with its controls, and the mouse wheel
   on it sets the volume.
 
+It also goes further than the website for lyrics:
+
+- when Deezer has no lyrics for a track, or only its plain text, synced
+  lyrics come from [LRCLIB](https://lrclib.net), so many more songs scroll
+  with the music;
+- when Deezer has no translation, the lyrics can be machine translated line
+  by line into your language, with Google or with your own LibreTranslate or
+  Ollama server; each translation stays under its line;
+- translations are kept on your computer, so a song heard again is
+  translated at once, and with Translate on, the next tracks are translated
+  as they come;
+- the lyrics show over the blurred cover, the sung line highlighted with a
+  fade around it, and a click on a line jumps there; where the lyrics or
+  their translation do not come from Deezer, the view says so.
+
 It still runs the official website, so Deezer itself plays the music.
 
 ## What it is
