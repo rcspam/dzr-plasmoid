@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.rcspam.deezerplasmoid\n"
 "Report-Msgid-Bugs-To: https://github.com/rcspam\n"
-"POT-Creation-Date: 2026-09-29 18:43+0200\n"
+"POT-Creation-Date: 2026-09-29 18:50+0200\n"
 "PO-Revision-Date: 2026-09-29 16:01+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -230,8 +230,8 @@ msgid "Volume change per wheel notch:"
 msgstr "Volume par cran de molette :"
 
 #: package/contents/ui/config/ConfigGeneral.qml:54
-#: package/contents/ui/config/ConfigLyrics.qml:119
-#: package/contents/ui/config/ConfigLyrics.qml:135
+#: package/contents/ui/config/ConfigLyrics.qml:129
+#: package/contents/ui/config/ConfigLyrics.qml:145
 msgctxt "percentage"
 msgid "%1 %"
 msgstr "%1 %"
@@ -240,47 +240,63 @@ msgstr "%1 %"
 msgid "Invert the wheel direction"
 msgstr "Inverser le sens de la molette"
 
-#: package/contents/ui/config/ConfigLyrics.qml:39
+#: package/contents/ui/config/ConfigLyrics.qml:28
+msgid "%1 byte"
+msgid_plural "%1 bytes"
+msgstr[0] "%1 octet"
+msgstr[1] "%1 octets"
+
+#: package/contents/ui/config/ConfigLyrics.qml:31
+msgid "%1 KB"
+msgstr "%1 Ko"
+
+#: package/contents/ui/config/ConfigLyrics.qml:33
+#: package/contents/ui/config/ConfigStorage.qml:57
+#: package/contents/ui/config/ConfigStorage.qml:76
+msgid "%1 MB"
+msgstr "%1 Mo"
+
+#: package/contents/ui/config/ConfigLyrics.qml:49
 msgid "Translation of lyrics Deezer does not translate"
 msgstr "Traduction des paroles que Deezer ne traduit pas"
 
-#: package/contents/ui/config/ConfigLyrics.qml:43
+#: package/contents/ui/config/ConfigLyrics.qml:53
 msgid "Translate with:"
 msgstr "Traduire avec :"
 
-#: package/contents/ui/config/ConfigLyrics.qml:45
+#: package/contents/ui/config/ConfigLyrics.qml:55
 msgid "Google (online, unofficial service)"
 msgstr "Google (en ligne, service non officiel)"
 
-#: package/contents/ui/config/ConfigLyrics.qml:50
+#: package/contents/ui/config/ConfigLyrics.qml:60
 msgid "A LibreTranslate server"
 msgstr "Un serveur LibreTranslate"
 
-#: package/contents/ui/config/ConfigLyrics.qml:55
+#: package/contents/ui/config/ConfigLyrics.qml:65
 msgid "LibreTranslate address:"
 msgstr "Adresse de LibreTranslate :"
 
-#: package/contents/ui/config/ConfigLyrics.qml:63
+#: package/contents/ui/config/ConfigLyrics.qml:73
 msgid "An Ollama server (better, but slower)"
 msgstr "Un serveur Ollama (meilleur, mais plus lent)"
 
-#: package/contents/ui/config/ConfigLyrics.qml:68
+#: package/contents/ui/config/ConfigLyrics.qml:78
 msgid "Ollama address:"
 msgstr "Adresse d'Ollama :"
 
-#: package/contents/ui/config/ConfigLyrics.qml:76
+#: package/contents/ui/config/ConfigLyrics.qml:86
 msgid "Ollama model:"
 msgstr "Modèle Ollama :"
 
-#: package/contents/ui/config/ConfigLyrics.qml:84
+#: package/contents/ui/config/ConfigLyrics.qml:94
 msgid "No machine translation"
 msgstr "Pas de traduction automatique"
 
-#: package/contents/ui/config/ConfigLyrics.qml:90
+#: package/contents/ui/config/ConfigLyrics.qml:100
 msgid "Also translate the lyrics Deezer provides"
 msgstr "Traduire aussi les paroles fournies par Deezer"
 
-#: package/contents/ui/config/ConfigLyrics.qml:98
+#: package/contents/ui/config/ConfigLyrics.qml:108
 msgid ""
 "Deezer's lyrics are licensed from LyricFind for personal use: this sends "
 "them to the chosen engine. Lyrics from LRCLIB are always translated."
@@ -289,42 +305,34 @@ msgstr ""
 "cette option les envoie au moteur choisi. Les paroles de LRCLIB sont "
 "toujours traduites."
 
-#: package/contents/ui/config/ConfigLyrics.qml:103
+#: package/contents/ui/config/ConfigLyrics.qml:113
 msgid "Appearance"
 msgstr "Apparence"
 
-#: package/contents/ui/config/ConfigLyrics.qml:107
+#: package/contents/ui/config/ConfigLyrics.qml:117
 msgid "Text size:"
 msgstr "Taille du texte :"
 
-#: package/contents/ui/config/ConfigLyrics.qml:124
+#: package/contents/ui/config/ConfigLyrics.qml:134
 msgid "Fade around the sung line:"
 msgstr "Fondu autour de la ligne chantée :"
 
-#: package/contents/ui/config/ConfigLyrics.qml:141
+#: package/contents/ui/config/ConfigLyrics.qml:151
 msgid "Cache"
 msgstr "Cache"
 
-#: package/contents/ui/config/ConfigLyrics.qml:145
+#: package/contents/ui/config/ConfigLyrics.qml:155
 msgid "Kept translations:"
 msgstr "Traductions gardées :"
 
-#: package/contents/ui/config/ConfigLyrics.qml:148
-msgid "%1 song"
-msgid_plural "%1 songs"
-msgstr[0] "%1 morceau"
-msgstr[1] "%1 morceaux"
-
-#: package/contents/ui/config/ConfigLyrics.qml:154
+#: package/contents/ui/config/ConfigLyrics.qml:164
 #: package/contents/ui/config/ConfigStorage.qml:62
 msgid "Empty"
 msgstr "Vider"
 
-#: package/contents/ui/config/ConfigLyrics.qml:167
-msgid ""
-"Only translations are kept here. Deezer's lyrics are not kept; those from "
-"LRCLIB stay in the web cache (Storage page), like any page the browser loads."
-msgstr "Seules les traductions sont gardées ici. Les paroles de Deezer ne sont pas gardées ; celles de LRCLIB restent dans le cache web (page Stockage), comme toute page chargée par le navigateur."
+#: package/contents/ui/config/ConfigLyrics.qml:177
+msgid "Only the translations are kept, never the lyrics themselves."
+msgstr "Seules les traductions sont gardées, jamais les paroles elles-mêmes."
 
 #: package/contents/ui/config/ConfigStorage.qml:50
 msgid "Web cache"
@@ -338,11 +346,6 @@ msgstr "Taille actuelle :"
 msgid "Measuring…"
 msgstr "Mesure en cours…"
 
-#: package/contents/ui/config/ConfigStorage.qml:57
-#: package/contents/ui/config/ConfigStorage.qml:76
-msgid "%1 MB"
-msgstr "%1 Mo"
-
 #: package/contents/ui/config/ConfigStorage.qml:72
 msgid "Limit:"
 msgstr "Limite :"
@@ -350,9 +353,9 @@ msgstr "Limite :"
 #: package/contents/ui/config/ConfigStorage.qml:85
 msgid ""
 "The Deezer page caches what it loads, like any browser: mostly tracks "
-"(encrypted) and covers, and lyrics from LRCLIB. Above the limit, the oldest "
-"files go. Emptying it does not sign you out."
-msgstr "La page Deezer garde en cache ce qu'elle charge, comme tout navigateur : surtout des morceaux (chiffrés) et des pochettes, ainsi que les paroles de LRCLIB. Au-delà de la limite, les fichiers les plus anciens partent. Le vider ne vous déconnecte pas."
+"(encrypted) and covers. Above the limit, the oldest files go. Emptying it "
+"does not sign you out."
+msgstr "La page Deezer garde en cache ce qu'elle charge, comme tout navigateur : surtout des morceaux (chiffrés) et des pochettes. Au-delà de la limite, les fichiers les plus anciens partent. Le vider ne vous déconnecte pas."
 
 #: package/contents/config/config.qml:6
 msgid "General"
@@ -365,5 +368,6 @@ msgstr "Paroles"
 #: package/contents/config/config.qml:16
 msgid "Storage"
 msgstr "Stockage"
+
 
 

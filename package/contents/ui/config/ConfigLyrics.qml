@@ -21,7 +21,17 @@ KCM.SimpleKCM {
     Ui.TranslationCache {
         id: translationCache
     }
-    property int cachedTranslations: translationCache.count()
+    property real cacheSize: translationCache.size()
+
+    function formatSize(bytes) {
+        if (bytes < 1024) {
+            return i18np("%1 byte", "%1 bytes", bytes);
+        }
+        if (bytes < 1048576) {
+            return i18n("%1 KB", Math.round(bytes / 1024));
+        }
+        return i18n("%1 MB", (bytes / 1048576).toFixed(1));
+    }
 
     component EngineButton: QQC2.RadioButton {
         required property string engine
@@ -145,16 +155,16 @@ KCM.SimpleKCM {
             Kirigami.FormData.label: i18n("Kept translations:")
 
             QQC2.Label {
-                text: i18np("%1 song", "%1 songs", page.cachedTranslations)
+                text: page.formatSize(page.cacheSize)
             }
 
             QQC2.Button {
-                enabled: page.cachedTranslations > 0
+                enabled: page.cacheSize > 0
                 icon.name: "edit-clear-history"
                 text: i18n("Empty")
                 onClicked: {
                     translationCache.clear();
-                    page.cachedTranslations = translationCache.count();
+                    page.cacheSize = translationCache.size();
                 }
             }
         }
@@ -164,7 +174,7 @@ KCM.SimpleKCM {
             Layout.maximumWidth: Kirigami.Units.gridUnit * 24
             wrapMode: Text.WordWrap
             font: Kirigami.Theme.smallFont
-            text: i18n("Only translations are kept here. Deezer's lyrics are not kept; those from LRCLIB stay in the web cache (Storage page), like any page the browser loads.")
+            text: i18n("Only the translations are kept, never the lyrics themselves.")
         }
     }
 }

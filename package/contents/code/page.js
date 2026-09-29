@@ -149,7 +149,9 @@
 
     // LRCLIB asks clients to say who they are; a page cannot set User-Agent,
     // hence its Lrclib-Client alternative. After a 429 it must be left alone
-    // for the Retry-After it gives.
+    // for the Retry-After it gives. no-store: the web engine would otherwise
+    // keep the lyrics on disk (GET), for about 60 ms saved on a song heard
+    // again, since LRCLIB sends no cache headers.
     const LRCLIB_CLIENT = 'Deezer Plasmoid 0.1.0 (https://github.com/rcspam)';
     let lrclibPausedUntil = 0;
 
@@ -163,7 +165,10 @@
             album_name: song.ALB_TITLE || '',
             duration: String(song.DURATION || ''),
         });
-        const response = await fetch('https://lrclib.net/api/get?' + params, { headers: { 'Lrclib-Client': LRCLIB_CLIENT } });
+        const response = await fetch('https://lrclib.net/api/get?' + params, {
+            cache: 'no-store',
+            headers: { 'Lrclib-Client': LRCLIB_CLIENT },
+        });
         if (response.status === 429) {
             lrclibPausedUntil = Date.now() + (Number(response.headers.get('Retry-After')) || 60) * 1000;
         }

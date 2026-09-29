@@ -38,16 +38,18 @@ QtObject {
         return value;
     }
 
-    function count() {
-        let n = 0;
+    // Bytes of the kept translations (the file itself only shrinks on VACUUM,
+    // which LocalStorage cannot run: it wraps everything in transactions).
+    function size() {
+        let bytes = 0;
         try {
             open().readTransaction(tx => {
-                n = tx.executeSql("SELECT COUNT(*) AS n FROM translations").rows.item(0).n;
+                bytes = tx.executeSql("SELECT TOTAL(LENGTH(CAST(key AS BLOB)) + LENGTH(CAST(value AS BLOB))) AS n FROM translations").rows.item(0).n;
             });
         } catch (e) {
-            console.warn("[deezer] translation cache count failed", e);
+            console.warn("[deezer] translation cache size failed", e);
         }
-        return n;
+        return bytes;
     }
 
     function clear() {

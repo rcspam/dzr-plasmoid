@@ -82,7 +82,7 @@ KCM.SimpleKCM {
             Layout.maximumWidth: Kirigami.Units.gridUnit * 24
             wrapMode: Text.WordWrap
             font: Kirigami.Theme.smallFont
-            text: i18n("The Deezer page caches what it loads, like any browser: mostly tracks (encrypted) and covers, and lyrics from LRCLIB. Above the limit, the oldest files go. Emptying it does not sign you out.")
+            text: i18n("The Deezer page caches what it loads, like any browser: mostly tracks (encrypted) and covers. Above the limit, the oldest files go. Emptying it does not sign you out.")
         }
     }
 }
