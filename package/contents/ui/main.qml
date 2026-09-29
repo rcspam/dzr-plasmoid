@@ -50,7 +50,12 @@ PlasmoidItem {
     property bool favorite: false
     property bool favoriteAvailable: false
     property int queueIndex: 0
-    property var queueTracks: []
+    // Updated in place (see syncQueue), so the list keeps its scroll position.
+    ListModel {
+        id: queueModel
+    }
+    // A whole new queue: the list goes back to the current track.
+    signal queueReset()
     property var playlists: null
     // Lyrics of the current track, loaded by the page on each track change:
     // status is "loading", "ready" or "missing".
@@ -255,6 +260,50 @@ PlasmoidItem {
         });
     }
 
+    // Applies the page's queue to queueModel with the smallest change: a heart
+    // updates its row, a removed or added track its own row. Anything else
+    // rebuilds the list. Replacing the model outright would reset the view,
+    // which jumped back to the top on every heart.
+    function syncQueue(tracks) {
+        const sameAt = (i, j) => queueModel.get(i).songId === tracks[j].songId;
+        const count = queueModel.count;
+        if (tracks.length === count && tracks.every((track, i) => sameAt(i, i))) {
+            tracks.forEach((track, i) => {
+                if (queueModel.get(i).favorite !== track.favorite) {
+                    queueModel.setProperty(i, "favorite", track.favorite);
+                }
+            });
+            return;
+        }
+        // First row that differs, then check the rest only shifted by one.
+        let first = 0;
+        while (first < Math.min(count, tracks.length) && sameAt(first, first)) {
+            first++;
+        }
+        if (tracks.length === count - 1) {
+            let shifted = true;
+            for (let j = first; j < tracks.length && shifted; j++) {
+                shifted = sameAt(j + 1, j);
+            }
+            if (shifted) {
+                queueModel.remove(first);
+                return;
+            }
+        } else if (tracks.length === count + 1) {
+            let shifted = true;
+            for (let i = first; i < count && shifted; i++) {
+                shifted = sameAt(i, i + 1);
+            }
+            if (shifted) {
+                queueModel.insert(first, tracks[first]);
+                return;
+            }
+        }
+        queueModel.clear();
+        tracks.forEach(track => queueModel.append(track));
+        queueReset();
+    }
+
     function refreshQueue() {
         run(Deezer.call("queue"), function (result) {
             if (typeof result !== "string" || result === root.queueJson) {
@@ -262,7 +311,7 @@ PlasmoidItem {
             }
             root.queueJson = result;
             try {
-                root.queueTracks = JSON.parse(result).tracks;
+                root.syncQueue(JSON.parse(result).tracks);
             } catch (e) {
                 console.warn("[deezer] bad queue:", result);
             }
@@ -968,14 +1017,31 @@ PlasmoidItem {
                 ListView {
                     id: queueView
                     clip: true
-                    model: root.queueTracks
+                    model: queueModel
                     currentIndex: root.queueIndex
-                    onCountChanged: positionViewAtIndex(root.queueIndex, ListView.Center)
+                    // On the current track when a new queue comes or the page opens,
+                    // not when a track is removed.
+                    onVisibleChanged: {
+                        if (visible) {
+                            positionViewAtIndex(root.queueIndex, ListView.Center);
+                        }
+                    }
+
+                    Connections {
+                        target: root
+                        function onQueueReset() {
+                            queueView.positionViewAtIndex(root.queueIndex, ListView.Center);
+                        }
+                    }
 
                     delegate: PlasmaComponents.ItemDelegate {
                         id: trackDelegate
                         required property int index
-                        required property var modelData
+                        required property string title
+                        required property string artist
+                        required property string cover
+                        required property real duration
+                        required property bool favorite
                         readonly property bool current: index === root.queueIndex
 
                         width: ListView.view.width
@@ -989,7 +1055,7 @@ PlasmoidItem {
                             Image {
                                 Layout.preferredWidth: Kirigami.Units.gridUnit * 2
                                 Layout.preferredHeight: Kirigami.Units.gridUnit * 2
-                                source: trackDelegate.modelData.cover
+                                source: trackDelegate.cover
                                 asynchronous: true
                                 fillMode: Image.PreserveAspectCrop
                             }
@@ -1002,29 +1068,29 @@ PlasmoidItem {
                                     Layout.fillWidth: true
                                     elide: Text.ElideRight
                                     font.bold: trackDelegate.current
-                                    text: trackDelegate.modelData.title
+                                    text: trackDelegate.title
                                 }
                                 PlasmaComponents.Label {
                                     Layout.fillWidth: true
                                     elide: Text.ElideRight
                                     opacity: 0.7
                                     font: Kirigami.Theme.smallFont
-                                    text: trackDelegate.modelData.artist
+                                    text: trackDelegate.artist
                                 }
                             }
 
                             PlasmaComponents.Label {
                                 opacity: 0.7
                                 font: Kirigami.Theme.smallFont
-                                text: Deezer.formatTime(trackDelegate.modelData.duration)
+                                text: Deezer.formatTime(trackDelegate.duration)
                             }
 
                             // Heart and removal, as in deezer.com's queue.
                             PlasmaComponents.ToolButton {
-                                icon.name: trackDelegate.modelData.favorite ? "" : "love-symbolic"
-                                icon.source: trackDelegate.modelData.favorite ? Qt.resolvedUrl("../images/dzplasmoid-heart-filled.svg") : ""
+                                icon.name: trackDelegate.favorite ? "" : "love-symbolic"
+                                icon.source: trackDelegate.favorite ? Qt.resolvedUrl("../images/dzplasmoid-heart-filled.svg") : ""
                                 display: QQC2.AbstractButton.IconOnly
-                                text: trackDelegate.modelData.favorite ? i18n("Remove from favorites") : i18n("Add to favorites")
+                                text: trackDelegate.favorite ? i18n("Remove from favorites") : i18n("Add to favorites")
                                 onClicked: root.actOnQueue("toggleQueueFavorite", [trackDelegate.index])
 
                                 PlasmaComponents.ToolTip {
