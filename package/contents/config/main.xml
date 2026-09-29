@@ -50,6 +50,11 @@
         <entry name="ollamaModel" type="String">
             <default>translategemma</default>
         </entry>
+        <!-- Prompt for Ollama, with {language}, {code} and {lines} in it
+             (see translate.js); empty for the default one. -->
+        <entry name="ollamaPrompt" type="String">
+            <default></default>
+        </entry>
         <!-- Also ask lrcmux, an aggregator of unofficial lyrics sources. -->
         <entry name="extendedLyrics" type="Bool">
             <default>false</default>

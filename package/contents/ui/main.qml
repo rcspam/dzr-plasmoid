@@ -107,8 +107,12 @@ PlasmoidItem {
     property var lyricsMachine: null
     property string lyricsMachineState: ""
     property string lyricsMachineEngine: ""
-    // Another engine: the current lyrics are translated again, with it.
-    onTranslationEngineChanged: {
+    // What a translation depends on besides the lyrics: the engine, and for
+    // Ollama its model and prompt. A change translates the current lyrics
+    // again, and keeps apart what the cache holds.
+    readonly property string translationSetup: translationEngine !== "ollama" ? translationEngine
+        : ["ollama", Plasmoid.configuration.ollamaModel, Translate.fingerprint(Plasmoid.configuration.ollamaPrompt)].join("/")
+    onTranslationSetupChanged: {
         lyricsMachine = null;
         lyricsMachineState = "";
         lyricsMachineEngine = "";
@@ -284,7 +288,8 @@ PlasmoidItem {
         const key = lyricsKey;
         const target = Qt.locale().name.split("_")[0];
         // Song, lyrics source, language and engine: each gives other lines.
-        const cacheKey = [key.split(":")[0], lyrics.source, target, translationEngine].join(":");
+        const setup = translationSetup;
+        const cacheKey = [key.split(":")[0], lyrics.source, target, setup].join(":");
         const cached = translationCache.get(cacheKey);
         if (cached && (cached.sameLanguage || cached.lines.length === lyrics.lines.length)) {
             applyTranslation(cached);
@@ -296,10 +301,11 @@ PlasmoidItem {
             libreTranslateUrl: Plasmoid.configuration.libreTranslateUrl,
             ollamaUrl: Plasmoid.configuration.ollamaUrl,
             ollamaModel: Plasmoid.configuration.ollamaModel,
+            ollamaPrompt: Plasmoid.configuration.ollamaPrompt,
         };
         Translate.translateLines(lyrics.lines.map(line => line.text), target, options, result => {
-            if (key !== root.lyricsKey || options.engine !== root.translationEngine) {
-                return; // Another track, or another engine, by now.
+            if (key !== root.lyricsKey || setup !== root.translationSetup) {
+                return; // Another track, or other translation settings, by now.
             }
             if (!result) {
                 root.lyricsMachineState = "failed";

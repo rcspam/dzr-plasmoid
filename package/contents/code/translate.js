@@ -13,6 +13,20 @@ var GOOGLE_URL = "https://translate.googleapis.com/translate_a/t?client=gtx&sl=a
 var GOOGLE_CHUNK = 50;
 // Lines per Ollama request; the chunks go one after the other.
 var OLLAMA_CHUNK = 20;
+// Ollama prompt when the settings give none. {language} and {code} are the
+// target language's name and code ("français", "fr"), {lines} the lines to
+// translate, numbered as "1| text"; the answer must keep these numbers.
+var OLLAMA_PROMPT = "Translate these song lyrics into {language}. Answer with one line per input "
+    + "line, keeping its number, as \"number| translation\", and nothing else.\n\n{lines}";
+
+// Short fingerprint of a text (djb2), to tell prompts apart in cache keys.
+function fingerprint(text) {
+    var h = 5381;
+    for (var i = 0; i < text.length; i++) {
+        h = (h * 33 + text.charCodeAt(i)) >>> 0;
+    }
+    return h.toString(36);
+}
 
 function post(url, contentType, body, callback) {
     var xhr = new XMLHttpRequest();
@@ -85,6 +99,11 @@ function libreTranslate(texts, target, options, callback) {
 function ollama(texts, target, options, callback) {
     var url = options.ollamaUrl.replace(/\/+$/, "") + "/api/generate";
     var language = Qt.locale(target).nativeLanguageName || target;
+    var template = options.ollamaPrompt || OLLAMA_PROMPT;
+    // Without {lines} the prompt would come with nothing to translate.
+    if (template.indexOf("{lines}") < 0) {
+        template += "\n\n{lines}";
+    }
     var translated = texts.map(function () { return ""; });
     var start = 0;
     function next() {
@@ -95,9 +114,8 @@ function ollama(texts, target, options, callback) {
         var chunkStart = start;
         var chunk = texts.slice(start, start + OLLAMA_CHUNK);
         start += OLLAMA_CHUNK;
-        var prompt = "Translate these song lyrics into " + language + ". Answer with one line per input "
-            + "line, keeping its number, as \"number| translation\", and nothing else.\n\n"
-            + chunk.map(function (text, i) { return (i + 1) + "| " + text; }).join("\n");
+        var prompt = template.split("{language}").join(language).split("{code}").join(target)
+            .split("{lines}").join(chunk.map(function (text, i) { return (i + 1) + "| " + text; }).join("\n"));
         var body = JSON.stringify({ model: options.ollamaModel, prompt: prompt, stream: false, options: { temperature: 0 } });
         post(url, "application/json", body, function (data) {
             if (!data || typeof data.response !== "string") {

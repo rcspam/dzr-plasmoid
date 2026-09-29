@@ -5,6 +5,7 @@ import org.kde.kirigami as Kirigami
 import org.kde.kcmutils as KCM
 
 import ".." as Ui
+import "../../code/translate.js" as Translate
 
 KCM.SimpleKCM {
     id: page
@@ -13,6 +14,8 @@ KCM.SimpleKCM {
     property alias cfg_libreTranslateUrl: libreTranslateUrl.text
     property alias cfg_ollamaUrl: ollamaUrl.text
     property alias cfg_ollamaModel: ollamaModel.text
+    // Empty for the default prompt, shown in the field all the same.
+    property string cfg_ollamaPrompt
     property alias cfg_translateDeezerLyrics: translateDeezerLyrics.checked
     property alias cfg_extendedLyrics: extendedLyrics.checked
     property real cfg_lyricsFontScale
@@ -130,6 +133,35 @@ KCM.SimpleKCM {
             Layout.preferredWidth: Kirigami.Units.gridUnit * 16
             enabled: page.cfg_translationEngine === "ollama"
             placeholderText: "translategemma"
+        }
+
+        QQC2.TextArea {
+            id: ollamaPrompt
+            Kirigami.FormData.label: i18n("Ollama prompt:")
+            Layout.preferredWidth: Kirigami.Units.gridUnit * 24
+            enabled: page.cfg_translationEngine === "ollama"
+            wrapMode: TextEdit.Wrap
+            text: page.cfg_ollamaPrompt || Translate.OLLAMA_PROMPT
+            onTextChanged: page.cfg_ollamaPrompt = text === Translate.OLLAMA_PROMPT ? "" : text
+        }
+
+        RowLayout {
+            enabled: page.cfg_translationEngine === "ollama"
+
+            QQC2.Label {
+                Layout.maximumWidth: Kirigami.Units.gridUnit * 18
+                wrapMode: Text.WordWrap
+                font: Kirigami.Theme.smallFont
+                text: i18n("{language} and {code} become the language to translate into (français, fr), {lines} the lyrics as numbered lines. The answer must keep the numbers, as \"number| translation\".")
+            }
+
+            QQC2.Button {
+                Layout.alignment: Qt.AlignTop
+                icon.name: "edit-undo"
+                text: i18n("Default")
+                enabled: page.cfg_ollamaPrompt !== ""
+                onClicked: ollamaPrompt.text = Translate.OLLAMA_PROMPT
+            }
         }
 
         EngineButton {
