@@ -539,15 +539,6 @@ PlasmoidItem {
                 onClicked: root.page = root.page === root.pagePopup ? root.pageWeb : root.pagePlayer
             }
 
-            Kirigami.Heading {
-                Layout.fillWidth: true
-                level: 4
-                elide: Text.ElideRight
-                text: root.page === root.pageQueue ? i18n("Queue")
-                    : root.page === root.pagePopup ? popupView.title
-                    : "Deezer"
-            }
-
             PlasmaComponents.ToolButton {
                 visible: root.page === root.pagePlayer
                 icon.name: "web-browser-symbolic"
@@ -558,6 +549,15 @@ PlasmoidItem {
                 PlasmaComponents.ToolTip {
                     text: parent.text
                 }
+            }
+
+            Kirigami.Heading {
+                Layout.fillWidth: true
+                level: 4
+                elide: Text.ElideRight
+                text: root.page === root.pageQueue ? i18n("Queue")
+                    : root.page === root.pagePopup ? popupView.title
+                    : "Deezer"
             }
 
             PlasmaComponents.ToolButton {
