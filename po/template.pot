@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.rcspam.deezerplasmoid\n"
 "Report-Msgid-Bugs-To: https://github.com/rcspam\n"
-"POT-Creation-Date: 2026-09-29 19:34+0200\n"
+"POT-Creation-Date: 2026-09-29 20:01+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -66,19 +66,19 @@ msgstr ""
 msgid "The lyrics could not be translated."
 msgstr ""
 
-#: package/contents/ui/LyricsView.qml:211
+#: package/contents/ui/LyricsView.qml:214
 msgid "No sync"
 msgstr ""
 
-#: package/contents/ui/LyricsView.qml:214
+#: package/contents/ui/LyricsView.qml:217
 msgid "Transl. %1"
 msgstr ""
 
-#: package/contents/ui/LyricsView.qml:233
+#: package/contents/ui/LyricsView.qml:236
 msgid "Translate"
 msgstr ""
 
-#: package/contents/ui/LyricsView.qml:256
+#: package/contents/ui/LyricsView.qml:259
 msgid "No lyrics for this track"
 msgstr ""
 
@@ -228,8 +228,8 @@ msgid "Volume change per wheel notch:"
 msgstr ""
 
 #: package/contents/ui/config/ConfigGeneral.qml:54
-#: package/contents/ui/config/ConfigLyrics.qml:129
-#: package/contents/ui/config/ConfigLyrics.qml:145
+#: package/contents/ui/config/ConfigLyrics.qml:149
+#: package/contents/ui/config/ConfigLyrics.qml:165
 msgctxt "percentage"
 msgid "%1 %"
 msgstr ""
@@ -238,94 +238,113 @@ msgstr ""
 msgid "Invert the wheel direction"
 msgstr ""
 
-#: package/contents/ui/config/ConfigLyrics.qml:28
+#: package/contents/ui/config/ConfigLyrics.qml:29
 msgid "%1 byte"
 msgid_plural "%1 bytes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: package/contents/ui/config/ConfigLyrics.qml:31
+#: package/contents/ui/config/ConfigLyrics.qml:32
 msgid "%1 KB"
 msgstr ""
 
-#: package/contents/ui/config/ConfigLyrics.qml:33
+#: package/contents/ui/config/ConfigLyrics.qml:34
 #: package/contents/ui/config/ConfigStorage.qml:57
 #: package/contents/ui/config/ConfigStorage.qml:76
 msgid "%1 MB"
 msgstr ""
 
-#: package/contents/ui/config/ConfigLyrics.qml:49
-msgid "Translation of lyrics Deezer does not translate"
-msgstr ""
-
-#: package/contents/ui/config/ConfigLyrics.qml:53
-msgid "Translate with:"
+#: package/contents/ui/config/ConfigLyrics.qml:50
+msgid "Sources"
 msgstr ""
 
 #: package/contents/ui/config/ConfigLyrics.qml:55
-msgid "Google (online, unofficial service)"
+msgid "Lyrics:"
 msgstr ""
 
-#: package/contents/ui/config/ConfigLyrics.qml:60
-msgid "A LibreTranslate server"
+#: package/contents/ui/config/ConfigLyrics.qml:56
+msgid "Extended sources (lrcmux)"
 msgstr ""
 
-#: package/contents/ui/config/ConfigLyrics.qml:65
-msgid "LibreTranslate address:"
+#: package/contents/ui/config/ConfigLyrics.qml:64
+msgid ""
+"When Deezer and LRCLIB have no synced lyrics, asks lrcmux, which gathers "
+"them from YouTube Music, KuGou, Musixmatch and others. These are unofficial, "
+"unlicensed sources: for personal use, and the service may stop at any time."
+msgstr ""
+
+#: package/contents/ui/config/ConfigLyrics.qml:69
+msgid "Translation of lyrics Deezer does not translate"
 msgstr ""
 
 #: package/contents/ui/config/ConfigLyrics.qml:73
+msgid "Translate with:"
+msgstr ""
+
+#: package/contents/ui/config/ConfigLyrics.qml:75
+msgid "Google (online, unofficial service)"
+msgstr ""
+
+#: package/contents/ui/config/ConfigLyrics.qml:80
+msgid "A LibreTranslate server"
+msgstr ""
+
+#: package/contents/ui/config/ConfigLyrics.qml:85
+msgid "LibreTranslate address:"
+msgstr ""
+
+#: package/contents/ui/config/ConfigLyrics.qml:93
 msgid "An Ollama server (better, but slower)"
 msgstr ""
 
-#: package/contents/ui/config/ConfigLyrics.qml:78
+#: package/contents/ui/config/ConfigLyrics.qml:98
 msgid "Ollama address:"
 msgstr ""
 
-#: package/contents/ui/config/ConfigLyrics.qml:86
+#: package/contents/ui/config/ConfigLyrics.qml:106
 msgid "Ollama model:"
 msgstr ""
 
-#: package/contents/ui/config/ConfigLyrics.qml:94
+#: package/contents/ui/config/ConfigLyrics.qml:114
 msgid "No machine translation"
 msgstr ""
 
-#: package/contents/ui/config/ConfigLyrics.qml:100
+#: package/contents/ui/config/ConfigLyrics.qml:120
 msgid "Also translate the lyrics Deezer provides"
 msgstr ""
 
-#: package/contents/ui/config/ConfigLyrics.qml:108
+#: package/contents/ui/config/ConfigLyrics.qml:128
 msgid ""
 "Deezer's lyrics are licensed from LyricFind for personal use: this sends "
 "them to the chosen engine. Lyrics from LRCLIB are always translated."
 msgstr ""
 
-#: package/contents/ui/config/ConfigLyrics.qml:113
+#: package/contents/ui/config/ConfigLyrics.qml:133
 msgid "Appearance"
 msgstr ""
 
-#: package/contents/ui/config/ConfigLyrics.qml:117
+#: package/contents/ui/config/ConfigLyrics.qml:137
 msgid "Text size:"
 msgstr ""
 
-#: package/contents/ui/config/ConfigLyrics.qml:134
+#: package/contents/ui/config/ConfigLyrics.qml:154
 msgid "Fade around the sung line:"
 msgstr ""
 
-#: package/contents/ui/config/ConfigLyrics.qml:151
+#: package/contents/ui/config/ConfigLyrics.qml:171
 msgid "Cache"
 msgstr ""
 
-#: package/contents/ui/config/ConfigLyrics.qml:155
+#: package/contents/ui/config/ConfigLyrics.qml:175
 msgid "Kept translations:"
 msgstr ""
 
-#: package/contents/ui/config/ConfigLyrics.qml:164
+#: package/contents/ui/config/ConfigLyrics.qml:184
 #: package/contents/ui/config/ConfigStorage.qml:62
 msgid "Empty"
 msgstr ""
 
-#: package/contents/ui/config/ConfigLyrics.qml:177
+#: package/contents/ui/config/ConfigLyrics.qml:197
 msgid "Only the translations are kept, never the lyrics themselves."
 msgstr ""
 

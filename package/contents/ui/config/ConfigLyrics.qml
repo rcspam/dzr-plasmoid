@@ -14,6 +14,7 @@ KCM.SimpleKCM {
     property alias cfg_ollamaUrl: ollamaUrl.text
     property alias cfg_ollamaModel: ollamaModel.text
     property alias cfg_translateDeezerLyrics: translateDeezerLyrics.checked
+    property alias cfg_extendedLyrics: extendedLyrics.checked
     property real cfg_lyricsFontScale
     property alias cfg_lyricsFade: fade.value
 
@@ -44,6 +45,25 @@ KCM.SimpleKCM {
     }
 
     Kirigami.FormLayout {
+        Item {
+            Kirigami.FormData.isSection: true
+            Kirigami.FormData.label: i18n("Sources")
+        }
+
+        QQC2.CheckBox {
+            id: extendedLyrics
+            Kirigami.FormData.label: i18n("Lyrics:")
+            text: i18n("Extended sources (lrcmux)")
+        }
+
+        QQC2.Label {
+            Layout.fillWidth: true
+            Layout.maximumWidth: Kirigami.Units.gridUnit * 24
+            wrapMode: Text.WordWrap
+            font: Kirigami.Theme.smallFont
+            text: i18n("When Deezer and LRCLIB have no synced lyrics, asks lrcmux, which gathers them from YouTube Music, KuGou, Musixmatch and others. These are unofficial, unlicensed sources: for personal use, and the service may stop at any time.")
+        }
+
         Item {
             Kirigami.FormData.isSection: true
             Kirigami.FormData.label: i18n("Translation of lyrics Deezer does not translate")

@@ -214,10 +214,57 @@
         return data.plainLyrics ? Object.assign(credits, { synced: false, lines: plainLines(data.plainLyrics) }) : null;
     }
 
+    // lrcmux (optional, "extended sources"): an aggregator that picks the best
+    // lyrics among LRCLIB, YouTube Music, KuGou, Musixmatch or Genius, and says
+    // which. Asked by ISRC, which finds the right recording whatever album it
+    // is filed under. Only its synced lyrics are used. Its CORS rules allow no
+    // custom header, hence no client name; no-store keeps lyrics off the disk.
+    let lrcmuxPausedUntil = 0;
+
+    async function lrcmuxLyrics(song) {
+        if (Date.now() < lrcmuxPausedUntil) {
+            return null;
+        }
+        const params = new URLSearchParams({
+            artist: song.ART_NAME || '',
+            title: song.SNG_TITLE || '',
+            album: song.ALB_TITLE || '',
+            duration: String(Number(song.DURATION) || 0),
+            level: 'line',
+            format: 'json',
+        });
+        if (song.ISRC) {
+            params.set('isrc', song.ISRC);
+        }
+        const response = await fetch('https://api.lrcmux.dev/get?' + params, { cache: 'no-store' });
+        if (response.status === 429) {
+            lrcmuxPausedUntil = Date.now() + (Number(response.headers.get('Retry-After')) || 60) * 1000;
+        }
+        if (!response.ok) {
+            return null;
+        }
+        const data = await response.json();
+        const lines = (data.lines || []).filter(line => typeof line.start === 'number');
+        if (!data.meta || data.meta.level === 'none' || lines.length === 0) {
+            return null;
+        }
+        return {
+            source: 'lrcmux',
+            origin: (data.meta.source && data.meta.source.name) || '',
+            writers: '',
+            licence: '',
+            synced: true,
+            lines: lines.map(line => ({ time: line.start / 1000, text: line.text || '', translation: '' })),
+        };
+    }
+
+    // Settings from the widget, sent with each snapshot.
+    h.options = { extendedLyrics: false };
+
     // Resolves to the lyrics of a dzPlayer song object, or null. Synced lyrics
     // come first, whatever the source: Deezer sometimes only has the text,
-    // which cannot follow the song, when LRCLIB has it synced. Also handy
-    // from the dev tools.
+    // which cannot follow the song, when LRCLIB or lrcmux has it synced.
+    // Also handy from the dev tools.
     h.fetchLyrics = async song => {
         let deezer = null;
         try {
@@ -236,6 +283,16 @@
         }
         if (lrclib && lrclib.synced) {
             return lrclib;
+        }
+        if (h.options.extendedLyrics) {
+            try {
+                const extended = await lrcmuxLyrics(song);
+                if (extended) {
+                    return extended;
+                }
+            } catch (e) {
+                console.warn('[dzPlasmoid] lrcmux lyrics failed', e);
+            }
         }
         return deezer || lrclib;
     };
@@ -324,7 +381,12 @@
     h.toggleNormalize = () => toggleAudioSwitch('normalize_button');
     h.toggleQueueSync = () => toggleAudioSwitch('synchronised_button');
 
-    h.snapshot = () => {
+    h.snapshot = options => {
+        if (options && options.extendedLyrics !== h.options.extendedLyrics) {
+            h.options = options;
+            // Other sources now: ask again for the current song.
+            h.lyricsState = { songId: '', status: '', data: null };
+        }
         const p = player();
         if (document.querySelector('[data-testid="topbar-profile"]')) {
             h.session = 'in';

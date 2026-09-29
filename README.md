@@ -68,6 +68,9 @@ taken down.
 
 Lyrics come from Deezer (licensed by LyricFind) or, when Deezer has none or
 no synced version, from LRCLIB, whose lyrics are contributed by its users.
+An option, off by default, also asks lrcmux, which gathers lyrics from
+unofficial and unlicensed sources (YouTube Music, KuGou, Musixmatch and
+others); it is meant for personal use and may stop working at any time.
 Machine translation is optional: it sends the lyrics to the engine chosen in
 the settings (Google, or your own LibreTranslate or Ollama server).
 
@@ -115,6 +118,7 @@ not when `plasmoidviewer` runs the source folder.
 
 General: the Deezer site language (the system's by default, English when
 Deezer does not have it) and the panel icon's wheel. Lyrics: the machine
+lyrics sources (extended sources through lrcmux, off by default), the
 translation engine (Google, a LibreTranslate or an Ollama server, or none),
 whether Deezer's own lyrics may be sent to it, the lyrics look, and the
 translation cache. Storage: the web engine's HTTP cache, its limit and a

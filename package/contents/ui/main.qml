@@ -153,7 +153,7 @@ PlasmoidItem {
     }
 
     function refresh() {
-        run(Deezer.call("snapshot"), function (result) {
+        run(Deezer.call("snapshot", [{ extendedLyrics: Plasmoid.configuration.extendedLyrics }]), function (result) {
             if (typeof result !== "string") {
                 return;
             }

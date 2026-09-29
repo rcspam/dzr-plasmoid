@@ -50,6 +50,10 @@
         <entry name="ollamaModel" type="String">
             <default>translategemma</default>
         </entry>
+        <!-- Also ask lrcmux, an aggregator of unofficial lyrics sources. -->
+        <entry name="extendedLyrics" type="Bool">
+            <default>false</default>
+        </entry>
         <!-- Also send Deezer's lyrics (licensed from LyricFind) to the engine. -->
         <entry name="translateDeezerLyrics" type="Bool">
             <default>true</default>

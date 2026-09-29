@@ -205,6 +205,9 @@ Item {
                 const parts = [];
                 if (view.lyrics && view.lyrics.source === "lrclib") {
                     parts.push("LRCLIB");
+                } else if (view.lyrics && view.lyrics.source === "lrcmux") {
+                    // The aggregator, then where its lyrics really come from.
+                    parts.push(view.lyrics.origin ? "lrcmux/" + view.lyrics.origin : "lrcmux");
                 }
                 // Plain text: no timing, so no following, seeking or fade.
                 if (view.lyrics && !view.synced) {
