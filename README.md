@@ -33,3 +33,12 @@ the `deezer-plasmoid` QtWebEngine profile of the host process.
 them into each `po/<lang>.po` and compiles the `.mo` files into
 `package/contents/locale`. Plasma only loads them from an installed package,
 not when `plasmoidviewer` runs the source folder.
+
+## Settings
+
+General: the Deezer site language (the system's by default, English when
+Deezer does not have it) and the panel icon's wheel. Lyrics: the machine
+translation engine (Google, a LibreTranslate or an Ollama server, or none),
+whether Deezer's own lyrics may be sent to it, the lyrics look, and the
+translation cache. Storage: the web engine's HTTP cache, its limit and a
+button to empty it.

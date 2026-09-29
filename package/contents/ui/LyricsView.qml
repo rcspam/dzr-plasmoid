@@ -20,6 +20,11 @@ Item {
     property var machineTranslations: null
     property string machineState: ""
     property string machineEngine: ""
+    // Whether these lyrics may go to the translation engine (settings).
+    property bool machineAllowed: true
+    // Settings: text size factor, and fade strength around the sung line (0 to 1).
+    property real fontScale: 1
+    property real fadeStrength: 1
 
     signal seekRequested(real seconds)
     signal translateRequested()
@@ -30,7 +35,7 @@ Item {
     readonly property bool hasTranslation: lines.some(line => line.translation !== "")
     property bool showTranslation: false
     // Whether to offer Translate: not for lyrics already in the user's language.
-    readonly property bool canTranslate: lines.length > 0 && (hasTranslation || machineState !== "same")
+    readonly property bool canTranslate: lines.length > 0 && (hasTranslation || (machineAllowed && machineState !== "same"))
 
     // With Translate on, the lyrics of the next tracks get translated too.
     onLyricsChanged: {
@@ -112,11 +117,11 @@ Item {
             readonly property bool current: index === view.currentLine
             // Lines fade out with their distance to the sung one, sung ones faster.
             readonly property int distance: Math.abs(index - view.currentLine)
+            readonly property real faded: index < view.currentLine ? Math.max(0.12, 0.35 - 0.08 * (distance - 1))
+                                                                   : Math.max(0.15, 0.6 - 0.15 * (distance - 1))
 
             width: ListView.view.width
-            opacity: !view.synced || current ? 1
-                : index < view.currentLine ? Math.max(0.12, 0.35 - 0.08 * (distance - 1))
-                : Math.max(0.15, 0.6 - 0.15 * (distance - 1))
+            opacity: !view.synced || current ? 1 : 1 - view.fadeStrength * (1 - faded)
 
             Behavior on opacity {
                 OpacityAnimator {
@@ -130,7 +135,7 @@ Item {
                 wrapMode: Text.WordWrap
                 color: "white"
                 font.bold: true
-                font.pointSize: Kirigami.Theme.defaultFont.pointSize * (line.current ? 1.4 : 1.2)
+                font.pointSize: Kirigami.Theme.defaultFont.pointSize * (line.current ? 1.4 : 1.2) * view.fontScale
                 // Empty lines are instrumental parts.
                 text: line.modelData.text || "♪"
             }
@@ -140,6 +145,7 @@ Item {
                 visible: view.showTranslation && text !== ""
                 wrapMode: Text.WordWrap
                 color: Qt.rgba(1, 1, 1, 0.75)
+                font.pointSize: Kirigami.Theme.defaultFont.pointSize * view.fontScale
                 text: view.translationAt(line.index)
             }
 

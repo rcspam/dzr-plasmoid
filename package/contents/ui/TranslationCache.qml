@@ -38,6 +38,28 @@ QtObject {
         return value;
     }
 
+    function count() {
+        let n = 0;
+        try {
+            open().readTransaction(tx => {
+                n = tx.executeSql("SELECT COUNT(*) AS n FROM translations").rows.item(0).n;
+            });
+        } catch (e) {
+            console.warn("[deezer] translation cache count failed", e);
+        }
+        return n;
+    }
+
+    function clear() {
+        try {
+            open().transaction(tx => {
+                tx.executeSql("DELETE FROM translations");
+            });
+        } catch (e) {
+            console.warn("[deezer] translation cache clear failed", e);
+        }
+    }
+
     function set(key, value) {
         try {
             open().transaction(tx => {

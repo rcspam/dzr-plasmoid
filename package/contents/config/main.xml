@@ -22,5 +22,55 @@
         <entry name="pin" type="Bool">
             <default>false</default>
         </entry>
+
+        <!-- Language of the Deezer site: empty for the system's. -->
+        <entry name="deezerLanguage" type="String">
+            <default></default>
+        </entry>
+
+        <!-- Panel icon wheel: volume step in percent, and direction. -->
+        <entry name="wheelStep" type="Int">
+            <default>5</default>
+        </entry>
+        <entry name="invertWheel" type="Bool">
+            <default>false</default>
+        </entry>
+
+        <!-- Machine translation of lyrics Deezer does not translate:
+             "google", "libretranslate", "ollama" or "none". -->
+        <entry name="translationEngine" type="String">
+            <default>google</default>
+        </entry>
+        <entry name="libreTranslateUrl" type="String">
+            <default>http://127.0.0.1:5000</default>
+        </entry>
+        <entry name="ollamaUrl" type="String">
+            <default>http://127.0.0.1:11434</default>
+        </entry>
+        <entry name="ollamaModel" type="String">
+            <default>translategemma</default>
+        </entry>
+        <!-- Also send Deezer's lyrics (licensed from LyricFind) to the engine. -->
+        <entry name="translateDeezerLyrics" type="Bool">
+            <default>true</default>
+        </entry>
+
+        <!-- Lyrics look: text size factor, and fade strength around the sung
+             line, 0 (none) to 100. -->
+        <entry name="lyricsFontScale" type="Double">
+            <default>1.0</default>
+        </entry>
+        <entry name="lyricsFade" type="Int">
+            <default>100</default>
+        </entry>
+
+        <!-- Web engine HTTP cache limit, in megabytes. -->
+        <entry name="webCacheLimit" type="Int">
+            <default>300</default>
+        </entry>
+        <!-- Set by the settings to ask the widget to empty its web cache. -->
+        <entry name="webCacheClearRequest" type="String">
+            <default></default>
+        </entry>
     </group>
 </kcfg>

@@ -11,7 +11,7 @@ DOMAIN="plasma_applet_$ID"
 xgettext --from-code=UTF-8 --language=JavaScript --add-comments=i18n \
     -ki18n:1 -ki18nc:1c,2 -ki18np:1,2 -ki18ncp:1c,2,3 \
     --package-name="$ID" --msgid-bugs-address=https://github.com/rcspam \
-    -o po/template.pot package/contents/ui/*.qml
+    -o po/template.pot package/contents/ui/*.qml package/contents/ui/config/*.qml package/contents/config/*.qml
 
 for po in po/*.po; do
     lang=$(basename "$po" .po)

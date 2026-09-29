@@ -63,6 +63,14 @@ PlasmoidItem {
     property var lyrics: null
     property bool lyricsShown: false
     property bool toolTipShown: false
+
+    // From the settings.
+    readonly property string deezerLanguage: Deezer.siteLanguage(Plasmoid.configuration.deezerLanguage, Qt.locale().name.split("_")[0])
+    readonly property string translationEngine: Plasmoid.configuration.translationEngine
+    // Whether these lyrics may go to the translation engine: Deezer's own
+    // (licensed from LyricFind) only when the settings allow it.
+    readonly property bool machineTranslationAllowed: translationEngine !== "none" && lyrics !== null
+        && (lyrics.source !== "deezer" || Plasmoid.configuration.translateDeezerLyrics)
     // Machine translation of lyrics Deezer does not translate, one entry per
     // line. State: "", "working", "done", "same" (already in the user's
     // language) or "failed".
@@ -234,20 +242,26 @@ PlasmoidItem {
     }
 
     function translateLyrics() {
-        if (!lyrics || lyricsMachineState === "working" || lyricsMachineState === "done") {
+        if (!machineTranslationAllowed || lyricsMachineState === "working" || lyricsMachineState === "done") {
             return;
         }
         const key = lyricsKey;
         const target = Qt.locale().name.split("_")[0];
-        // Song, lyrics source and language: other lyrics get other lines.
-        const cacheKey = [key.split(":")[0], lyrics.source, target].join(":");
+        // Song, lyrics source, language and engine: each gives other lines.
+        const cacheKey = [key.split(":")[0], lyrics.source, target, translationEngine].join(":");
         const cached = translationCache.get(cacheKey);
         if (cached && (cached.sameLanguage || cached.lines.length === lyrics.lines.length)) {
             applyTranslation(cached);
             return;
         }
         lyricsMachineState = "working";
-        Translate.translateLines(lyrics.lines.map(line => line.text), target, result => {
+        const options = {
+            engine: translationEngine,
+            libreTranslateUrl: Plasmoid.configuration.libreTranslateUrl,
+            ollamaUrl: Plasmoid.configuration.ollamaUrl,
+            ollamaModel: Plasmoid.configuration.ollamaModel,
+        };
+        Translate.translateLines(lyrics.lines.map(line => line.text), target, options, result => {
             if (key !== root.lyricsKey) {
                 return; // Another track by now.
             }
@@ -412,7 +426,7 @@ PlasmoidItem {
         // turns up, and flipped by natural scrolling, which wheel.inverted
         // tells. One notch (120) is 5 %.
         onWheel: wheel => {
-            const delta = (wheel.inverted ? -1 : 1) * wheel.angleDelta.y;
+            const delta = (wheel.inverted ? -1 : 1) * (Plasmoid.configuration.invertWheel ? -1 : 1) * wheel.angleDelta.y;
             if (delta === 0) {
                 wheel.accepted = false;
                 return;
@@ -425,7 +439,7 @@ PlasmoidItem {
                 wheelDelta -= step * 120;
             }
             if (steps !== 0) {
-                root.changeVolume(steps * 0.05);
+                root.changeVolume(steps * Plasmoid.configuration.wheelStep / 100);
             }
         }
 
@@ -635,6 +649,9 @@ PlasmoidItem {
                             machineTranslations: root.lyricsMachine
                             machineState: root.lyricsMachineState
                             machineEngine: root.lyricsMachineEngine
+                            machineAllowed: root.machineTranslationAllowed
+                            fontScale: Plasmoid.configuration.lyricsFontScale
+                            fadeStrength: Plasmoid.configuration.lyricsFade / 100
                             onTranslateRequested: root.translateLyrics()
                             position: root.position
                             onSeekRequested: seconds => {
@@ -1117,7 +1134,8 @@ PlasmoidItem {
             WebEngineView {
                 id: web
                 profile: deezerProfile.instance()
-                url: Deezer.pageUrl
+                // Changing the language reloads the page, which stops the music.
+                url: Deezer.pageUrl(root.deezerLanguage)
                 settings.playbackRequiresUserGesture: false
                 userScripts.collection: [{
                     name: "dzPlasmoid",
@@ -1144,7 +1162,21 @@ PlasmoidItem {
                     reload();
                 }
 
-                Component.onCompleted: root.webView = web
+                Component.onCompleted: {
+                    root.webView = web;
+                    profile.httpCacheMaximumSize = Plasmoid.configuration.webCacheLimit * 1024 * 1024;
+                }
+
+                // Web cache limit, and the settings' "empty" button.
+                Connections {
+                    target: Plasmoid.configuration
+                    function onWebCacheLimitChanged() {
+                        web.profile.httpCacheMaximumSize = Plasmoid.configuration.webCacheLimit * 1024 * 1024;
+                    }
+                    function onWebCacheClearRequestChanged() {
+                        web.profile.clearHttpCache();
+                    }
+                }
                 Component.onDestruction: {
                     if (root.webView === web) {
                         root.webView = null;

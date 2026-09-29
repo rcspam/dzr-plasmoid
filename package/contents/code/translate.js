@@ -1,17 +1,18 @@
 .pragma library
 
-// Machine translation of lyrics that Deezer does not translate.
-//
-// Each line goes as its own item, so a translation always lands on its line:
-// Google's translate_a/t returns one [text, detected language] per q, and
-// LibreTranslate one translatedText per entry of a q list. Google first (the
-// service translate-shell uses, called in POST), the local LibreTranslate
-// if Google fails.
+// Machine translation of lyrics that Deezer does not translate, with the
+// engine picked in the settings. Each translation must land on its line:
+// - Google (translate_a/t, the service translate-shell uses, called in POST)
+//   returns one [text, detected language] per q, one q per line;
+// - LibreTranslate returns one translatedText per entry of a q list;
+// - Ollama gets numbered lines and its answers are matched by number, so a
+//   line the model adds or drops does not shift the others.
 
 var GOOGLE_URL = "https://translate.googleapis.com/translate_a/t?client=gtx&sl=auto&tl=";
-var LIBRE_URL = "http://127.0.0.1:5000/translate";
 // Lines per Google request; the chunks go in parallel.
-var CHUNK = 50;
+var GOOGLE_CHUNK = 50;
+// Lines per Ollama request; the chunks go one after the other.
+var OLLAMA_CHUNK = 20;
 
 function post(url, contentType, body, callback) {
     var xhr = new XMLHttpRequest();
@@ -34,11 +35,12 @@ function post(url, contentType, body, callback) {
     xhr.send(body);
 }
 
-// Calls back with {texts, languages} (one entry per text) or null.
-function google(texts, target, callback) {
+// The engines call back with {texts, languages} (one entry per text; languages
+// may be empty) or null.
+function google(texts, target, options, callback) {
     var chunks = [];
-    for (var i = 0; i < texts.length; i += CHUNK) {
-        chunks.push(texts.slice(i, i + CHUNK));
+    for (var i = 0; i < texts.length; i += GOOGLE_CHUNK) {
+        chunks.push(texts.slice(i, i + GOOGLE_CHUNK));
     }
     var results = [];
     var pending = chunks.length;
@@ -66,9 +68,9 @@ function google(texts, target, callback) {
     });
 }
 
-function libre(texts, target, callback) {
+function libreTranslate(texts, target, options, callback) {
     var body = JSON.stringify({ q: texts, source: "auto", target: target, format: "text" });
-    post(LIBRE_URL, "application/json", body, function (data) {
+    post(options.libreTranslateUrl.replace(/\/+$/, "") + "/translate", "application/json", body, function (data) {
         if (!data || !Array.isArray(data.translatedText) || data.translatedText.length !== texts.length) {
             callback(null);
             return;
@@ -80,11 +82,55 @@ function libre(texts, target, callback) {
     });
 }
 
-// Translates lyric lines into target (e.g. "fr"). Calls back with null on
-// failure, else {engine, sameLanguage, lines}: lines has one translation per
-// input line ("" for empty ones), sameLanguage is true when the lyrics are
-// mostly in the target language already.
-function translateLines(lines, target, callback) {
+function ollama(texts, target, options, callback) {
+    var url = options.ollamaUrl.replace(/\/+$/, "") + "/api/generate";
+    var language = Qt.locale(target).nativeLanguageName || target;
+    var translated = texts.map(function () { return ""; });
+    var start = 0;
+    function next() {
+        if (start >= texts.length) {
+            callback({ texts: translated, languages: [] });
+            return;
+        }
+        var chunkStart = start;
+        var chunk = texts.slice(start, start + OLLAMA_CHUNK);
+        start += OLLAMA_CHUNK;
+        var prompt = "Translate these song lyrics into " + language + ". Answer with one line per input "
+            + "line, keeping its number, as \"number| translation\", and nothing else.\n\n"
+            + chunk.map(function (text, i) { return (i + 1) + "| " + text; }).join("\n");
+        var body = JSON.stringify({ model: options.ollamaModel, prompt: prompt, stream: false, options: { temperature: 0 } });
+        post(url, "application/json", body, function (data) {
+            if (!data || typeof data.response !== "string") {
+                callback(null);
+                return;
+            }
+            data.response.split("\n").forEach(function (line) {
+                var m = /^\s*(\d+)\s*[|:.)]\s?(.*)$/.exec(line);
+                var k = m ? Number(m[1]) - 1 : -1;
+                if (k >= 0 && k < chunk.length) {
+                    translated[chunkStart + k] = m[2].trim();
+                }
+            });
+            next();
+        });
+    }
+    next();
+}
+
+var ENGINES = {
+    google: { name: "Google", run: google },
+    libretranslate: { name: "LibreTranslate", run: libreTranslate },
+    ollama: { name: "Ollama", run: ollama },
+};
+
+// Translates lyric lines into target (e.g. "fr") with options.engine
+// ("google", "libretranslate" or "ollama"; see the settings for the other
+// options). Calls back with null on failure, else {engine, sameLanguage,
+// lines}: lines has one translation per input line ("" for empty ones),
+// sameLanguage is true when the engine found the lyrics mostly in the target
+// language already.
+function translateLines(lines, target, options, callback) {
+    var engine = ENGINES[options.engine];
     var indexes = [];
     var texts = [];
     lines.forEach(function (line, i) {
@@ -93,29 +139,20 @@ function translateLines(lines, target, callback) {
             texts.push(line);
         }
     });
-    if (texts.length === 0) {
+    if (!engine || texts.length === 0) {
         callback(null);
         return;
     }
-    function finish(engine, result) {
+    engine.run(texts, target, options, function (result) {
+        if (!result) {
+            callback(null);
+            return;
+        }
         var translated = lines.map(function () { return ""; });
         indexes.forEach(function (lineIndex, n) {
             translated[lineIndex] = result.texts[n] || "";
         });
         var same = result.languages.filter(function (lang) { return lang === target; }).length;
-        callback({ engine: engine, sameLanguage: same > texts.length / 2, lines: translated });
-    }
-    google(texts, target, function (result) {
-        if (result) {
-            finish("Google", result);
-            return;
-        }
-        libre(texts, target, function (fallback) {
-            if (fallback) {
-                finish("LibreTranslate", fallback);
-            } else {
-                callback(null);
-            }
-        });
+        callback({ engine: engine.name, sameLanguage: same > texts.length / 2, lines: translated });
     });
 }
