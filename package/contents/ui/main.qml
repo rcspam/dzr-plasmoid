@@ -61,6 +61,7 @@ PlasmoidItem {
     readonly property bool hasTrack: title !== ""
 
     preferredRepresentation: compactRepresentation
+    hideOnWindowDeactivate: !Plasmoid.configuration.pin
     // deezer.com favicon (240x240), shipped: not every icon theme has a Deezer icon.
     // Packaged images need names no icon theme uses: Kirigami.Icon looks the file's
     // base name up in the icon theme first ("deezer" gave WhiteSur's app icon).
@@ -328,6 +329,19 @@ PlasmoidItem {
                     text: parent.text
                 }
             }
+
+            PlasmaComponents.ToolButton {
+                checkable: true
+                checked: Plasmoid.configuration.pin
+                icon.name: "window-pin"
+                display: QQC2.AbstractButton.IconOnly
+                text: i18n("Keep Open")
+                onToggled: Plasmoid.configuration.pin = checked
+
+                PlasmaComponents.ToolTip {
+                    text: parent.text
+                }
+            }
         }
 
         StackLayout {
@@ -433,11 +447,17 @@ PlasmoidItem {
                         }
                     }
 
-                    RowLayout {
+                    // Heart and "+" centred at a quarter of the width from each
+                    // edge, the track text between them.
+                    Item {
                         Layout.fillWidth: true
                         Layout.topMargin: Kirigami.Units.smallSpacing
+                        implicitHeight: Math.max(trackText.implicitHeight, addButton.implicitHeight)
 
                         PlasmaComponents.ToolButton {
+                            id: favoriteButton
+                            x: Math.round(parent.width / 4 - width / 2)
+                            anchors.verticalCenter: parent.verticalCenter
                             enabled: root.favoriteAvailable
                             // Filled heart when the track is in the favorites, outline otherwise.
                             // The filled heart ships with the package: icon themes rarely have a real one.
@@ -454,7 +474,12 @@ PlasmoidItem {
                         }
 
                         ColumnLayout {
-                            Layout.fillWidth: true
+                            id: trackText
+                            anchors.left: favoriteButton.right
+                            anchors.right: addButton.left
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.leftMargin: Kirigami.Units.smallSpacing
+                            anchors.rightMargin: Kirigami.Units.smallSpacing
                             spacing: 0
 
                             Kirigami.Heading {
@@ -483,6 +508,8 @@ PlasmoidItem {
 
                         PlasmaComponents.ToolButton {
                             id: addButton
+                            x: Math.round(parent.width * 3 / 4 - width / 2)
+                            anchors.verticalCenter: parent.verticalCenter
                             icon.name: "list-add"
                             display: QQC2.AbstractButton.IconOnly
                             text: i18n("Add to a playlist")
@@ -577,6 +604,7 @@ PlasmoidItem {
                     }
 
                     RowLayout {
+                        id: transportRow
                         Layout.alignment: Qt.AlignHCenter
                         spacing: Kirigami.Units.smallSpacing
 
@@ -636,15 +664,33 @@ PlasmoidItem {
                         }
                     }
 
-                    // Three equal columns: the volume spans the left two.
-                    GridLayout {
-                        Layout.fillWidth: true
-                        columns: 3
-                        uniformCellWidths: true
+                    // Mute and volume, as wide as the transport buttons and centred
+                    // under them, between the playlists and the queue buttons.
+                    // Layouts fill the width by default: turned off here and below,
+                    // or the block stretches past the transport buttons.
+                    RowLayout {
+                        Layout.alignment: Qt.AlignHCenter
+                        Layout.fillWidth: false
+                        spacing: Kirigami.Units.smallSpacing
+
+                        PlasmaComponents.ToolButton {
+                            Layout.rightMargin: Kirigami.Units.largeSpacing
+                            icon.name: "playlist-symbolic"
+                            display: QQC2.AbstractButton.IconOnly
+                            text: i18n("Show your playlists")
+                            onClicked: {
+                                root.run(Deezer.call("showPlaylists"));
+                                root.page = root.pageWeb;
+                            }
+
+                            PlasmaComponents.ToolTip {
+                                text: parent.text
+                            }
+                        }
 
                         RowLayout {
-                            Layout.fillWidth: true
-                            Layout.columnSpan: 2
+                            Layout.fillWidth: false
+                            Layout.preferredWidth: transportRow.implicitWidth
 
                             PlasmaComponents.ToolButton {
                                 readonly property real level: root.muted ? 0 : root.volume
@@ -669,40 +715,18 @@ PlasmoidItem {
                             }
                         }
 
-                        // Right third: queue and playlists, against the right edge.
-                        RowLayout {
-                            Layout.fillWidth: true
-
-                            Item {
-                                Layout.fillWidth: true
+                        PlasmaComponents.ToolButton {
+                            Layout.leftMargin: Kirigami.Units.largeSpacing
+                            icon.name: "view-media-playlist"
+                            display: QQC2.AbstractButton.IconOnly
+                            text: i18n("Show the queue")
+                            onClicked: {
+                                root.page = root.pageQueue;
+                                root.refreshQueue();
                             }
 
-                            PlasmaComponents.ToolButton {
-                                icon.name: "view-media-playlist"
-                                display: QQC2.AbstractButton.IconOnly
-                                text: i18n("Show the queue")
-                                onClicked: {
-                                    root.page = root.pageQueue;
-                                    root.refreshQueue();
-                                }
-
-                                PlasmaComponents.ToolTip {
-                                    text: parent.text
-                                }
-                            }
-
-                            PlasmaComponents.ToolButton {
-                                icon.name: "playlist-symbolic"
-                                display: QQC2.AbstractButton.IconOnly
-                                text: i18n("Show your playlists")
-                                onClicked: {
-                                    root.run(Deezer.call("showPlaylists"));
-                                    root.page = root.pageWeb;
-                                }
-
-                                PlasmaComponents.ToolTip {
-                                    text: parent.text
-                                }
+                            PlasmaComponents.ToolTip {
+                                text: parent.text
                             }
                         }
                     }
