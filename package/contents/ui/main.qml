@@ -636,42 +636,73 @@ PlasmoidItem {
                         }
                     }
 
-                    RowLayout {
+                    // Three equal columns: the volume spans the left two.
+                    GridLayout {
                         Layout.fillWidth: true
+                        columns: 3
+                        uniformCellWidths: true
 
-                        PlasmaComponents.ToolButton {
-                            readonly property real level: root.muted ? 0 : root.volume
-                            icon.name: level <= 0 ? "audio-volume-muted"
-                                : level < 0.34 ? "audio-volume-low"
-                                : level < 0.67 ? "audio-volume-medium"
-                                : "audio-volume-high"
-                            display: QQC2.AbstractButton.IconOnly
-                            text: root.muted ? i18n("Unmute") : i18n("Mute")
-                            onClicked: root.act("toggleMute")
-                        }
-
-                        ThinSlider {
+                        RowLayout {
                             Layout.fillWidth: true
-                            from: 0
-                            to: 1
-                            value: root.muted ? 0 : root.volume
-                            onMoved: {
-                                root.volume = value;
-                                root.act("setVolume", [value]);
+                            Layout.columnSpan: 2
+
+                            PlasmaComponents.ToolButton {
+                                readonly property real level: root.muted ? 0 : root.volume
+                                icon.name: level <= 0 ? "audio-volume-muted"
+                                    : level < 0.34 ? "audio-volume-low"
+                                    : level < 0.67 ? "audio-volume-medium"
+                                    : "audio-volume-high"
+                                display: QQC2.AbstractButton.IconOnly
+                                text: root.muted ? i18n("Unmute") : i18n("Mute")
+                                onClicked: root.act("toggleMute")
+                            }
+
+                            ThinSlider {
+                                Layout.fillWidth: true
+                                from: 0
+                                to: 1
+                                value: root.muted ? 0 : root.volume
+                                onMoved: {
+                                    root.volume = value;
+                                    root.act("setVolume", [value]);
+                                }
                             }
                         }
 
-                        PlasmaComponents.ToolButton {
-                            icon.name: "view-media-playlist"
-                            display: QQC2.AbstractButton.IconOnly
-                            text: i18n("Show the queue")
-                            onClicked: {
-                                root.page = root.pageQueue;
-                                root.refreshQueue();
+                        // Right third: queue and playlists, against the right edge.
+                        RowLayout {
+                            Layout.fillWidth: true
+
+                            Item {
+                                Layout.fillWidth: true
                             }
 
-                            PlasmaComponents.ToolTip {
-                                text: parent.text
+                            PlasmaComponents.ToolButton {
+                                icon.name: "view-media-playlist"
+                                display: QQC2.AbstractButton.IconOnly
+                                text: i18n("Show the queue")
+                                onClicked: {
+                                    root.page = root.pageQueue;
+                                    root.refreshQueue();
+                                }
+
+                                PlasmaComponents.ToolTip {
+                                    text: parent.text
+                                }
+                            }
+
+                            PlasmaComponents.ToolButton {
+                                icon.name: "playlist-symbolic"
+                                display: QQC2.AbstractButton.IconOnly
+                                text: i18n("Show your playlists")
+                                onClicked: {
+                                    root.run(Deezer.call("showPlaylists"));
+                                    root.page = root.pageWeb;
+                                }
+
+                                PlasmaComponents.ToolTip {
+                                    text: parent.text
+                                }
                             }
                         }
                     }

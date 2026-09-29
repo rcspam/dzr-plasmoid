@@ -170,6 +170,19 @@
     h.seek = fraction => player().control.seek(Math.max(0, Math.min(1, fraction)));
     h.playQueueIndex = index => player().playTrackAtIndex(index);
 
+    // Goes through the web app's own router: loading the URL would reload the
+    // page and stop the music.
+    h.showPlaylists = () => {
+        const link = document.querySelector('a[href$="/library/playlists"]');
+        if (link) {
+            link.click();
+            return;
+        }
+        const lang = location.pathname.split('/')[1] || 'fr';
+        history.pushState(null, '', `/${lang}/library/playlists`);
+        window.dispatchEvent(new PopStateEvent('popstate'));
+    };
+
     // Clicking Deezer's own heart lets the page pick the right API
     // (song.addFavorites or favorite_song.add) and keeps its UI in sync.
     h.toggleFavorite = () => {
