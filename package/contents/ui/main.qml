@@ -210,25 +210,40 @@ PlasmoidItem {
         });
     }
 
+    function applyTranslation(result) {
+        if (result.sameLanguage) {
+            lyricsMachineState = "same";
+        } else {
+            lyricsMachine = result.lines;
+            lyricsMachineEngine = result.engine;
+            lyricsMachineState = "done";
+        }
+    }
+
     function translateLyrics() {
         if (!lyrics || lyricsMachineState === "working" || lyricsMachineState === "done") {
             return;
         }
         const key = lyricsKey;
+        const target = Qt.locale().name.split("_")[0];
+        // Song, lyrics source and language: other lyrics get other lines.
+        const cacheKey = [key.split(":")[0], lyrics.source, target].join(":");
+        const cached = translationCache.get(cacheKey);
+        if (cached && (cached.sameLanguage || cached.lines.length === lyrics.lines.length)) {
+            applyTranslation(cached);
+            return;
+        }
         lyricsMachineState = "working";
-        Translate.translateLines(lyrics.lines.map(line => line.text), Qt.locale().name.split("_")[0], result => {
+        Translate.translateLines(lyrics.lines.map(line => line.text), target, result => {
             if (key !== root.lyricsKey) {
                 return; // Another track by now.
             }
             if (!result) {
                 root.lyricsMachineState = "failed";
-            } else if (result.sameLanguage) {
-                root.lyricsMachineState = "same";
-            } else {
-                root.lyricsMachine = result.lines;
-                root.lyricsMachineEngine = result.engine;
-                root.lyricsMachineState = "done";
+                return;
             }
+            translationCache.set(cacheKey, result);
+            root.applyTranslation(result);
         });
     }
 
@@ -263,6 +278,10 @@ PlasmoidItem {
         if (page === root.pageQueue) {
             refreshQueue();
         }
+    }
+
+    TranslationCache {
+        id: translationCache
     }
 
     WebEngineProfilePrototype {

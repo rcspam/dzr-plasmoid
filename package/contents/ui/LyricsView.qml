@@ -32,6 +32,13 @@ Item {
     // Whether to offer Translate: not for lyrics already in the user's language.
     readonly property bool canTranslate: lines.length > 0 && (hasTranslation || machineState !== "same")
 
+    // With Translate on, the lyrics of the next tracks get translated too.
+    onLyricsChanged: {
+        if (showTranslation && lyrics && !hasTranslation && machineState === "") {
+            translateRequested();
+        }
+    }
+
     function translationAt(index) {
         if (hasTranslation) {
             return lines[index].translation;
