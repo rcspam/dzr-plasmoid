@@ -249,7 +249,7 @@ PlasmoidItem {
 
             PlasmaComponents.ToolButton {
                 visible: root.page === root.pagePlayer
-                icon.name: "internet-web-browser"
+                icon.name: "web-browser-symbolic"
                 display: QQC2.AbstractButton.IconOnly
                 text: i18n("Show the Deezer page")
                 onClicked: root.page = root.pageWeb
@@ -287,7 +287,7 @@ PlasmoidItem {
                     iconName: "audio-headphones"
                     text: parent.signedOut ? i18n("Not signed in") : i18n("Nothing playing")
                     helpfulAction: QQC2.Action {
-                        icon.name: root.loggedIn ? "internet-web-browser" : "user"
+                        icon.name: root.loggedIn ? "web-browser-symbolic" : "user"
                         text: root.loggedIn ? i18n("Open Deezer") : i18n("Sign in")
                         onTriggered: root.page = root.pageWeb
                     }
