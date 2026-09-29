@@ -810,7 +810,10 @@ PlasmoidItem {
                             checked: root.lyricsShown
                             // Stays usable while shown, to go back to the cover.
                             enabled: root.lyricsStatus === "ready" || root.lyricsShown
-                            icon.name: "audio-input-microphone-symbolic"
+                            // Karaoke microphone shipped in two shades, picked by theme.
+                            icon.source: Kirigami.Theme.textColor.hslLightness > 0.5
+                                         ? Qt.resolvedUrl("../images/dzplasmoid-lyrics-dark.svg")
+                                         : Qt.resolvedUrl("../images/dzplasmoid-lyrics.svg")
                             display: QQC2.AbstractButton.IconOnly
                             text: root.lyricsShown ? i18n("Show the cover") : i18n("Show the lyrics")
                             onToggled: root.lyricsShown = checked
