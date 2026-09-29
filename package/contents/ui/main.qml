@@ -282,7 +282,10 @@ PlasmoidItem {
     }
 
     function translateLyrics() {
-        if (!machineTranslationAllowed || lyricsMachineState === "working" || lyricsMachineState === "done") {
+        // Checked here: the view can ask while its own flag for Deezer's
+        // translation still describes the previous lyrics.
+        const deezerTranslated = lyrics !== null && lyrics.lines.some(line => line.translation !== "");
+        if (!machineTranslationAllowed || deezerTranslated || lyricsMachineState === "working" || lyricsMachineState === "done") {
             return;
         }
         const key = lyricsKey;
