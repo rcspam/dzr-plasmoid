@@ -1137,8 +1137,16 @@ PlasmoidItem {
 
                             width: ListView.view.width
                             highlighted: current
-                            // Double click, as in most players: a single click is easy to make by accident.
-                            onDoubleClicked: root.act("playQueueIndex", [position])
+                            // A click plays the track; on the current one it only resumes,
+                            // so the double click that goes back to the cover never restarts it.
+                            onClicked: {
+                                if (!current) {
+                                    root.act("playQueueIndex", [position]);
+                                } else if (!root.playing) {
+                                    root.act("togglePause");
+                                }
+                            }
+                            onDoubleClicked: root.page = root.pagePlayer
 
                             contentItem: RowLayout {
                                 spacing: Kirigami.Units.smallSpacing
