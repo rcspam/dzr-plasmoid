@@ -67,6 +67,11 @@
         <entry name="lyricsFade" type="Int">
             <default>100</default>
         </entry>
+        <!-- Behind the lyrics: "cover" (blurred, text color to suit it),
+             "light" (black on white) or "dark" (white on black). -->
+        <entry name="lyricsBackground" type="String">
+            <default>cover</default>
+        </entry>
 
         <!-- Web engine HTTP cache limit, in megabytes. -->
         <entry name="webCacheLimit" type="Int">

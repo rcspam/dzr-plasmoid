@@ -17,6 +17,7 @@ KCM.SimpleKCM {
     property alias cfg_extendedLyrics: extendedLyrics.checked
     property real cfg_lyricsFontScale
     property alias cfg_lyricsFade: fade.value
+    property string cfg_lyricsBackground
 
     // Same database as the widget: the settings run in its process.
     Ui.TranslationCache {
@@ -34,12 +35,33 @@ KCM.SimpleKCM {
         return i18n("%1 MB", (bytes / 1048576).toFixed(1));
     }
 
+    // Radio buttons in one parent all exclude each other: one group per setting.
+    QQC2.ButtonGroup {
+        id: engineGroup
+    }
+    QQC2.ButtonGroup {
+        id: backgroundGroup
+    }
+
     component EngineButton: QQC2.RadioButton {
         required property string engine
+        QQC2.ButtonGroup.group: engineGroup
         checked: page.cfg_translationEngine === engine
         onToggled: {
             if (checked) {
                 page.cfg_translationEngine = engine;
+            }
+        }
+    }
+
+    // "mode", as a control already has a background property.
+    component BackgroundButton: QQC2.RadioButton {
+        required property string mode
+        QQC2.ButtonGroup.group: backgroundGroup
+        checked: page.cfg_lyricsBackground === mode
+        onToggled: {
+            if (checked) {
+                page.cfg_lyricsBackground = mode;
             }
         }
     }
@@ -131,6 +153,22 @@ KCM.SimpleKCM {
         Item {
             Kirigami.FormData.isSection: true
             Kirigami.FormData.label: i18n("Appearance")
+        }
+
+        BackgroundButton {
+            Kirigami.FormData.label: i18n("Background:")
+            mode: "cover"
+            text: i18n("Blurred cover, text color to suit it")
+        }
+
+        BackgroundButton {
+            mode: "light"
+            text: i18n("Black on white")
+        }
+
+        BackgroundButton {
+            mode: "dark"
+            text: i18n("White on black")
         }
 
         RowLayout {

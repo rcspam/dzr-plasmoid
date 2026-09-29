@@ -22,9 +22,11 @@ Item {
     property string machineEngine: ""
     // Whether these lyrics may go to the translation engine (settings).
     property bool machineAllowed: true
-    // Settings: text size factor, and fade strength around the sung line (0 to 1).
+    // Settings: text size factor, fade strength around the sung line (0 to 1),
+    // and what is behind the lyrics: "cover", "light" or "dark".
     property real fontScale: 1
     property real fadeStrength: 1
+    property string background: "cover"
 
     signal seekRequested(real seconds)
     signal translateRequested()
@@ -67,6 +69,44 @@ Item {
         return found;
     }
 
+    // A light cover gets dark text over a light veil, any other white text
+    // over a dark one, so the lyrics stay readable whatever the cover.
+    property real coverBrightness: 0
+    readonly property bool lightBackground: background === "light" || (background === "cover" && coverBrightness > 0.6)
+    readonly property color textColor: lightBackground ? "black" : "white"
+
+    onCoverChanged: {
+        coverBrightness = 0;
+        if (cover.toString() !== "") {
+            sampler.loadImage(cover);
+        }
+    }
+
+    // Mean brightness of the cover, from a 16x16 copy of it. The image is
+    // unloaded once read: the canvas would keep every cover otherwise, and
+    // would not signal a cover coming back as loaded.
+    Canvas {
+        id: sampler
+        width: 16
+        height: 16
+        opacity: 0
+        onImageLoaded: requestPaint()
+        onPaint: {
+            if (!isImageLoaded(view.cover)) {
+                return;
+            }
+            const ctx = getContext("2d");
+            ctx.drawImage(view.cover, 0, 0, width, height);
+            const pixels = ctx.getImageData(0, 0, width, height).data;
+            let sum = 0;
+            for (let i = 0; i < pixels.length; i += 4) {
+                sum += 0.2126 * pixels[i] + 0.7152 * pixels[i + 1] + 0.0722 * pixels[i + 2];
+            }
+            view.coverBrightness = sum / (width * height * 255);
+            unloadImage(view.cover);
+        }
+    }
+
     Image {
         id: backdrop
         anchors.fill: parent
@@ -80,15 +120,18 @@ Item {
     MultiEffect {
         anchors.fill: backdrop
         source: backdrop
+        visible: view.background === "cover"
         blurEnabled: true
         blur: 1
         blurMax: 64
-        brightness: -0.2
+        brightness: view.lightBackground ? 0.2 : -0.2
     }
 
+    // The veil over the cover, or the plain background.
     Rectangle {
         anchors.fill: parent
-        color: Qt.rgba(0, 0, 0, 0.25)
+        color: view.background !== "cover" ? (view.lightBackground ? "white" : "black")
+             : view.lightBackground ? Qt.rgba(1, 1, 1, 0.25) : Qt.rgba(0, 0, 0, 0.25)
     }
 
     ListView {
@@ -133,7 +176,7 @@ Item {
             PlasmaComponents.Label {
                 width: parent.width
                 wrapMode: Text.WordWrap
-                color: "white"
+                color: view.textColor
                 font.bold: true
                 font.pointSize: Kirigami.Theme.defaultFont.pointSize * (line.current ? 1.4 : 1.2) * view.fontScale
                 // Empty lines are instrumental parts.
@@ -144,7 +187,7 @@ Item {
                 width: parent.width
                 visible: view.showTranslation && text !== ""
                 wrapMode: Text.WordWrap
-                color: Qt.rgba(1, 1, 1, 0.75)
+                color: Qt.alpha(view.textColor, 0.75)
                 font.pointSize: Kirigami.Theme.defaultFont.pointSize * view.fontScale
                 text: view.translationAt(line.index)
             }
@@ -159,7 +202,7 @@ Item {
             width: ListView.view.width
             topPadding: Kirigami.Units.gridUnit
             wrapMode: Text.WordWrap
-            color: Qt.rgba(1, 1, 1, 0.6)
+            color: Qt.alpha(view.textColor, 0.6)
             font: Kirigami.Theme.smallFont
             text: {
                 if (!view.lyrics) {
@@ -198,7 +241,7 @@ Item {
             Layout.fillWidth: true
             horizontalAlignment: Text.AlignRight
             elide: Text.ElideLeft
-            color: Qt.rgba(1, 1, 1, 0.75)
+            color: Qt.alpha(view.textColor, 0.75)
             font: Kirigami.Theme.smallFont
             // Short, e.g. "LRCLIB - No Sync - Trad Google".
             text: {
@@ -255,7 +298,7 @@ Item {
         visible: view.status === "missing"
         horizontalAlignment: Text.AlignHCenter
         wrapMode: Text.WordWrap
-        color: "white"
+        color: view.textColor
         text: i18n("No lyrics for this track")
     }
 }
