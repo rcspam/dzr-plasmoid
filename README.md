@@ -7,6 +7,26 @@ An unofficial Plasma 6 panel widget to listen to Deezer with your own account.
 > "Deezer" is a trademark of Deezer SA; the name only says which service the
 > widget works with.
 
+## Why this plasmoid
+
+Deezer has no Linux app: its desktop app exists for Windows and macOS only.
+On Linux, what is left is the web player in a browser tab (or installed as a
+web app from a Chromium-based browser), and community repackagings of the
+Windows app, such as [deezer-linux](https://github.com/aunetx/deezer-linux),
+which Deezer does not support. Each of them is a window of its own: to see
+what is playing, skip a track or read the lyrics, you first have to find it.
+
+This widget puts Deezer where a music player belongs on a Plasma desktop, in
+the panel:
+
+- the music plays without a browser window open;
+- a click on the icon shows the player, the queue and the lyrics, with their
+  translation when you want it;
+- hovering the icon shows the track with its controls, and the mouse wheel
+  on it sets the volume.
+
+It still runs the official website, so Deezer itself plays the music.
+
 ## What it is
 
 The widget is a small web browser. It opens the regular Deezer website,
