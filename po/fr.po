@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.rcspam.deezerplasmoid\n"
 "Report-Msgid-Bugs-To: https://github.com/rcspam\n"
-"POT-Creation-Date: 2026-09-29 22:07+0200\n"
+"POT-Creation-Date: 2026-09-29 22:42+0200\n"
 "PO-Revision-Date: 2026-09-29 16:01+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -42,19 +42,19 @@ msgstr "Normaliser le volume"
 msgid "Sync the queue"
 msgstr "Synchronisation de la file d'attente"
 
-#: package/contents/ui/CompactToolTip.qml:97 package/contents/ui/main.qml:934
+#: package/contents/ui/CompactToolTip.qml:97 package/contents/ui/main.qml:939
 msgid "Previous track"
 msgstr "Piste précédente"
 
-#: package/contents/ui/CompactToolTip.qml:105 package/contents/ui/main.qml:943
+#: package/contents/ui/CompactToolTip.qml:105 package/contents/ui/main.qml:948
 msgid "Pause"
 msgstr "Pause"
 
-#: package/contents/ui/CompactToolTip.qml:105 package/contents/ui/main.qml:943
+#: package/contents/ui/CompactToolTip.qml:105 package/contents/ui/main.qml:948
 msgid "Play"
 msgstr "Lecture"
 
-#: package/contents/ui/CompactToolTip.qml:113 package/contents/ui/main.qml:952
+#: package/contents/ui/CompactToolTip.qml:113 package/contents/ui/main.qml:957
 msgid "Next track"
 msgstr "Piste suivante"
 
@@ -83,125 +83,125 @@ msgid "No lyrics for this track"
 msgstr "Pas de paroles pour ce titre"
 
 #: package/contents/ui/main.qml:141 package/contents/ui/main.qml:151
-#: package/contents/ui/main.qml:653
+#: package/contents/ui/main.qml:658
 msgid "Nothing playing"
 msgstr "Aucune lecture en cours"
 
-#: package/contents/ui/main.qml:151 package/contents/ui/main.qml:653
+#: package/contents/ui/main.qml:151 package/contents/ui/main.qml:658
 msgid "Not signed in"
 msgstr "Non connecté"
 
-#: package/contents/ui/main.qml:589
+#: package/contents/ui/main.qml:594
 msgid "Deezer"
 msgstr "Deezer"
 
-#: package/contents/ui/main.qml:589
+#: package/contents/ui/main.qml:594
 msgid "Player"
 msgstr "Lecteur"
 
-#: package/contents/ui/main.qml:597
+#: package/contents/ui/main.qml:602
 msgid "Show the Deezer page"
 msgstr "Afficher la page Deezer"
 
-#: package/contents/ui/main.qml:609
+#: package/contents/ui/main.qml:614
 msgid "Queue"
 msgstr "File d'attente"
 
-#: package/contents/ui/main.qml:619
+#: package/contents/ui/main.qml:624
 msgid "Keep Open"
 msgstr "Garder ouvert"
 
-#: package/contents/ui/main.qml:656
+#: package/contents/ui/main.qml:661
 msgid "Open Deezer"
 msgstr "Ouvrir Deezer"
 
-#: package/contents/ui/main.qml:656
+#: package/contents/ui/main.qml:661
 msgid "Sign in"
 msgstr "Se connecter"
 
-#: package/contents/ui/main.qml:747
+#: package/contents/ui/main.qml:752
 msgid "Added to %1"
 msgstr "Ajouté à %1"
 
-#: package/contents/ui/main.qml:748
+#: package/contents/ui/main.qml:753
 msgid "Could not add to %1"
 msgstr "Impossible d'ajouter à %1"
 
-#: package/contents/ui/main.qml:773 package/contents/ui/main.qml:1206
+#: package/contents/ui/main.qml:778 package/contents/ui/main.qml:1211
 msgid "Remove from favorites"
 msgstr "Retirer des coups de cœur"
 
-#: package/contents/ui/main.qml:773 package/contents/ui/main.qml:1206
+#: package/contents/ui/main.qml:778 package/contents/ui/main.qml:1211
 msgid "Add to favorites"
 msgstr "Ajouter aux coups de cœur"
 
-#: package/contents/ui/main.qml:820
+#: package/contents/ui/main.qml:825
 msgid "Add to a playlist"
 msgstr "Ajouter à une playlist"
 
-#: package/contents/ui/main.qml:837
+#: package/contents/ui/main.qml:842
 msgid "No playlist"
 msgstr "Aucune playlist"
 
-#: package/contents/ui/main.qml:837
+#: package/contents/ui/main.qml:842
 msgid "Loading playlists…"
 msgstr "Chargement des playlists…"
 
-#: package/contents/ui/main.qml:844
+#: package/contents/ui/main.qml:849
 msgid "%2 (%1 track)"
 msgid_plural "%2 (%1 tracks)"
 msgstr[0] "%2 (%1 titre)"
 msgstr[1] "%2 (%1 titres)"
 
-#: package/contents/ui/main.qml:921
+#: package/contents/ui/main.qml:926
 msgid "Shuffle: on"
 msgstr "Lecture aléatoire : activée"
 
-#: package/contents/ui/main.qml:921
+#: package/contents/ui/main.qml:926
 msgid "Shuffle: off"
 msgstr "Lecture aléatoire : désactivée"
 
-#: package/contents/ui/main.qml:961
+#: package/contents/ui/main.qml:966
 msgid "Repeat: current track"
 msgstr "Répétition : titre en cours"
 
-#: package/contents/ui/main.qml:962
+#: package/contents/ui/main.qml:967
 msgid "Repeat: all"
 msgstr "Répétition : tout"
 
-#: package/contents/ui/main.qml:963
+#: package/contents/ui/main.qml:968
 msgid "Repeat: off"
 msgstr "Répétition : désactivée"
 
-#: package/contents/ui/main.qml:985
+#: package/contents/ui/main.qml:990
 msgid "Audio settings"
 msgstr "Réglages audio"
 
-#: package/contents/ui/main.qml:1009
+#: package/contents/ui/main.qml:1014
 msgid "Show your playlists"
 msgstr "Afficher vos playlists"
 
-#: package/contents/ui/main.qml:1031
+#: package/contents/ui/main.qml:1036
 msgid "Unmute"
 msgstr "Rétablir le son"
 
-#: package/contents/ui/main.qml:1031
+#: package/contents/ui/main.qml:1036
 msgid "Mute"
 msgstr "Couper le son"
 
-#: package/contents/ui/main.qml:1051
+#: package/contents/ui/main.qml:1056
 msgid "Show the queue"
 msgstr "Afficher la file d'attente"
 
-#: package/contents/ui/main.qml:1072
+#: package/contents/ui/main.qml:1077
 msgid "Show the cover"
 msgstr "Afficher la pochette"
 
-#: package/contents/ui/main.qml:1072
+#: package/contents/ui/main.qml:1077
 msgid "Show the lyrics"
 msgstr "Afficher les paroles"
 
-#: package/contents/ui/main.qml:1217
+#: package/contents/ui/main.qml:1222
 msgid "Remove from the queue"
 msgstr "Retirer de la file d'attente"
 
@@ -230,9 +230,9 @@ msgid "Volume change per wheel notch:"
 msgstr "Volume par cran de molette :"
 
 #: package/contents/ui/config/ConfigGeneral.qml:54
-#: package/contents/ui/config/ConfigLyrics.qml:220
-#: package/contents/ui/config/ConfigLyrics.qml:237
-#: package/contents/ui/config/ConfigLyrics.qml:253
+#: package/contents/ui/config/ConfigLyrics.qml:68
+#: package/contents/ui/config/ConfigLyrics.qml:85
+#: package/contents/ui/config/ConfigLyrics.qml:101
 msgctxt "percentage"
 msgid "%1 %"
 msgstr "%1 %"
@@ -241,35 +241,76 @@ msgstr "%1 %"
 msgid "Invert the wheel direction"
 msgstr "Inverser le sens de la molette"
 
-#: package/contents/ui/config/ConfigLyrics.qml:34
+#: package/contents/ui/config/ConfigLyrics.qml:36
+msgid "Appearance"
+msgstr "Apparence"
+
+#: package/contents/ui/config/ConfigLyrics.qml:40
+msgid "Background:"
+msgstr "Fond :"
+
+#: package/contents/ui/config/ConfigLyrics.qml:42
+msgid "Blurred cover, text color to suit it"
+msgstr "Pochette floutée, couleur du texte adaptée"
+
+#: package/contents/ui/config/ConfigLyrics.qml:47
+msgid "Black on white"
+msgstr "Noir sur blanc"
+
+#: package/contents/ui/config/ConfigLyrics.qml:52
+msgid "White on black"
+msgstr "Blanc sur noir"
+
+#: package/contents/ui/config/ConfigLyrics.qml:56
+msgid "Cover blur:"
+msgstr "Flou de la pochette :"
+
+#: package/contents/ui/config/ConfigLyrics.qml:73
+msgid "Text size:"
+msgstr "Taille du texte :"
+
+#: package/contents/ui/config/ConfigLyrics.qml:90
+msgid "Fade around the sung line:"
+msgstr "Fondu autour de la ligne chantée :"
+
+#: package/contents/ui/config/ConfigServices.qml:32
 msgid "%1 byte"
 msgid_plural "%1 bytes"
 msgstr[0] "%1 octet"
 msgstr[1] "%1 octets"
 
-#: package/contents/ui/config/ConfigLyrics.qml:37
+#: package/contents/ui/config/ConfigServices.qml:35
 msgid "%1 KB"
 msgstr "%1 Ko"
 
-#: package/contents/ui/config/ConfigLyrics.qml:39
+#: package/contents/ui/config/ConfigServices.qml:37
 #: package/contents/ui/config/ConfigStorage.qml:57
 #: package/contents/ui/config/ConfigStorage.qml:76
 msgid "%1 MB"
 msgstr "%1 Mo"
 
-#: package/contents/ui/config/ConfigLyrics.qml:76
-msgid "Sources"
-msgstr "Sources"
+#: package/contents/ui/config/ConfigServices.qml:59
+#: package/contents/config/config.qml:11
+msgid "Lyrics"
+msgstr "Paroles"
 
-#: package/contents/ui/config/ConfigLyrics.qml:81
+#: package/contents/ui/config/ConfigServices.qml:63
 msgid "Lyrics:"
 msgstr "Paroles :"
 
-#: package/contents/ui/config/ConfigLyrics.qml:82
+#: package/contents/ui/config/ConfigServices.qml:67
+msgid ""
+"When Deezer has no synced lyrics, they are looked up on LRCLIB (lrclib.net), "
+"a free database made by its users."
+msgstr ""
+"Quand Deezer n'a pas de paroles synchronisées, elles sont cherchées sur "
+"LRCLIB (lrclib.net), une base libre faite par ses utilisateurs."
+
+#: package/contents/ui/config/ConfigServices.qml:72
 msgid "Extended sources (lrcmux)"
 msgstr "Sources étendues (lrcmux)"
 
-#: package/contents/ui/config/ConfigLyrics.qml:90
+#: package/contents/ui/config/ConfigServices.qml:80
 msgid ""
 "When Deezer and LRCLIB have no synced lyrics, asks lrcmux, which gathers "
 "them from YouTube Music, KuGou, Musixmatch and others. These are unofficial, "
@@ -280,43 +321,43 @@ msgstr ""
 "sont des sources non officielles et sans licence : pour un usage personnel, "
 "et le service peut s'arrêter à tout moment."
 
-#: package/contents/ui/config/ConfigLyrics.qml:95
+#: package/contents/ui/config/ConfigServices.qml:85
 msgid "Translation of lyrics Deezer does not translate"
 msgstr "Traduction des paroles que Deezer ne traduit pas"
 
-#: package/contents/ui/config/ConfigLyrics.qml:99
+#: package/contents/ui/config/ConfigServices.qml:89
 msgid "Translate with:"
 msgstr "Traduire avec :"
 
-#: package/contents/ui/config/ConfigLyrics.qml:101
+#: package/contents/ui/config/ConfigServices.qml:91
 msgid "Google (online, unofficial service)"
 msgstr "Google (en ligne, service non officiel)"
 
-#: package/contents/ui/config/ConfigLyrics.qml:106
+#: package/contents/ui/config/ConfigServices.qml:96
 msgid "A LibreTranslate server"
 msgstr "Un serveur LibreTranslate"
 
-#: package/contents/ui/config/ConfigLyrics.qml:111
+#: package/contents/ui/config/ConfigServices.qml:101
 msgid "LibreTranslate address:"
 msgstr "Adresse de LibreTranslate :"
 
-#: package/contents/ui/config/ConfigLyrics.qml:119
+#: package/contents/ui/config/ConfigServices.qml:109
 msgid "An Ollama server (better, but slower)"
 msgstr "Un serveur Ollama (meilleur, mais plus lent)"
 
-#: package/contents/ui/config/ConfigLyrics.qml:124
+#: package/contents/ui/config/ConfigServices.qml:114
 msgid "Ollama address:"
 msgstr "Adresse d'Ollama :"
 
-#: package/contents/ui/config/ConfigLyrics.qml:132
+#: package/contents/ui/config/ConfigServices.qml:122
 msgid "Ollama model:"
 msgstr "Modèle Ollama :"
 
-#: package/contents/ui/config/ConfigLyrics.qml:140
+#: package/contents/ui/config/ConfigServices.qml:130
 msgid "Ollama prompt:"
 msgstr "Prompt Ollama :"
 
-#: package/contents/ui/config/ConfigLyrics.qml:155
+#: package/contents/ui/config/ConfigServices.qml:145
 msgid ""
 "{language} and {code} become the language to translate into (français, fr), "
 "{lines} the lyrics as numbered lines. The answer must keep the numbers, as "
@@ -326,19 +367,19 @@ msgstr ""
 "paroles en lignes numérotées. La réponse doit garder les numéros, sous la "
 "forme \"numéro| traduction\"."
 
-#: package/contents/ui/config/ConfigLyrics.qml:161
+#: package/contents/ui/config/ConfigServices.qml:151
 msgid "Default"
 msgstr "Par défaut"
 
-#: package/contents/ui/config/ConfigLyrics.qml:169
+#: package/contents/ui/config/ConfigServices.qml:159
 msgid "No machine translation"
 msgstr "Pas de traduction automatique"
 
-#: package/contents/ui/config/ConfigLyrics.qml:175
+#: package/contents/ui/config/ConfigServices.qml:165
 msgid "Also translate the lyrics Deezer provides"
 msgstr "Traduire aussi les paroles fournies par Deezer"
 
-#: package/contents/ui/config/ConfigLyrics.qml:183
+#: package/contents/ui/config/ConfigServices.qml:173
 msgid ""
 "Deezer's lyrics are licensed from LyricFind for personal use: this sends "
 "them to the chosen engine. Lyrics from LRCLIB are always translated."
@@ -347,52 +388,20 @@ msgstr ""
 "cette option les envoie au moteur choisi. Les paroles de LRCLIB sont "
 "toujours traduites."
 
-#: package/contents/ui/config/ConfigLyrics.qml:188
-msgid "Appearance"
-msgstr "Apparence"
-
-#: package/contents/ui/config/ConfigLyrics.qml:192
-msgid "Background:"
-msgstr "Fond :"
-
-#: package/contents/ui/config/ConfigLyrics.qml:194
-msgid "Blurred cover, text color to suit it"
-msgstr "Pochette floutée, couleur du texte adaptée"
-
-#: package/contents/ui/config/ConfigLyrics.qml:199
-msgid "Black on white"
-msgstr "Noir sur blanc"
-
-#: package/contents/ui/config/ConfigLyrics.qml:204
-msgid "White on black"
-msgstr "Blanc sur noir"
-
-#: package/contents/ui/config/ConfigLyrics.qml:208
-msgid "Cover blur:"
-msgstr "Flou de la pochette :"
-
-#: package/contents/ui/config/ConfigLyrics.qml:225
-msgid "Text size:"
-msgstr "Taille du texte :"
-
-#: package/contents/ui/config/ConfigLyrics.qml:242
-msgid "Fade around the sung line:"
-msgstr "Fondu autour de la ligne chantée :"
-
-#: package/contents/ui/config/ConfigLyrics.qml:259
+#: package/contents/ui/config/ConfigServices.qml:178
 msgid "Cache"
 msgstr "Cache"
 
-#: package/contents/ui/config/ConfigLyrics.qml:263
+#: package/contents/ui/config/ConfigServices.qml:182
 msgid "Kept translations:"
 msgstr "Traductions gardées :"
 
-#: package/contents/ui/config/ConfigLyrics.qml:272
+#: package/contents/ui/config/ConfigServices.qml:191
 #: package/contents/ui/config/ConfigStorage.qml:62
 msgid "Empty"
 msgstr "Vider"
 
-#: package/contents/ui/config/ConfigLyrics.qml:285
+#: package/contents/ui/config/ConfigServices.qml:204
 msgid "Only the translations are kept, never the lyrics themselves."
 msgstr "Seules les traductions sont gardées, jamais les paroles elles-mêmes."
 
@@ -426,10 +435,13 @@ msgstr ""
 msgid "General"
 msgstr "Général"
 
-#: package/contents/config/config.qml:11
-msgid "Lyrics"
-msgstr "Paroles"
-
 #: package/contents/config/config.qml:16
+msgid "Non-Deezer services"
+msgstr "Services hors Deezer"
+
+#: package/contents/config/config.qml:21
 msgid "Storage"
 msgstr "Stockage"
+
+#~ msgid "Sources"
+#~ msgstr "Sources"

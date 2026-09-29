@@ -13,6 +13,11 @@ ConfigModel {
         source: "config/ConfigLyrics.qml"
     }
     ConfigCategory {
+        name: i18n("Non-Deezer services")
+        icon: "internet-services"
+        source: "config/ConfigServices.qml"
+    }
+    ConfigCategory {
         name: i18n("Storage")
         icon: "drive-harddisk"
         source: "config/ConfigStorage.qml"
