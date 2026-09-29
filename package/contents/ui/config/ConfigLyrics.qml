@@ -164,7 +164,7 @@ KCM.SimpleKCM {
             Layout.maximumWidth: Kirigami.Units.gridUnit * 24
             wrapMode: Text.WordWrap
             font: Kirigami.Theme.smallFont
-            text: i18n("Lyrics themselves are not kept: they are asked again for each song.")
+            text: i18n("Only translations are kept here. Deezer's lyrics are not kept; those from LRCLIB stay in the web cache (Storage page), like any page the browser loads.")
         }
     }
 }

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.rcspam.deezerplasmoid\n"
 "Report-Msgid-Bugs-To: https://github.com/rcspam\n"
-"POT-Creation-Date: 2026-09-29 18:34+0200\n"
+"POT-Creation-Date: 2026-09-29 18:43+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -316,7 +316,9 @@ msgid "Empty"
 msgstr ""
 
 #: package/contents/ui/config/ConfigLyrics.qml:167
-msgid "Lyrics themselves are not kept: they are asked again for each song."
+msgid ""
+"Only translations are kept here. Deezer's lyrics are not kept; those from "
+"LRCLIB stay in the web cache (Storage page), like any page the browser loads."
 msgstr ""
 
 #: package/contents/ui/config/ConfigStorage.qml:50
@@ -342,9 +344,9 @@ msgstr ""
 
 #: package/contents/ui/config/ConfigStorage.qml:85
 msgid ""
-"The Deezer page caches what it loads, mostly tracks (encrypted) and covers, "
-"like any browser. Above the limit, the oldest files go. Emptying it does not "
-"sign you out."
+"The Deezer page caches what it loads, like any browser: mostly tracks "
+"(encrypted) and covers, and lyrics from LRCLIB. Above the limit, the oldest "
+"files go. Emptying it does not sign you out."
 msgstr ""
 
 #: package/contents/config/config.qml:6

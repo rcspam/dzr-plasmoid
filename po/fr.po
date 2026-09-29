@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.rcspam.deezerplasmoid\n"
 "Report-Msgid-Bugs-To: https://github.com/rcspam\n"
-"POT-Creation-Date: 2026-09-29 18:33+0200\n"
+"POT-Creation-Date: 2026-09-29 18:43+0200\n"
 "PO-Revision-Date: 2026-09-29 16:01+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -217,7 +217,9 @@ msgstr "Langue de Deezer :"
 msgid ""
 "The language of the Deezer page and its menus, which can differ from the "
 "system's. Changing it reloads the page, which stops the music."
-msgstr "La langue de la page Deezer et de ses menus, qui peut différer de celle du système. La changer recharge la page, ce qui arrête la musique."
+msgstr ""
+"La langue de la page Deezer et de ses menus, qui peut différer de celle du "
+"système. La changer recharge la page, ce qui arrête la musique."
 
 #: package/contents/ui/config/ConfigGeneral.qml:46
 msgid "Panel icon"
@@ -282,7 +284,10 @@ msgstr "Traduire aussi les paroles fournies par Deezer"
 msgid ""
 "Deezer's lyrics are licensed from LyricFind for personal use: this sends "
 "them to the chosen engine. Lyrics from LRCLIB are always translated."
-msgstr "Les paroles de Deezer sont sous licence LyricFind, pour un usage personnel : cette option les envoie au moteur choisi. Les paroles de LRCLIB sont toujours traduites."
+msgstr ""
+"Les paroles de Deezer sont sous licence LyricFind, pour un usage personnel : "
+"cette option les envoie au moteur choisi. Les paroles de LRCLIB sont "
+"toujours traduites."
 
 #: package/contents/ui/config/ConfigLyrics.qml:103
 msgid "Appearance"
@@ -316,8 +321,10 @@ msgid "Empty"
 msgstr "Vider"
 
 #: package/contents/ui/config/ConfigLyrics.qml:167
-msgid "Lyrics themselves are not kept: they are asked again for each song."
-msgstr "Les paroles elles-mêmes ne sont pas gardées : elles sont redemandées à chaque morceau."
+msgid ""
+"Only translations are kept here. Deezer's lyrics are not kept; those from "
+"LRCLIB stay in the web cache (Storage page), like any page the browser loads."
+msgstr "Seules les traductions sont gardées ici. Les paroles de Deezer ne sont pas gardées ; celles de LRCLIB restent dans le cache web (page Stockage), comme toute page chargée par le navigateur."
 
 #: package/contents/ui/config/ConfigStorage.qml:50
 msgid "Web cache"
@@ -342,10 +349,10 @@ msgstr "Limite :"
 
 #: package/contents/ui/config/ConfigStorage.qml:85
 msgid ""
-"The Deezer page caches what it loads, mostly tracks (encrypted) and covers, "
-"like any browser. Above the limit, the oldest files go. Emptying it does not "
-"sign you out."
-msgstr "La page Deezer garde en cache ce qu'elle charge, surtout des morceaux (chiffrés) et des pochettes, comme tout navigateur. Au-delà de la limite, les fichiers les plus anciens partent. Le vider ne vous déconnecte pas."
+"The Deezer page caches what it loads, like any browser: mostly tracks "
+"(encrypted) and covers, and lyrics from LRCLIB. Above the limit, the oldest "
+"files go. Emptying it does not sign you out."
+msgstr "La page Deezer garde en cache ce qu'elle charge, comme tout navigateur : surtout des morceaux (chiffrés) et des pochettes, ainsi que les paroles de LRCLIB. Au-delà de la limite, les fichiers les plus anciens partent. Le vider ne vous déconnecte pas."
 
 #: package/contents/config/config.qml:6
 msgid "General"
@@ -358,3 +365,5 @@ msgstr "Paroles"
 #: package/contents/config/config.qml:16
 msgid "Storage"
 msgstr "Stockage"
+
+
