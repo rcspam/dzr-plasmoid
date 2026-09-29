@@ -805,18 +805,20 @@ PlasmoidItem {
                             }
                         }
 
+                        // Not checkable: a shown state is told by the purple icon,
+                        // without the checked button's grey background.
                         PlasmaComponents.ToolButton {
-                            checkable: true
-                            checked: root.lyricsShown
                             // Stays usable while shown, to go back to the cover.
                             enabled: root.lyricsStatus === "ready" || root.lyricsShown
-                            // Karaoke microphone shipped in two shades, picked by theme.
-                            icon.source: Kirigami.Theme.textColor.hslLightness > 0.5
-                                         ? Qt.resolvedUrl("../images/dzplasmoid-lyrics-dark.svg")
-                                         : Qt.resolvedUrl("../images/dzplasmoid-lyrics.svg")
+                            // Karaoke microphone: purple while shown, else in the theme's shade.
+                            icon.source: root.lyricsShown ? Qt.resolvedUrl("../images/dzplasmoid-lyrics-active.svg")
+                                : Kirigami.Theme.textColor.hslLightness > 0.5 ? Qt.resolvedUrl("../images/dzplasmoid-lyrics-dark.svg")
+                                : Qt.resolvedUrl("../images/dzplasmoid-lyrics.svg")
                             display: QQC2.AbstractButton.IconOnly
                             text: root.lyricsShown ? i18n("Show the cover") : i18n("Show the lyrics")
-                            onToggled: root.lyricsShown = checked
+                            Accessible.checkable: true
+                            Accessible.checked: root.lyricsShown
+                            onClicked: root.lyricsShown = !root.lyricsShown
 
                             PlasmaComponents.ToolTip {
                                 text: parent.text
