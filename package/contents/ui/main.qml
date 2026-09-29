@@ -52,6 +52,7 @@ PlasmoidItem {
     property bool favoriteAvailable: false
     property int queueIndex: 0
     // Updated in place (see syncQueue), so the list keeps its scroll position.
+    // Each row carries its queue position, which the page's actions need.
     ListModel {
         id: queueModel
     }
@@ -59,7 +60,10 @@ PlasmoidItem {
     signal queueReset()
 
     // The queue as listed: only the tracks matching the search, if any.
-    // Rows here are not queue positions: see queuePosition().
+    // Rows here are not queue positions: delegates read their position role.
+    // Mapping a row back to the source from a delegate binding is not an
+    // option: on a removal the proxy tells the view before it shifts the
+    // source rows, and the binding would keep the old position.
     KItemModels.KSortFilterProxyModel {
         id: queueFilter
         sourceModel: queueModel
@@ -78,10 +82,7 @@ PlasmoidItem {
         return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
     }
 
-    // Queue position of a listed row, and the other way round (-1 if hidden).
-    function queuePosition(row) {
-        return queueFilter.mapToSource(queueFilter.index(row, 0)).row;
-    }
+    // Listed row of a queue position (-1 if hidden).
     function listedRow(position) {
         return queueFilter.mapFromSource(queueModel.index(position, 0)).row;
     }
@@ -330,6 +331,7 @@ PlasmoidItem {
             }
             if (shifted) {
                 queueModel.remove(first);
+                renumberQueue(first);
                 return;
             }
         } else if (tracks.length === count + 1) {
@@ -339,12 +341,20 @@ PlasmoidItem {
             }
             if (shifted) {
                 queueModel.insert(first, tracks[first]);
+                renumberQueue(first + 1);
                 return;
             }
         }
         queueModel.clear();
         tracks.forEach(track => queueModel.append(track));
         queueReset();
+    }
+
+    // The rows from this one on moved in the queue.
+    function renumberQueue(from) {
+        for (let i = from; i < queueModel.count; i++) {
+            queueModel.setProperty(i, "position", i);
+        }
     }
 
     function refreshQueue() {
@@ -1116,14 +1126,13 @@ PlasmoidItem {
 
                         delegate: PlasmaComponents.ItemDelegate {
                             id: trackDelegate
-                            required property int index
+                            // The row's place in the queue, which the page's actions need.
+                            required property int position
                             required property string title
                             required property string artist
                             required property string cover
                             required property real duration
                             required property bool favorite
-                            // The row's place in the queue, which the page's actions need.
-                            readonly property int position: root.queuePosition(index)
                             readonly property bool current: position === root.queueIndex
 
                             width: ListView.view.width

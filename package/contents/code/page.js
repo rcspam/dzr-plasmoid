@@ -513,7 +513,8 @@
         }
         return JSON.stringify({
             index: p ? Number(p.getIndexSong()) || 0 : 0,
-            tracks: tracks.map(s => ({
+            tracks: tracks.map((s, position) => ({
+                position,
                 songId: String(s.SNG_ID),
                 favorite: h.favorites.has(String(s.SNG_ID)),
                 title: s.SNG_TITLE + (s.VERSION ? ' ' + s.VERSION : ''),
