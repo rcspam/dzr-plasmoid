@@ -29,6 +29,8 @@ Item {
     // Deezer's own translation, preferred when there is one.
     readonly property bool hasTranslation: lines.some(line => line.translation !== "")
     property bool showTranslation: false
+    // Whether to offer Translate: not for lyrics already in the user's language.
+    readonly property bool canTranslate: lines.length > 0 && (hasTranslation || machineState !== "same")
 
     function translationAt(index) {
         if (hasTranslation) {
@@ -168,7 +170,9 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.margins: Kirigami.Units.smallSpacing
-        visible: view.status === "ready" && (sourceLabel.text !== "" || translateButton.visible)
+        // Not translateButton.visible: a child reads as hidden while its parent
+        // is, so the bar would never show without a source to name.
+        visible: view.status === "ready" && (sourceLabel.text !== "" || view.canTranslate)
         spacing: Kirigami.Units.smallSpacing
 
         PlasmaComponents.Label {
@@ -199,8 +203,7 @@ Item {
 
         PlasmaComponents.ToolButton {
             id: translateButton
-            // Hidden for lyrics already in the user's language.
-            visible: view.lines.length > 0 && (view.hasTranslation || view.machineState !== "same")
+            visible: view.canTranslate
             checkable: true
             checked: view.showTranslation
             icon.name: "translate"
