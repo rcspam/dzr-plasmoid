@@ -118,9 +118,9 @@
 
     // Liner notes filed as lyrics, for some instrumentals: half the lines or
     // more name an instrument or a studio job, three different ones at least
-    // (a song can repeat "bass" all along), like LRCLIB's "FZ lead guitar" and
-    // "Engineer: Alan P." (Pink Napkins) or KuGou's "Drums background vocals"
-    // through lrcmux (Black Napkins).
+    // (a song can repeat "bass" all along), like "FZ lead guitar" and
+    // "Engineer: Alan P." from Deezer and LRCLIB (Pink Napkins) or KuGou's
+    // "Drums background vocals" through lrcmux (Black Napkins).
     const LINER_NOTE = /\b(guitars?|bass|drums|keyboards?|piano|vocals?|saxophones?|sax|trumpets?|trombones?|marimba|vibraphone|percussions?|violins?|cello|synthesizers?|organ|harmonica|harp|flutes?|clarinets?|engineer|producer|mixed|mastered|recorded|arranged)\b/gi;
     function looksLikeLinerNotes(lines) {
         const texts = lines.map(line => (line.text || '').trim()).filter(text => text);
@@ -158,13 +158,13 @@
         }
         const credits = { source: 'deezer', writers: lyrics.writers || '', licence: lyrics.licence || '' };
         const synced = lyrics.synchronizedLines || [];
-        if (synced.length) {
-            return Object.assign(credits, {
-                synced: true,
-                lines: synced.map(l => ({ time: l.milliseconds / 1000, text: l.line || '', translation: l.lineTranslated || '' })),
-            });
+        const lines = synced.length
+            ? synced.map(l => ({ time: l.milliseconds / 1000, text: l.line || '', translation: l.lineTranslated || '' }))
+            : lyrics.text ? plainLines(lyrics.text) : [];
+        if (!lines.length || looksLikeLinerNotes(lines)) {
+            return null;
         }
-        return lyrics.text ? Object.assign(credits, { synced: false, lines: plainLines(lyrics.text) }) : null;
+        return Object.assign(credits, { synced: synced.length > 0, lines });
     }
 
     // LRCLIB asks clients to say who they are; a page cannot set User-Agent,
