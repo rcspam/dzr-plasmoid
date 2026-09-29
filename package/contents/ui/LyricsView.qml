@@ -14,13 +14,27 @@ Item {
     // {synced, lines: [{time, text, translation}], source, writers, licence}
     property var lyrics: null
     property real position: 0
+    // Machine translation for lyrics Deezer does not translate: one entry per
+    // line, its state ("", "working", "done", "same" or "failed") and engine.
+    property var machineTranslations: null
+    property string machineState: ""
+    property string machineEngine: ""
 
     signal seekRequested(real seconds)
+    signal translateRequested()
 
     readonly property var lines: lyrics ? lyrics.lines : []
     readonly property bool synced: lyrics ? lyrics.synced : false
+    // Deezer's own translation, preferred when there is one.
     readonly property bool hasTranslation: lines.some(line => line.translation !== "")
     property bool showTranslation: false
+
+    function translationAt(index) {
+        if (hasTranslation) {
+            return lines[index].translation;
+        }
+        return machineTranslations ? machineTranslations[index] || "" : "";
+    }
 
     // Index of the line being sung; lines come sorted by time. Looks a little
     // ahead since the position is polled.
@@ -108,10 +122,10 @@ Item {
 
             PlasmaComponents.Label {
                 width: parent.width
-                visible: view.showTranslation && line.modelData.translation !== ""
+                visible: view.showTranslation && text !== ""
                 wrapMode: Text.WordWrap
                 color: Qt.rgba(1, 1, 1, 0.75)
-                text: line.modelData.translation
+                text: view.translationAt(line.index)
             }
 
             TapHandler {
@@ -140,6 +154,13 @@ Item {
                 if (view.lyrics.licence) {
                     credits.push(view.lyrics.licence);
                 }
+                if (view.showTranslation && !view.hasTranslation) {
+                    if (view.machineState === "done") {
+                        credits.push(i18n("Translation: %1", view.machineEngine));
+                    } else if (view.machineState === "failed") {
+                        credits.push(i18n("The lyrics could not be translated."));
+                    }
+                }
                 return credits.join("\n");
             }
         }
@@ -150,12 +171,27 @@ Item {
         anchors.top: parent.top
         anchors.right: parent.right
         anchors.margins: Kirigami.Units.smallSpacing
-        visible: view.status === "ready" && view.hasTranslation
+        // Hidden for lyrics already in the user's language.
+        visible: view.status === "ready" && view.lines.length > 0 && (view.hasTranslation || view.machineState !== "same")
         checkable: true
         checked: view.showTranslation
         icon.name: "translate"
         text: i18n("Translate")
-        onToggled: view.showTranslation = checked
+        onToggled: {
+            view.showTranslation = checked;
+            if (checked && !view.hasTranslation && view.machineState !== "done") {
+                view.translateRequested();
+            }
+        }
+    }
+
+    PlasmaComponents.BusyIndicator {
+        anchors.verticalCenter: translateButton.verticalCenter
+        anchors.right: translateButton.left
+        width: translateButton.height
+        height: width
+        visible: view.showTranslation && view.machineState === "working"
+        running: visible
     }
 
     PlasmaComponents.BusyIndicator {

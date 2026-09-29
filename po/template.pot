@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.rcspam.deezerplasmoid\n"
 "Report-Msgid-Bugs-To: https://github.com/rcspam\n"
-"POT-Creation-Date: 2026-09-29 16:31+0200\n"
+"POT-Creation-Date: 2026-09-29 17:07+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,176 +18,184 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: package/contents/ui/AudioMenu.qml:40
+#: package/contents/ui/AudioMenu.qml:48
 msgid "Audio quality"
 msgstr ""
 
-#: package/contents/ui/AudioMenu.qml:45
+#: package/contents/ui/AudioMenu.qml:53
 msgid "Standard (128 kb/s)"
 msgstr ""
 
-#: package/contents/ui/AudioMenu.qml:50
+#: package/contents/ui/AudioMenu.qml:58
 msgid "High Quality (320 kb/s)"
 msgstr ""
 
-#: package/contents/ui/AudioMenu.qml:55
+#: package/contents/ui/AudioMenu.qml:63
 msgid "High Fidelity (FLAC)"
 msgstr ""
 
-#: package/contents/ui/AudioMenu.qml:64
+#: package/contents/ui/AudioMenu.qml:71
 msgid "Normalize volume"
 msgstr ""
 
-#: package/contents/ui/AudioMenu.qml:76
+#: package/contents/ui/AudioMenu.qml:79
 msgid "Sync the queue"
 msgstr ""
 
-#: package/contents/ui/LyricsView.qml:134
+#: package/contents/ui/LyricsView.qml:148
 msgid "Lyrics from LRCLIB"
 msgstr ""
 
-#: package/contents/ui/LyricsView.qml:138
+#: package/contents/ui/LyricsView.qml:152
 msgid "Writers: %1"
 msgstr ""
 
-#: package/contents/ui/LyricsView.qml:157
+#: package/contents/ui/LyricsView.qml:159
+msgid "Translation: %1"
+msgstr ""
+
+#: package/contents/ui/LyricsView.qml:161
+msgid "The lyrics could not be translated."
+msgstr ""
+
+#: package/contents/ui/LyricsView.qml:179
 msgid "Translate"
 msgstr ""
 
-#: package/contents/ui/LyricsView.qml:174
+#: package/contents/ui/LyricsView.qml:210
 msgid "No lyrics for this track"
 msgstr ""
 
-#: package/contents/ui/main.qml:79 package/contents/ui/main.qml:408
+#: package/contents/ui/main.qml:86 package/contents/ui/main.qml:440
 msgid "Nothing playing"
 msgstr ""
 
-#: package/contents/ui/main.qml:344
+#: package/contents/ui/main.qml:376
 msgid "Deezer"
 msgstr ""
 
-#: package/contents/ui/main.qml:344
+#: package/contents/ui/main.qml:376
 msgid "Player"
 msgstr ""
 
-#: package/contents/ui/main.qml:352
+#: package/contents/ui/main.qml:384
 msgid "Queue"
 msgstr ""
 
-#: package/contents/ui/main.qml:361
+#: package/contents/ui/main.qml:393
 msgid "Show the Deezer page"
 msgstr ""
 
-#: package/contents/ui/main.qml:374
+#: package/contents/ui/main.qml:406
 msgid "Keep Open"
 msgstr ""
 
-#: package/contents/ui/main.qml:408
+#: package/contents/ui/main.qml:440
 msgid "Not signed in"
 msgstr ""
 
-#: package/contents/ui/main.qml:411
+#: package/contents/ui/main.qml:443
 msgid "Open Deezer"
 msgstr ""
 
-#: package/contents/ui/main.qml:411
+#: package/contents/ui/main.qml:443
 msgid "Sign in"
 msgstr ""
 
-#: package/contents/ui/main.qml:493
+#: package/contents/ui/main.qml:529
 msgid "Added to %1"
 msgstr ""
 
-#: package/contents/ui/main.qml:494
+#: package/contents/ui/main.qml:530
 msgid "Could not add to %1"
 msgstr ""
 
-#: package/contents/ui/main.qml:519
+#: package/contents/ui/main.qml:555
 msgid "Remove from favorites"
 msgstr ""
 
-#: package/contents/ui/main.qml:519
+#: package/contents/ui/main.qml:555
 msgid "Add to favorites"
 msgstr ""
 
-#: package/contents/ui/main.qml:566
+#: package/contents/ui/main.qml:602
 msgid "Add to a playlist"
 msgstr ""
 
-#: package/contents/ui/main.qml:583
+#: package/contents/ui/main.qml:619
 msgid "No playlist"
 msgstr ""
 
-#: package/contents/ui/main.qml:583
+#: package/contents/ui/main.qml:619
 msgid "Loading playlists…"
 msgstr ""
 
-#: package/contents/ui/main.qml:590
+#: package/contents/ui/main.qml:626
 msgid "%2 (%1 track)"
 msgid_plural "%2 (%1 tracks)"
 msgstr[0] ""
 msgstr[1] ""
 
-#: package/contents/ui/main.qml:667
+#: package/contents/ui/main.qml:703
 msgid "Shuffle: on"
 msgstr ""
 
-#: package/contents/ui/main.qml:667
+#: package/contents/ui/main.qml:703
 msgid "Shuffle: off"
 msgstr ""
 
-#: package/contents/ui/main.qml:680
+#: package/contents/ui/main.qml:716
 msgid "Previous track"
 msgstr ""
 
-#: package/contents/ui/main.qml:689
+#: package/contents/ui/main.qml:725
 msgid "Pause"
 msgstr ""
 
-#: package/contents/ui/main.qml:689
+#: package/contents/ui/main.qml:725
 msgid "Play"
 msgstr ""
 
-#: package/contents/ui/main.qml:698
+#: package/contents/ui/main.qml:734
 msgid "Next track"
 msgstr ""
 
-#: package/contents/ui/main.qml:707
+#: package/contents/ui/main.qml:743
 msgid "Repeat: current track"
 msgstr ""
 
-#: package/contents/ui/main.qml:708
+#: package/contents/ui/main.qml:744
 msgid "Repeat: all"
 msgstr ""
 
-#: package/contents/ui/main.qml:709
+#: package/contents/ui/main.qml:745
 msgid "Repeat: off"
 msgstr ""
 
-#: package/contents/ui/main.qml:731
+#: package/contents/ui/main.qml:767
 msgid "Audio settings"
 msgstr ""
 
-#: package/contents/ui/main.qml:755
+#: package/contents/ui/main.qml:791
 msgid "Show your playlists"
 msgstr ""
 
-#: package/contents/ui/main.qml:777
+#: package/contents/ui/main.qml:813
 msgid "Unmute"
 msgstr ""
 
-#: package/contents/ui/main.qml:777
+#: package/contents/ui/main.qml:813
 msgid "Mute"
 msgstr ""
 
-#: package/contents/ui/main.qml:797
+#: package/contents/ui/main.qml:833
 msgid "Show the queue"
 msgstr ""
 
-#: package/contents/ui/main.qml:815
+#: package/contents/ui/main.qml:854
 msgid "Show the cover"
 msgstr ""
 
-#: package/contents/ui/main.qml:815
+#: package/contents/ui/main.qml:854
 msgid "Show the lyrics"
 msgstr ""

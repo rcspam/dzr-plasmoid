@@ -8,6 +8,7 @@ import org.kde.plasma.extras as PlasmaExtras
 import org.kde.kirigami as Kirigami
 
 import "../code/deezer.js" as Deezer
+import "../code/translate.js" as Translate
 
 PlasmoidItem {
     id: root
@@ -56,6 +57,12 @@ PlasmoidItem {
     property string lyricsStatus: ""
     property var lyrics: null
     property bool lyricsShown: false
+    // Machine translation of lyrics Deezer does not translate, one entry per
+    // line. State: "", "working", "done", "same" (already in the user's
+    // language) or "failed".
+    property var lyricsMachine: null
+    property string lyricsMachineState: ""
+    property string lyricsMachineEngine: ""
     // Deezer's audio settings as the page last read them (see AudioMenu).
     property var audio: null
 
@@ -145,6 +152,9 @@ PlasmoidItem {
                 root.lyricsKey = lyricsKey;
                 root.lyricsStatus = state.lyricsStatus;
                 root.lyrics = null;
+                root.lyricsMachine = null;
+                root.lyricsMachineState = "";
+                root.lyricsMachineEngine = "";
                 if (state.lyricsStatus === "ready") {
                     root.refreshLyrics();
                 }
@@ -169,6 +179,28 @@ PlasmoidItem {
                 root.lyrics = JSON.parse(result).data;
             } catch (e) {
                 console.warn("[deezer] bad lyrics:", result);
+            }
+        });
+    }
+
+    function translateLyrics() {
+        if (!lyrics || lyricsMachineState === "working" || lyricsMachineState === "done") {
+            return;
+        }
+        const key = lyricsKey;
+        lyricsMachineState = "working";
+        Translate.translateLines(lyrics.lines.map(line => line.text), Qt.locale().name.split("_")[0], result => {
+            if (key !== root.lyricsKey) {
+                return; // Another track by now.
+            }
+            if (!result) {
+                root.lyricsMachineState = "failed";
+            } else if (result.sameLanguage) {
+                root.lyricsMachineState = "same";
+            } else {
+                root.lyricsMachine = result.lines;
+                root.lyricsMachineEngine = result.engine;
+                root.lyricsMachineState = "done";
             }
         });
     }
@@ -452,6 +484,10 @@ PlasmoidItem {
                             cover: root.cover
                             status: root.lyricsStatus
                             lyrics: root.lyrics
+                            machineTranslations: root.lyricsMachine
+                            machineState: root.lyricsMachineState
+                            machineEngine: root.lyricsMachineEngine
+                            onTranslateRequested: root.translateLyrics()
                             position: root.position
                             onSeekRequested: seconds => {
                                 root.position = seconds;
