@@ -169,23 +169,30 @@
         return data.plainLyrics ? Object.assign(credits, { synced: false, lines: plainLines(data.plainLyrics) }) : null;
     }
 
-    // Resolves to the lyrics of a dzPlayer song object, or null. Also handy
+    // Resolves to the lyrics of a dzPlayer song object, or null. Synced lyrics
+    // come first, whatever the source: Deezer sometimes only has the text,
+    // which cannot follow the song, when LRCLIB has it synced. Also handy
     // from the dev tools.
     h.fetchLyrics = async song => {
+        let deezer = null;
         try {
-            const lyrics = await deezerLyrics(song);
-            if (lyrics) {
-                return lyrics;
-            }
+            deezer = await deezerLyrics(song);
         } catch (e) {
             console.warn('[dzPlasmoid] Deezer lyrics failed', e);
         }
+        if (deezer && deezer.synced) {
+            return deezer;
+        }
+        let lrclib = null;
         try {
-            return await lrclibLyrics(song);
+            lrclib = await lrclibLyrics(song);
         } catch (e) {
             console.warn('[dzPlasmoid] LRCLIB lyrics failed', e);
-            return null;
         }
+        if (lrclib && lrclib.synced) {
+            return lrclib;
+        }
+        return deezer || lrclib;
     };
 
     // status: 'loading', 'ready' or 'missing'.
