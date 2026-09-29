@@ -235,6 +235,8 @@ Item {
         // is, so the bar would never show without a source to name.
         visible: view.status === "ready" && (sourceLabel.text !== "" || view.canTranslate)
         spacing: Kirigami.Units.smallSpacing
+        // Translate in the lyrics' color, which may not be the theme's.
+        Kirigami.Theme.textColor: view.textColor
 
         PlasmaComponents.Label {
             id: sourceLabel
