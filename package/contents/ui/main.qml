@@ -178,10 +178,7 @@ PlasmoidItem {
         onPlayPauseRequested: root.act("togglePause")
         onNextRequested: root.act("next")
         onPreviousRequested: root.act("previous")
-        onSeekRequested: seconds => {
-            root.position = seconds;
-            root.act("seek", [seconds / root.duration]);
-        }
+        onSeekRequested: seconds => root.seekTo(seconds)
         // Polled faster while shown, for a progress bar that moves.
         onShownChanged: root.toolTipShown = shown
     }
@@ -218,13 +215,19 @@ PlasmoidItem {
         act("setVolume", [level]);
     }
 
-    // Keyboard seek, in seconds, kept within the track.
-    function seekBy(seconds) {
+    // Seek to a time in seconds. The page takes a fraction of the track, so
+    // nothing is done while the duration is unknown (0 would make it the start).
+    function seekTo(seconds) {
         if (duration <= 0) {
             return;
         }
-        position = Math.max(0, Math.min(duration, position + seconds));
-        act("seek", [position / duration]);
+        position = seconds;
+        act("seek", [seconds / duration]);
+    }
+
+    // Keyboard seek, in seconds, kept within the track.
+    function seekBy(seconds) {
+        seekTo(Math.max(0, Math.min(duration, position + seconds)));
     }
 
     function refresh() {
@@ -311,10 +314,17 @@ PlasmoidItem {
 
     function refreshLyrics() {
         run(Deezer.call("lyrics"), function (result) {
+            let state;
             try {
-                root.lyrics = JSON.parse(result).data;
+                state = JSON.parse(result);
             } catch (e) {
                 console.warn("[deezer] bad lyrics:", result);
+                return;
+            }
+            // The track may have changed since the snapshot: the next one
+            // asks again for the right lyrics.
+            if (state.songId + ":" + state.status === root.lyricsKey) {
+                root.lyrics = state.data;
             }
         });
     }
@@ -326,6 +336,20 @@ PlasmoidItem {
             lyricsMachine = result.lines;
             lyricsMachineEngine = result.engine;
             lyricsMachineState = "done";
+        }
+    }
+
+    // Bumped by each translation and by its time limit: a late answer is dropped.
+    property int translationRun: 0
+
+    Timer {
+        id: translationTimeout
+        onTriggered: {
+            if (root.lyricsMachineState === "working") {
+                console.warn("[deezer] translation timed out:", root.translationEngine);
+                root.translationRun++;
+                root.lyricsMachineState = "failed";
+            }
         }
     }
 
@@ -349,6 +373,9 @@ PlasmoidItem {
             return;
         }
         lyricsMachineState = "working";
+        const run = ++translationRun;
+        translationTimeout.interval = Translate.timeLimit(translationEngine);
+        translationTimeout.restart();
         const options = {
             engine: translationEngine,
             libreTranslateUrl: Plasmoid.configuration.libreTranslateUrl,
@@ -357,6 +384,10 @@ PlasmoidItem {
             ollamaPrompt: Plasmoid.configuration.ollamaPrompt,
         };
         Translate.translateLines(lyrics.lines.map(line => line.text), target, options, result => {
+            if (run !== root.translationRun) {
+                return; // Given up on (time limit), or asked again since.
+            }
+            translationTimeout.stop();
             if (key !== root.lyricsKey || setup !== root.translationSetup) {
                 return; // Another track, or other translation settings, by now.
             }
@@ -878,10 +909,7 @@ PlasmoidItem {
                             blurStrength: Plasmoid.configuration.lyricsBlur / 100
                             onTranslateRequested: root.translateLyrics()
                             position: root.position
-                            onSeekRequested: seconds => {
-                                root.position = seconds;
-                                root.act("seek", [seconds / root.duration]);
-                            }
+                            onSeekRequested: seconds => root.seekTo(seconds)
                         }
 
                         // Short-lived feedback, e.g. after adding to a playlist.
@@ -1035,9 +1063,9 @@ PlasmoidItem {
                         property real target: -1
 
                         function seek() {
-                            // Shown right away, so the handle does not jump back until the next poll.
-                            root.position = target;
-                            root.act("seek", [target / root.duration]);
+                            // Shown right away (seekTo sets the position), so the handle
+                            // does not jump back until the next poll.
+                            root.seekTo(target);
                             target = -1;
                         }
 
@@ -1438,10 +1466,25 @@ PlasmoidItem {
                 }]
 
                 onLoadingChanged: request => {
-                    if (request.status === WebEngineLoadingInfo.LoadSucceededStatus) {
+                    if (request.status === WebEngineLoadingInfo.LoadStartedStatus) {
+                        reloadLater.stop();
+                    } else if (request.status === WebEngineLoadingInfo.LoadSucceededStatus) {
                         root.pageLoaded = true;
                         refreshSoon.restart();
+                    } else if (request.status === WebEngineLoadingInfo.LoadFailedStatus
+                            && (request.errorDomain === WebEngineLoadingInfo.ConnectionErrorDomain
+                                || request.errorDomain === WebEngineLoadingInfo.DnsErrorDomain)) {
+                        // No network yet (plasmashell often starts before the
+                        // Wi-Fi is up): try again until it comes.
+                        console.warn("[deezer] page load failed, retrying:", request.errorString);
+                        reloadLater.restart();
                     }
+                }
+
+                Timer {
+                    id: reloadLater
+                    interval: 10000
+                    onTriggered: web.reload()
                 }
                 onIconChanged: {
                     if (icon.toString() !== "") {

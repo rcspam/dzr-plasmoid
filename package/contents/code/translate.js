@@ -13,6 +13,14 @@ var GOOGLE_URL = "https://translate.googleapis.com/translate_a/t?client=gtx&sl=a
 var GOOGLE_CHUNK = 50;
 // Lines per Ollama request; the chunks go one after the other.
 var OLLAMA_CHUNK = 20;
+// How long a whole translation may take, in ms: QML's XMLHttpRequest has no
+// timeout, and a server that takes the request without answering would
+// leave it working for ever. Ollama on a CPU is slow, hence its margin.
+var TIME_LIMITS = { google: 30000, libretranslate: 60000, ollama: 300000 };
+
+function timeLimit(engine) {
+    return TIME_LIMITS[engine] || 60000;
+}
 // Ollama prompt when the settings give none. {language} and {code} are the
 // target language's name and code ("français", "fr"), {lines} the lines to
 // translate, numbered as "1| text"; the answer must keep these numbers.
