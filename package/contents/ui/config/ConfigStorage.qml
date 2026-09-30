@@ -15,14 +15,19 @@ KCM.SimpleKCM {
     // The web engine keeps the cache of the "deezer-plasmoid" profile in the
     // host program's cache folder (plasmashell, or plasmoidviewer in tests),
     // which is the settings' program too.
-    readonly property string cacheFolder: StandardPaths.writableLocation(StandardPaths.CacheLocation).toString().replace("file://", "")
+    readonly property string cacheFolder: decodeURIComponent(StandardPaths.writableLocation(StandardPaths.CacheLocation).toString().replace("file://", ""))
                                           + "/QtWebEngine/deezer-plasmoid"
+
+    // Single quotes for the shell, a quote in the text closed and escaped.
+    function shellQuote(text) {
+        return "'" + text.split("'").join("'\\''") + "'";
+    }
     // In bytes; -1 while measuring.
     property real cacheSize: -1
 
     function measure() {
         cacheSize = -1;
-        du.connectSource("du -sb '" + cacheFolder + "' #" + Date.now());
+        du.connectSource("du -sb " + shellQuote(cacheFolder) + " #" + Date.now());
     }
 
     P5Support.DataSource {

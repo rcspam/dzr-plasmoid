@@ -25,7 +25,10 @@ KCM.SimpleKCM {
     Ui.TranslationCache {
         id: translationCache
     }
-    property real cacheSize: translationCache.size()
+    // Read once the page is up: as a binding, the database opening on the
+    // first read made a binding loop.
+    property real cacheSize: 0
+    Component.onCompleted: cacheSize = translationCache.size()
 
     function formatSize(bytes) {
         if (bytes < 1024) {
@@ -131,7 +134,10 @@ KCM.SimpleKCM {
             Layout.preferredWidth: Kirigami.Units.gridUnit * 24
             enabled: page.cfg_translationEngine === "ollama"
             wrapMode: TextEdit.Wrap
-            text: page.cfg_ollamaPrompt || Translate.OLLAMA_PROMPT
+            // Filled once: a binding to the setting would put the default prompt
+            // back as soon as the field is emptied to write another one. An
+            // empty field, like the default prompt, is stored as "".
+            Component.onCompleted: text = page.cfg_ollamaPrompt || Translate.OLLAMA_PROMPT
             onTextChanged: page.cfg_ollamaPrompt = text === Translate.OLLAMA_PROMPT ? "" : text
         }
 
@@ -149,7 +155,7 @@ KCM.SimpleKCM {
                 Layout.alignment: Qt.AlignTop
                 icon.name: "edit-undo"
                 text: i18n("Default")
-                enabled: page.cfg_ollamaPrompt !== ""
+                enabled: ollamaPrompt.text !== Translate.OLLAMA_PROMPT
                 onClicked: ollamaPrompt.text = Translate.OLLAMA_PROMPT
             }
         }
