@@ -161,8 +161,8 @@ KCM.SimpleKCM {
 
         QQC2.CheckBox {
             id: translateDeezerLyrics
-            enabled: page.cfg_translationEngine !== "none"
-            text: i18n("Also translate the lyrics Deezer provides")
+            enabled: page.cfg_translationEngine === "google"
+            text: i18n("Also send the lyrics Deezer provides to Google")
         }
 
         QQC2.Label {
@@ -170,7 +170,7 @@ KCM.SimpleKCM {
             Layout.maximumWidth: Kirigami.Units.gridUnit * 24
             wrapMode: Text.WordWrap
             font: Kirigami.Theme.smallFont
-            text: i18n("Deezer's lyrics are licensed from LyricFind for personal use: this sends them to the chosen engine. Lyrics from LRCLIB are always translated.")
+            text: i18n("Deezer's lyrics are licensed from LyricFind for personal use. The LibreTranslate or Ollama server you set up always translates them, Google only with this option. Lyrics from LRCLIB are always translated.")
         }
 
         Item {

@@ -75,7 +75,10 @@ An option, off by default, also asks lrcmux, which gathers lyrics from
 unofficial and unlicensed sources (YouTube Music, KuGou, Musixmatch and
 others); it is meant for personal use and may stop working at any time.
 Machine translation is optional: it sends the lyrics to the engine chosen in
-the settings (Google, or your own LibreTranslate or Ollama server).
+the settings (Google, or your own LibreTranslate or Ollama server). Deezer's
+own lyrics go to Google only if you allow it in the settings. The Google
+engine is the free endpoint of Google Translate's web widget
+(`client=gtx`), not Google's paid Cloud Translation API.
 
 The panel icon is, by default, deezer.com's favicon as the page loads it,
 the way a browser shows it in a tab: no Deezer image is shipped.
@@ -127,8 +130,9 @@ white on black, with the cover blur, text size and fade. Non-Deezer
 services: everything sent elsewhere than Deezer, that is the lyrics sources
 (LRCLIB, and the extended sources through lrcmux, off by default), the
 translation engine (Google, a LibreTranslate or an Ollama server with an
-editable prompt, or none), whether Deezer's own lyrics may be sent to it,
-and the translation cache. Storage: the web engine's HTTP cache, its limit
+editable prompt, or none), whether Deezer's own lyrics may also go to
+Google (off by default; your own server always gets them), and the
+translation cache. Storage: the web engine's HTTP cache, its limit
 and a button to empty it.
 
 ## License

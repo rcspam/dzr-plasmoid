@@ -98,10 +98,11 @@ PlasmoidItem {
     // From the settings.
     readonly property string deezerLanguage: Deezer.siteLanguage(Plasmoid.configuration.deezerLanguage, Qt.locale().name.split("_")[0])
     readonly property string translationEngine: Plasmoid.configuration.translationEngine
-    // Whether these lyrics may go to the translation engine: Deezer's own
-    // (licensed from LyricFind) only when the settings allow it.
+    // Whether these lyrics may go to the translation engine. Deezer's own
+    // (licensed from LyricFind) go to the user's own server, and to Google
+    // only when the settings allow it.
     readonly property bool machineTranslationAllowed: translationEngine !== "none" && lyrics !== null
-        && (lyrics.source !== "deezer" || Plasmoid.configuration.translateDeezerLyrics)
+        && (lyrics.source !== "deezer" || translationEngine !== "google" || Plasmoid.configuration.translateDeezerLyrics)
     // Machine translation of lyrics Deezer does not translate, one entry per
     // line. State: "", "working", "done", "same" (already in the user's
     // language) or "failed".

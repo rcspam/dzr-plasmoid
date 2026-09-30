@@ -68,9 +68,10 @@
         <entry name="extendedLyrics" type="Bool">
             <default>false</default>
         </entry>
-        <!-- Also send Deezer's lyrics (licensed from LyricFind) to the engine. -->
+        <!-- Also send Deezer's lyrics (licensed from LyricFind) to Google; the
+             user's own LibreTranslate or Ollama server always gets them. -->
         <entry name="translateDeezerLyrics" type="Bool">
-            <default>true</default>
+            <default>false</default>
         </entry>
 
         <!-- Lyrics look: text size factor, and fade strength around the sung
