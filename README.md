@@ -138,5 +138,6 @@ Public License, version 3 or (at your option) any later version; see
 [LICENSE](LICENSE).
 
 Not covered by it: the karaoke microphone icons, which come from SVG Repo
-under CC0. The widget icon is a Breeze icon (KDE), under the GNU Lesser
-General Public License, version 3 or later.
+under CC0. The widget icon and the purple shuffle and repeat icons are
+Breeze icons (KDE), under the GNU Lesser General Public License, version 3
+or later.

@@ -1019,12 +1019,15 @@ PlasmoidItem {
                         Layout.alignment: Qt.AlignHCenter
                         spacing: Kirigami.Units.smallSpacing
 
+                        // Shuffle and repeat are not checkable either: as for the
+                        // lyrics button, the purple icon tells they are on.
                         PlasmaComponents.ToolButton {
-                            checkable: true
-                            checked: root.shuffle
-                            icon.name: "media-playlist-shuffle"
+                            icon.name: root.shuffle ? "" : "media-playlist-shuffle"
+                            icon.source: root.shuffle ? Qt.resolvedUrl("../images/dzplasmoid-shuffle-active.svg") : ""
                             display: QQC2.AbstractButton.IconOnly
                             text: root.shuffle ? i18n("Shuffle: on") : i18n("Shuffle: off")
+                            Accessible.checkable: true
+                            Accessible.checked: root.shuffle
                             onClicked: root.act("toggleShuffle")
 
                             PlasmaComponents.ToolTip {
@@ -1072,13 +1075,16 @@ PlasmoidItem {
                         }
 
                         PlasmaComponents.ToolButton {
-                            checkable: true
-                            checked: root.repeat > 0
-                            icon.name: root.repeat === 2 ? "media-playlist-repeat-song" : "media-playlist-repeat"
+                            icon.name: root.repeat > 0 ? "" : "media-playlist-repeat"
+                            icon.source: root.repeat === 2 ? Qt.resolvedUrl("../images/dzplasmoid-repeat-song-active.svg")
+                                : root.repeat === 1 ? Qt.resolvedUrl("../images/dzplasmoid-repeat-active.svg")
+                                : ""
                             display: QQC2.AbstractButton.IconOnly
                             text: root.repeat === 2 ? i18n("Repeat: current track")
                                 : root.repeat === 1 ? i18n("Repeat: all")
                                 : i18n("Repeat: off")
+                            Accessible.checkable: true
+                            Accessible.checked: root.repeat > 0
                             onClicked: root.act("cycleRepeat")
 
                             PlasmaComponents.ToolTip {

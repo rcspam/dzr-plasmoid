@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.rcspam.deezerplasmoid\n"
 "Report-Msgid-Bugs-To: https://github.com/rcspam\n"
-"POT-Creation-Date: 2026-09-30 10:44+0200\n"
+"POT-Creation-Date: 2026-09-30 10:46+0200\n"
 "PO-Revision-Date: 2026-09-29 16:01+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -42,19 +42,19 @@ msgstr "Normaliser le volume"
 msgid "Sync the queue"
 msgstr "Synchronisation de la file d'attente"
 
-#: package/contents/ui/CompactToolTip.qml:97 package/contents/ui/main.qml:1040
+#: package/contents/ui/CompactToolTip.qml:97 package/contents/ui/main.qml:1043
 msgid "Previous track"
 msgstr "Piste précédente"
 
-#: package/contents/ui/CompactToolTip.qml:105 package/contents/ui/main.qml:1053
+#: package/contents/ui/CompactToolTip.qml:105 package/contents/ui/main.qml:1056
 msgid "Pause"
 msgstr "Pause"
 
-#: package/contents/ui/CompactToolTip.qml:105 package/contents/ui/main.qml:1053
+#: package/contents/ui/CompactToolTip.qml:105 package/contents/ui/main.qml:1056
 msgid "Play"
 msgstr "Lecture"
 
-#: package/contents/ui/CompactToolTip.qml:113 package/contents/ui/main.qml:1066
+#: package/contents/ui/CompactToolTip.qml:113 package/contents/ui/main.qml:1069
 msgid "Next track"
 msgstr "Piste suivante"
 
@@ -132,11 +132,11 @@ msgstr "Ajouté à %1"
 msgid "Could not add to %1"
 msgstr "Impossible d'ajouter à %1"
 
-#: package/contents/ui/main.qml:879 package/contents/ui/main.qml:1328
+#: package/contents/ui/main.qml:879 package/contents/ui/main.qml:1334
 msgid "Remove from favorites"
 msgstr "Retirer des coups de cœur"
 
-#: package/contents/ui/main.qml:879 package/contents/ui/main.qml:1328
+#: package/contents/ui/main.qml:879 package/contents/ui/main.qml:1334
 msgid "Add to favorites"
 msgstr "Ajouter aux coups de cœur"
 
@@ -158,55 +158,55 @@ msgid_plural "%2 (%1 tracks)"
 msgstr[0] "%2 (%1 titre)"
 msgstr[1] "%2 (%1 titres)"
 
-#: package/contents/ui/main.qml:1027
+#: package/contents/ui/main.qml:1028
 msgid "Shuffle: on"
 msgstr "Lecture aléatoire : activée"
 
-#: package/contents/ui/main.qml:1027
+#: package/contents/ui/main.qml:1028
 msgid "Shuffle: off"
 msgstr "Lecture aléatoire : désactivée"
 
-#: package/contents/ui/main.qml:1079
+#: package/contents/ui/main.qml:1083
 msgid "Repeat: current track"
 msgstr "Répétition : titre en cours"
 
-#: package/contents/ui/main.qml:1080
+#: package/contents/ui/main.qml:1084
 msgid "Repeat: all"
 msgstr "Répétition : tout"
 
-#: package/contents/ui/main.qml:1081
+#: package/contents/ui/main.qml:1085
 msgid "Repeat: off"
 msgstr "Répétition : désactivée"
 
-#: package/contents/ui/main.qml:1103
+#: package/contents/ui/main.qml:1109
 msgid "Audio settings"
 msgstr "Réglages audio"
 
-#: package/contents/ui/main.qml:1127
+#: package/contents/ui/main.qml:1133
 msgid "Show your playlists"
 msgstr "Afficher vos playlists"
 
-#: package/contents/ui/main.qml:1149
+#: package/contents/ui/main.qml:1155
 msgid "Unmute"
 msgstr "Rétablir le son"
 
-#: package/contents/ui/main.qml:1149
+#: package/contents/ui/main.qml:1155
 msgid "Mute"
 msgstr "Couper le son"
 
-#: package/contents/ui/main.qml:1173
+#: package/contents/ui/main.qml:1179
 msgid "Show the queue"
 msgstr "Afficher la file d'attente"
 
-#: package/contents/ui/main.qml:1194
+#: package/contents/ui/main.qml:1200
 msgid "Show the cover"
 msgstr "Afficher la pochette"
 
-#: package/contents/ui/main.qml:1194
+#: package/contents/ui/main.qml:1200
 msgid "Show the lyrics"
 msgstr "Afficher les paroles"
 
-#: package/contents/ui/main.qml:1339
+#: package/contents/ui/main.qml:1345
 msgid "Remove from the queue"
 msgstr "Retirer de la file d'attente"
 
