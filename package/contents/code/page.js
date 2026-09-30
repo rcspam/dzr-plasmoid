@@ -422,7 +422,8 @@
         const p = player();
         if (document.querySelector('[data-testid="topbar-profile"]')) {
             h.session = 'in';
-        } else if (h.session !== 'in' && Date.now() - lastSessionCheck > 5000) {
+        } else if (Date.now() - lastSessionCheck > 5000) {
+            // Also when signed in: signing out may not reload the page.
             checkSession();
         }
         const session = h.session;

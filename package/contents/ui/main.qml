@@ -414,7 +414,40 @@ PlasmoidItem {
         settled = false;
         if (session === "in") {
             settleTimer.restart();
+        } else if (session === "out") {
+            forgetAccount();
         }
+    }
+
+    // Signed out, the page has no player and its snapshots are not ready:
+    // without this the last track, its queue and lyrics would stay on show.
+    function forgetAccount() {
+        playing = false;
+        songId = "";
+        title = "";
+        artist = "";
+        album = "";
+        cover = "";
+        position = 0;
+        duration = 0;
+        favorite = false;
+        favoriteAvailable = false;
+        queueIndex = 0;
+        queueModel.clear();
+        queueJson = "";
+        playlists = null;
+        playlistsJson = "";
+        // Loaded again for the next account.
+        playlistsRequested = false;
+        lyricsShown = false;
+        lyricsStatus = "";
+        lyrics = null;
+        lyricsKey = "";
+        lyricsMachine = null;
+        lyricsMachineState = "";
+        lyricsMachineEngine = "";
+        audio = null;
+        audioJson = "";
     }
 
     Timer {
