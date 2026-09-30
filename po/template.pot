@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.rcspam.deezerplasmoid\n"
 "Report-Msgid-Bugs-To: https://github.com/rcspam\n"
-"POT-Creation-Date: 2026-09-30 13:12+0200\n"
+"POT-Creation-Date: 2026-09-30 13:15+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -237,32 +237,38 @@ msgid "Icon:"
 msgstr ""
 
 #: package/contents/ui/config/ConfigGeneral.qml:82
+msgid "Widget icon"
+msgstr ""
+
+#: package/contents/ui/config/ConfigGeneral.qml:87
 msgid "Deezer site icon"
 msgstr ""
 
-#: package/contents/ui/config/ConfigGeneral.qml:90
+#: package/contents/ui/config/ConfigGeneral.qml:95
 msgid ""
 "Loaded with the Deezer page, as in a browser tab. The widget icon stands in "
 "until then."
 msgstr ""
 
-#: package/contents/ui/config/ConfigGeneral.qml:95
-msgid "Widget icon"
+#: package/contents/ui/config/ConfigGeneral.qml:103
+msgid ""
+"The Deezer logo is a trademark of Deezer SA, and this widget is not made by "
+"Deezer. Show it for your own use only."
 msgstr ""
 
-#: package/contents/ui/config/ConfigGeneral.qml:102
+#: package/contents/ui/config/ConfigGeneral.qml:110
 msgid "Custom icon:"
 msgstr ""
 
-#: package/contents/ui/config/ConfigGeneral.qml:115
+#: package/contents/ui/config/ConfigGeneral.qml:123
 msgid "Choose an icon"
 msgstr ""
 
-#: package/contents/ui/config/ConfigGeneral.qml:132
+#: package/contents/ui/config/ConfigGeneral.qml:140
 msgid "Volume change per wheel notch:"
 msgstr ""
 
-#: package/contents/ui/config/ConfigGeneral.qml:135
+#: package/contents/ui/config/ConfigGeneral.qml:143
 #: package/contents/ui/config/ConfigLyrics.qml:68
 #: package/contents/ui/config/ConfigLyrics.qml:85
 #: package/contents/ui/config/ConfigLyrics.qml:101
@@ -270,7 +276,7 @@ msgctxt "percentage"
 msgid "%1 %"
 msgstr ""
 
-#: package/contents/ui/config/ConfigGeneral.qml:141
+#: package/contents/ui/config/ConfigGeneral.qml:149
 msgid "Invert the wheel direction"
 msgstr ""
 

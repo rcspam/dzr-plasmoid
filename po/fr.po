@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.rcspam.deezerplasmoid\n"
 "Report-Msgid-Bugs-To: https://github.com/rcspam\n"
-"POT-Creation-Date: 2026-09-30 13:12+0200\n"
+"POT-Creation-Date: 2026-09-30 13:15+0200\n"
 "PO-Revision-Date: 2026-09-29 16:01+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -239,10 +239,14 @@ msgid "Icon:"
 msgstr "Icône :"
 
 #: package/contents/ui/config/ConfigGeneral.qml:82
+msgid "Widget icon"
+msgstr "Icône du widget"
+
+#: package/contents/ui/config/ConfigGeneral.qml:87
 msgid "Deezer site icon"
 msgstr "Icône du site Deezer"
 
-#: package/contents/ui/config/ConfigGeneral.qml:90
+#: package/contents/ui/config/ConfigGeneral.qml:95
 msgid ""
 "Loaded with the Deezer page, as in a browser tab. The widget icon stands in "
 "until then."
@@ -250,23 +254,27 @@ msgstr ""
 "Chargée avec la page Deezer, comme dans un onglet de navigateur. L'icône du "
 "widget la remplace jusque-là."
 
-#: package/contents/ui/config/ConfigGeneral.qml:95
-msgid "Widget icon"
-msgstr "Icône du widget"
+#: package/contents/ui/config/ConfigGeneral.qml:103
+msgid ""
+"The Deezer logo is a trademark of Deezer SA, and this widget is not made by "
+"Deezer. Show it for your own use only."
+msgstr ""
+"Le logo Deezer est une marque de Deezer SA, et ce widget n'est pas fait par "
+"Deezer. Affichez-le seulement pour votre usage personnel."
 
-#: package/contents/ui/config/ConfigGeneral.qml:102
+#: package/contents/ui/config/ConfigGeneral.qml:110
 msgid "Custom icon:"
 msgstr "Icône personnalisée :"
 
-#: package/contents/ui/config/ConfigGeneral.qml:115
+#: package/contents/ui/config/ConfigGeneral.qml:123
 msgid "Choose an icon"
 msgstr "Choisir une icône"
 
-#: package/contents/ui/config/ConfigGeneral.qml:132
+#: package/contents/ui/config/ConfigGeneral.qml:140
 msgid "Volume change per wheel notch:"
 msgstr "Volume par cran de molette :"
 
-#: package/contents/ui/config/ConfigGeneral.qml:135
+#: package/contents/ui/config/ConfigGeneral.qml:143
 #: package/contents/ui/config/ConfigLyrics.qml:68
 #: package/contents/ui/config/ConfigLyrics.qml:85
 #: package/contents/ui/config/ConfigLyrics.qml:101
@@ -274,7 +282,7 @@ msgctxt "percentage"
 msgid "%1 %"
 msgstr "%1 %"
 
-#: package/contents/ui/config/ConfigGeneral.qml:141
+#: package/contents/ui/config/ConfigGeneral.qml:149
 msgid "Invert the wheel direction"
 msgstr "Inverser le sens de la molette"
 

@@ -80,8 +80,9 @@ own lyrics go to Google only if you allow it in the settings. The Google
 engine is the free endpoint of Google Translate's web widget
 (`client=gtx`), not Google's paid Cloud Translation API.
 
-The panel icon is, by default, deezer.com's favicon as the page loads it,
-the way a browser shows it in a tab: no Deezer image is shipped.
+The panel icon is the widget's own. The settings can show deezer.com's
+favicon instead, as the page loads it, the way a browser shows it in a tab:
+no Deezer image is shipped. The Deezer logo is a trademark of Deezer SA.
 
 This software is provided as is, without any warranty.
 
@@ -123,8 +124,8 @@ not when `plasmoidviewer` runs the source folder.
 ## Settings
 
 General: the Deezer site language (the system's by default, English when
-Deezer does not have it) and the panel icon, that is the Deezer site's icon,
-the widget's own or any icon you pick, and its wheel. Lyrics: how they look,
+Deezer does not have it) and the panel icon, that is the widget's own, the
+Deezer site's icon or any icon you pick, and its wheel. Lyrics: how they look,
 over the blurred cover with a text color to suit it, or black on white, or
 white on black, with the cover blur, text size and fade. Non-Deezer
 services: everything sent elsewhere than Deezer, that is the lyrics sources

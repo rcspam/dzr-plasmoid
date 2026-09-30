@@ -35,10 +35,10 @@
         <entry name="invertWheel" type="Bool">
             <default>false</default>
         </entry>
-        <!-- Panel icon: "favicon" (deezer.com's, as the page loads it),
-             "widget" (the widget's own) or "custom" (panelIconCustom). -->
+        <!-- Panel icon: "widget" (the widget's own), "favicon" (deezer.com's,
+             as the page loads it) or "custom" (panelIconCustom). -->
         <entry name="panelIcon" type="String">
-            <default>favicon</default>
+            <default>widget</default>
         </entry>
         <!-- Icon name or file picked by the user, kept when another choice is made. -->
         <entry name="panelIconCustom" type="String">
