@@ -78,11 +78,6 @@ KCM.SimpleKCM {
 
         PanelIconButton {
             Kirigami.FormData.label: i18n("Icon:")
-            choice: "widget"
-            text: i18n("Widget icon")
-        }
-
-        PanelIconButton {
             choice: "favicon"
             text: i18n("Deezer site icon")
         }
@@ -101,6 +96,11 @@ KCM.SimpleKCM {
             visible: page.cfg_panelIcon === "favicon"
             type: Kirigami.MessageType.Warning
             text: i18n("The Deezer logo is a trademark of Deezer SA, and this widget is not made by Deezer. Show it for your own use only.")
+        }
+
+        PanelIconButton {
+            choice: "widget"
+            text: i18n("Widget icon")
         }
 
         RowLayout {

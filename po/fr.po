@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.rcspam.deezerplasmoid\n"
 "Report-Msgid-Bugs-To: https://github.com/rcspam\n"
-"POT-Creation-Date: 2026-09-30 13:22+0200\n"
+"POT-Creation-Date: 2026-09-30 13:35+0200\n"
 "PO-Revision-Date: 2026-09-29 16:01+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -239,14 +239,10 @@ msgid "Icon:"
 msgstr "Icône :"
 
 #: package/contents/ui/config/ConfigGeneral.qml:82
-msgid "Widget icon"
-msgstr "Icône du widget"
-
-#: package/contents/ui/config/ConfigGeneral.qml:87
 msgid "Deezer site icon"
 msgstr "Icône du site Deezer"
 
-#: package/contents/ui/config/ConfigGeneral.qml:95
+#: package/contents/ui/config/ConfigGeneral.qml:90
 msgid ""
 "Loaded with the Deezer page, as in a browser tab. The widget icon stands in "
 "until then."
@@ -254,13 +250,17 @@ msgstr ""
 "Chargée avec la page Deezer, comme dans un onglet de navigateur. L'icône du "
 "widget la remplace jusque-là."
 
-#: package/contents/ui/config/ConfigGeneral.qml:103
+#: package/contents/ui/config/ConfigGeneral.qml:98
 msgid ""
 "The Deezer logo is a trademark of Deezer SA, and this widget is not made by "
 "Deezer. Show it for your own use only."
 msgstr ""
 "Le logo Deezer est une marque de Deezer SA, et ce widget n'est pas fait par "
 "Deezer. Affichez-le seulement pour votre usage personnel."
+
+#: package/contents/ui/config/ConfigGeneral.qml:103
+msgid "Widget icon"
+msgstr "Icône du widget"
 
 #: package/contents/ui/config/ConfigGeneral.qml:110
 msgid "Custom icon:"
