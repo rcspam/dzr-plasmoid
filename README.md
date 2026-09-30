@@ -141,7 +141,8 @@ Copyright 2026 rcspam. This program is free software, under the GNU General
 Public License, version 3 or (at your option) any later version; see
 [LICENSE](LICENSE).
 
-Not covered by it: the karaoke microphone icons, which come from SVG Repo
-under CC0. The widget icon and the purple shuffle and repeat icons are
-Breeze icons (KDE), under the GNU Lesser General Public License, version 3
-or later.
+Not covered by it: the karaoke microphone icons, which are "Karaoke Sing"
+from SVG Repo (https://www.svgrepo.com/svg/190626/karaoke-sing), recoloured,
+under the Creative Commons license stated on that page. The widget icon and
+the purple shuffle and repeat icons are Breeze icons (KDE), under the GNU
+Lesser General Public License, version 3 or later.
