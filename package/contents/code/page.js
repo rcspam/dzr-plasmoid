@@ -16,6 +16,8 @@
         session: 'unknown',
         playlists: null,
         notice: { id: 0, kind: '', text: '' },
+        // Tells this page load from the next one, whose notices restart at 0.
+        pageId: String(Date.now()) + Math.random().toString(36).slice(2),
         token: '',
         user: null,
         // Feature switches of the account (__DZR_GATEKEEPS__ of getUserData).
@@ -350,8 +352,35 @@
     // Null until read; queueSync is null when the account has no such option.
     h.audio = null;
     let audioReadAt = 0;
+
+    // Signed out, the page may stay loaded with its player: nothing of the
+    // previous account (track, playlists, settings, lyrics) may show up again,
+    // and the next account starts afresh.
+    function forgetAccount() {
+        h.token = '';
+        h.user = null;
+        h.gatekeeps = {};
+        h.playlists = null;
+        h.audio = null;
+        h.favorites = new Set();
+        favoritesAt = 0;
+        h.lyricsState = { songId: '', status: '', data: null };
+        restored = false;
+        playerSince = 0;
+    }
     const AUDIO_QUALITIES = { standard: 'quality_standard', high: 'quality_hq', lossless: 'quality_loseless' };
     const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+    // What find() gives once it gives something, or null after about a second.
+    async function waitFor(find) {
+        for (let i = 0; i < 20; i++) {
+            const found = find();
+            if (found) {
+                return found;
+            }
+            await sleep(50);
+        }
+        return find() || null;
+    }
 
     function readAudioPanel(menu) {
         const input = prefix => menu.querySelector(`[data-testid^="${prefix}"] input`);
@@ -381,10 +410,7 @@
         if (!wasOpen) {
             button.click();
         }
-        for (let i = 0; i < 20 && !openMenu(); i++) {
-            await sleep(50);
-        }
-        const menu = openMenu();
+        const menu = await waitFor(openMenu);
         if (menu) {
             if (change) {
                 change(menu);
@@ -396,6 +422,37 @@
             button.click();
         }
     }
+
+    // Signs out as the user would: the profile button's menu, then its
+    // "Log out" entry, so that Deezer ends the session itself. Should the
+    // site have changed, the menu is closed again and the widget told, so it
+    // can show the page instead.
+    let signingOut = false;
+    h.signOut = async () => {
+        if (signingOut) {
+            return;
+        }
+        signingOut = true;
+        try {
+            const profile = document.querySelector('[data-testid="topbar-profile"]');
+            const entry = () => document.querySelector('[data-testid="logout"]');
+            const wasOpen = !!entry();
+            if (profile && !wasOpen) {
+                profile.click();
+            }
+            const item = profile ? await waitFor(entry) : null;
+            if (item) {
+                (item.querySelector('a, button') || item).click();
+                return;
+            }
+            if (profile && !wasOpen) {
+                profile.click();
+            }
+            notify('signOutFailed', '');
+        } finally {
+            signingOut = false;
+        }
+    };
 
     h.readAudio = () => withAudioPanel(null);
     h.setQuality = quality => withAudioPanel(menu => {
@@ -427,6 +484,10 @@
             checkSession();
         }
         const session = h.session;
+        if (session === 'out') {
+            forgetAccount();
+            return JSON.stringify({ ready: false, session });
+        }
         if (!p || typeof p.getCurrentSong !== 'function') {
             return JSON.stringify({ ready: false, session });
         }
@@ -479,6 +540,7 @@
             queueIndex: Number(p.getIndexSong()) || 0,
             playlists: h.playlists,
             notice: h.notice,
+            pageId: h.pageId,
         });
     };
 

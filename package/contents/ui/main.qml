@@ -3,6 +3,7 @@ import QtQuick.Layouts
 import QtQuick.Controls as QQC2
 import QtWebEngine
 import org.kde.plasma.plasmoid
+import org.kde.plasma.core as PlasmaCore
 import org.kde.plasma.components as PlasmaComponents
 import org.kde.plasma.extras as PlasmaExtras
 import org.kde.kirigami as Kirigami
@@ -124,6 +125,8 @@ PlasmoidItem {
     property string queueJson: ""
     property string playlistsJson: ""
     property int lastNoticeId: -1
+    // The page load the state comes from (see refresh).
+    property string pageLoadId: ""
     property string lyricsKey: ""
     property string audioJson: ""
     property bool playlistsRequested: false
@@ -132,6 +135,15 @@ PlasmoidItem {
 
     preferredRepresentation: compactRepresentation
     hideOnWindowDeactivate: !Plasmoid.configuration.pin
+
+    Plasmoid.contextualActions: [
+        PlasmaCore.Action {
+            text: i18n("Sign out of Deezer")
+            icon.name: "system-log-out"
+            visible: root.loggedIn
+            onTriggered: root.signOut()
+        }
+    ]
     // The widget's own icon. Packaged images need names no icon theme uses:
     // Kirigami.Icon looks the file's base name up in the icon theme first
     // ("deezer" gave WhiteSur's app icon).
@@ -252,8 +264,21 @@ PlasmoidItem {
                 root.playlistsJson = lists;
                 root.playlists = state.playlists;
             }
+            // A new page load: its notices count from 0 again, so it only sets
+            // the count (or a reload would raise a notice nobody sent), and
+            // it has no playlists until asked.
+            if (state.pageId !== root.pageLoadId) {
+                root.pageLoadId = state.pageId;
+                root.lastNoticeId = state.notice.id;
+                root.playlistsRequested = false;
+            }
             if (root.lastNoticeId >= 0 && state.notice.id !== root.lastNoticeId) {
-                root.notice(state.notice.kind, state.notice.text);
+                if (state.notice.kind === "signOutFailed") {
+                    root.page = root.pageWeb;
+                    root.expanded = true;
+                } else {
+                    root.notice(state.notice.kind, state.notice.text);
+                }
             }
             root.lastNoticeId = state.notice.id;
 
@@ -417,6 +442,12 @@ PlasmoidItem {
         } else if (session === "out") {
             forgetAccount();
         }
+    }
+
+    // Signs out through the page's own menu. Should Deezer have changed it,
+    // the page says so (a "signOutFailed" notice) and is shown instead.
+    function signOut() {
+        act("signOut");
     }
 
     // Signed out, the page has no player and its snapshots are not ready:

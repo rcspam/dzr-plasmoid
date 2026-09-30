@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.rcspam.deezerplasmoid\n"
 "Report-Msgid-Bugs-To: https://github.com/rcspam\n"
-"POT-Creation-Date: 2026-09-30 11:56+0200\n"
+"POT-Creation-Date: 2026-09-30 13:11+0200\n"
 "PO-Revision-Date: 2026-09-29 16:01+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -42,19 +42,19 @@ msgstr "Normaliser le volume"
 msgid "Sync the queue"
 msgstr "Synchronisation de la file d'attente"
 
-#: package/contents/ui/CompactToolTip.qml:97 package/contents/ui/main.qml:1076
+#: package/contents/ui/CompactToolTip.qml:97 package/contents/ui/main.qml:1107
 msgid "Previous track"
 msgstr "Piste précédente"
 
-#: package/contents/ui/CompactToolTip.qml:105 package/contents/ui/main.qml:1089
+#: package/contents/ui/CompactToolTip.qml:105 package/contents/ui/main.qml:1120
 msgid "Pause"
 msgstr "Pause"
 
-#: package/contents/ui/CompactToolTip.qml:105 package/contents/ui/main.qml:1089
+#: package/contents/ui/CompactToolTip.qml:105 package/contents/ui/main.qml:1120
 msgid "Play"
 msgstr "Lecture"
 
-#: package/contents/ui/CompactToolTip.qml:113 package/contents/ui/main.qml:1102
+#: package/contents/ui/CompactToolTip.qml:113 package/contents/ui/main.qml:1133
 msgid "Next track"
 msgstr "Piste suivante"
 
@@ -82,131 +82,135 @@ msgstr "Traduire"
 msgid "No lyrics for this track"
 msgstr "Pas de paroles pour ce titre"
 
-#: package/contents/ui/main.qml:154 package/contents/ui/main.qml:164
-#: package/contents/ui/main.qml:792
+#: package/contents/ui/main.qml:141
+msgid "Sign out of Deezer"
+msgstr "Se déconnecter de Deezer"
+
+#: package/contents/ui/main.qml:166 package/contents/ui/main.qml:176
+#: package/contents/ui/main.qml:823
 msgid "Nothing playing"
 msgstr "Aucune lecture en cours"
 
-#: package/contents/ui/main.qml:164 package/contents/ui/main.qml:792
+#: package/contents/ui/main.qml:176 package/contents/ui/main.qml:823
 msgid "Not signed in"
 msgstr "Non connecté"
 
-#: package/contents/ui/main.qml:574
+#: package/contents/ui/main.qml:605
 msgctxt "@info:tooltip a button's name, then its keyboard shortcut"
 msgid "%1 (%2)"
 msgstr "%1 (%2)"
 
-#: package/contents/ui/main.qml:728
+#: package/contents/ui/main.qml:759
 msgid "Deezer"
 msgstr "Deezer"
 
-#: package/contents/ui/main.qml:728
+#: package/contents/ui/main.qml:759
 msgid "Player"
 msgstr "Lecteur"
 
-#: package/contents/ui/main.qml:736
+#: package/contents/ui/main.qml:767
 msgid "Show the Deezer page"
 msgstr "Afficher la page Deezer"
 
-#: package/contents/ui/main.qml:748
+#: package/contents/ui/main.qml:779
 msgid "Queue"
 msgstr "File d'attente"
 
-#: package/contents/ui/main.qml:758
+#: package/contents/ui/main.qml:789
 msgid "Keep Open"
 msgstr "Garder ouvert"
 
-#: package/contents/ui/main.qml:795
+#: package/contents/ui/main.qml:826
 msgid "Open Deezer"
 msgstr "Ouvrir Deezer"
 
-#: package/contents/ui/main.qml:795
+#: package/contents/ui/main.qml:826
 msgid "Sign in"
 msgstr "Se connecter"
 
-#: package/contents/ui/main.qml:886
+#: package/contents/ui/main.qml:917
 msgid "Added to %1"
 msgstr "Ajouté à %1"
 
-#: package/contents/ui/main.qml:887
+#: package/contents/ui/main.qml:918
 msgid "Could not add to %1"
 msgstr "Impossible d'ajouter à %1"
 
-#: package/contents/ui/main.qml:912 package/contents/ui/main.qml:1367
+#: package/contents/ui/main.qml:943 package/contents/ui/main.qml:1398
 msgid "Remove from favorites"
 msgstr "Retirer des coups de cœur"
 
-#: package/contents/ui/main.qml:912 package/contents/ui/main.qml:1367
+#: package/contents/ui/main.qml:943 package/contents/ui/main.qml:1398
 msgid "Add to favorites"
 msgstr "Ajouter aux coups de cœur"
 
-#: package/contents/ui/main.qml:959
+#: package/contents/ui/main.qml:990
 msgid "Add to a playlist"
 msgstr "Ajouter à une playlist"
 
-#: package/contents/ui/main.qml:976
+#: package/contents/ui/main.qml:1007
 msgid "No playlist"
 msgstr "Aucune playlist"
 
-#: package/contents/ui/main.qml:976
+#: package/contents/ui/main.qml:1007
 msgid "Loading playlists…"
 msgstr "Chargement des playlists…"
 
-#: package/contents/ui/main.qml:983
+#: package/contents/ui/main.qml:1014
 msgid "%2 (%1 track)"
 msgid_plural "%2 (%1 tracks)"
 msgstr[0] "%2 (%1 titre)"
 msgstr[1] "%2 (%1 titres)"
 
-#: package/contents/ui/main.qml:1061
+#: package/contents/ui/main.qml:1092
 msgid "Shuffle: on"
 msgstr "Lecture aléatoire : activée"
 
-#: package/contents/ui/main.qml:1061
+#: package/contents/ui/main.qml:1092
 msgid "Shuffle: off"
 msgstr "Lecture aléatoire : désactivée"
 
-#: package/contents/ui/main.qml:1116
+#: package/contents/ui/main.qml:1147
 msgid "Repeat: current track"
 msgstr "Répétition : titre en cours"
 
-#: package/contents/ui/main.qml:1117
+#: package/contents/ui/main.qml:1148
 msgid "Repeat: all"
 msgstr "Répétition : tout"
 
-#: package/contents/ui/main.qml:1118
+#: package/contents/ui/main.qml:1149
 msgid "Repeat: off"
 msgstr "Répétition : désactivée"
 
-#: package/contents/ui/main.qml:1142
+#: package/contents/ui/main.qml:1173
 msgid "Audio settings"
 msgstr "Réglages audio"
 
-#: package/contents/ui/main.qml:1166
+#: package/contents/ui/main.qml:1197
 msgid "Show your playlists"
 msgstr "Afficher vos playlists"
 
-#: package/contents/ui/main.qml:1188
+#: package/contents/ui/main.qml:1219
 msgid "Unmute"
 msgstr "Rétablir le son"
 
-#: package/contents/ui/main.qml:1188
+#: package/contents/ui/main.qml:1219
 msgid "Mute"
 msgstr "Couper le son"
 
-#: package/contents/ui/main.qml:1212
+#: package/contents/ui/main.qml:1243
 msgid "Show the queue"
 msgstr "Afficher la file d'attente"
 
-#: package/contents/ui/main.qml:1233
+#: package/contents/ui/main.qml:1264
 msgid "Show the cover"
 msgstr "Afficher la pochette"
 
-#: package/contents/ui/main.qml:1233
+#: package/contents/ui/main.qml:1264
 msgid "Show the lyrics"
 msgstr "Afficher les paroles"
 
-#: package/contents/ui/main.qml:1378
+#: package/contents/ui/main.qml:1409
 msgid "Remove from the queue"
 msgstr "Retirer de la file d'attente"
 
