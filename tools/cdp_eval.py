@@ -15,8 +15,19 @@ import urllib.request
 import websocket  # python3-websocket (websocket-client)
 
 port = os.environ.get("CDP_PORT", "9333")
-targets = json.load(urllib.request.urlopen(f"http://127.0.0.1:{port}/json/list"))
-page = next(t for t in targets if t["type"] == "page" and "deezer.com" in t["url"])
+try:
+    targets = json.load(urllib.request.urlopen(f"http://127.0.0.1:{port}/json/list"))
+except OSError as e:
+    sys.exit(f"cdp_eval: nothing on port {port} ({e}); is the widget running with "
+             f"QTWEBENGINE_REMOTE_DEBUGGING=127.0.0.1:{port}?")
+pages = [t for t in targets if t["type"] == "page"]
+# The widget's own page is www.deezer.com; a sign-in window (account.deezer.com,
+# Google, Apple) can be listed first and has none of its state.
+main = [t for t in pages if t["url"].startswith("https://www.deezer.com/")]
+if not main:
+    urls = ", ".join(t["url"] or "about:blank" for t in pages) or "none"
+    sys.exit(f"cdp_eval: no www.deezer.com page on port {port} (pages: {urls})")
+page = main[0]
 ws = websocket.create_connection(page["webSocketDebuggerUrl"], timeout=30, suppress_origin=True)
 ws.send(json.dumps({"id": 1, "method": "Runtime.evaluate",
                     "params": {"expression": sys.stdin.read(), "awaitPromise": True, "returnByValue": True,
