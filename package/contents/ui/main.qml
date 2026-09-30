@@ -132,10 +132,23 @@ PlasmoidItem {
 
     preferredRepresentation: compactRepresentation
     hideOnWindowDeactivate: !Plasmoid.configuration.pin
-    // deezer.com favicon (240x240), shipped: not every icon theme has a Deezer icon.
-    // Packaged images need names no icon theme uses: Kirigami.Icon looks the file's
-    // base name up in the icon theme first ("deezer" gave WhiteSur's app icon).
-    Plasmoid.icon: Qt.resolvedUrl("../images/dzplasmoid-logo.png")
+    // The widget's own icon. Packaged images need names no icon theme uses:
+    // Kirigami.Icon looks the file's base name up in the icon theme first
+    // ("deezer" gave WhiteSur's app icon).
+    Plasmoid.icon: Qt.resolvedUrl("../images/dzplasmoid-waveform.svg")
+    // deezer.com's favicon as the page loaded it, as in a browser tab: nothing
+    // of Deezer's is shipped. Kept while the page reloads, when the view drops it.
+    property url favicon: ""
+    readonly property var panelIcon: {
+        const choice = Plasmoid.configuration.panelIcon;
+        if (choice === "custom" && Plasmoid.configuration.panelIconCustom !== "") {
+            return Plasmoid.configuration.panelIconCustom;
+        }
+        if (choice === "favicon" && favicon.toString() !== "") {
+            return favicon;
+        }
+        return Plasmoid.icon;
+    }
     // Plain texts: the fallback when the shell ignores toolTipItem.
     toolTipMainText: hasTrack ? title : Plasmoid.title
     toolTipSubText: hasTrack ? artist : i18n("Nothing playing")
@@ -510,7 +523,7 @@ PlasmoidItem {
 
         Kirigami.Icon {
             anchors.fill: parent
-            source: Plasmoid.icon
+            source: root.panelIcon
             active: parent.containsMouse
         }
     }
@@ -1343,6 +1356,9 @@ PlasmoidItem {
                 // Changing the language reloads the page, which stops the music.
                 url: Deezer.pageUrl(root.deezerLanguage)
                 settings.playbackRequiresUserGesture: false
+                // The panel icon: without touch icons the view keeps only the
+                // 32 px favicon, blurred at panel size; this gives the 180 px one.
+                settings.touchIconsEnabled: true
                 userScripts.collection: [{
                     name: "dzPlasmoid",
                     sourceUrl: Qt.resolvedUrl("../code/page.js"),
@@ -1354,6 +1370,11 @@ PlasmoidItem {
                     if (request.status === WebEngineLoadingInfo.LoadSucceededStatus) {
                         root.pageLoaded = true;
                         refreshSoon.restart();
+                    }
+                }
+                onIconChanged: {
+                    if (icon.toString() !== "") {
+                        root.favicon = icon;
                     }
                 }
                 // Sign-in with Google or Apple opens a window that reports back

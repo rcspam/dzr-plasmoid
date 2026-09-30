@@ -77,8 +77,8 @@ others); it is meant for personal use and may stop working at any time.
 Machine translation is optional: it sends the lyrics to the engine chosen in
 the settings (Google, or your own LibreTranslate or Ollama server).
 
-The panel icon is deezer.com's favicon, used here for personal use; it has
-to be replaced before any public distribution.
+The panel icon is, by default, deezer.com's favicon as the page loads it,
+the way a browser shows it in a tab: no Deezer image is shipped.
 
 This software is provided as is, without any warranty.
 
@@ -120,7 +120,8 @@ not when `plasmoidviewer` runs the source folder.
 ## Settings
 
 General: the Deezer site language (the system's by default, English when
-Deezer does not have it) and the panel icon's wheel. Lyrics: how they look,
+Deezer does not have it) and the panel icon, that is the Deezer site's icon,
+the widget's own or any icon you pick, and its wheel. Lyrics: how they look,
 over the blurred cover with a text color to suit it, or black on white, or
 white on black, with the cover blur, text size and fade. Non-Deezer
 services: everything sent elsewhere than Deezer, that is the lyrics sources
@@ -136,6 +137,6 @@ Copyright 2026 rcspam. This program is free software, under the GNU General
 Public License, version 3 or (at your option) any later version; see
 [LICENSE](LICENSE).
 
-Not covered by it: the panel icon, which is deezer.com's favicon and belongs
-to Deezer SA, and the karaoke microphone icons, which come from SVG Repo
-under CC0.
+Not covered by it: the karaoke microphone icons, which come from SVG Repo
+under CC0. The widget icon is a Breeze icon (KDE), under the GNU Lesser
+General Public License, version 3 or later.
