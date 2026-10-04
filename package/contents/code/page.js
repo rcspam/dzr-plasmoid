@@ -528,6 +528,10 @@
             title,
             artist: (meta && meta.artist) || song.ART_NAME || '',
             album: (meta && meta.album) || song.ALB_TITLE || '',
+            albumId: String(song.ALB_ID || ''),
+            artists: (song.ARTISTS && song.ARTISTS.length ? song.ARTISTS : [song])
+                .filter(a => a.ART_ID)
+                .map(a => ({ id: String(a.ART_ID), name: a.ART_NAME || '' })),
             cover,
             position: Number(p.getPosition()) || 0,
             duration: Number(p.getDuration()) || 0,
@@ -639,16 +643,30 @@
     h.playQueueIndex = index => player().playTrackAtIndex(index);
 
     // Goes through the web app's own router: loading the URL would reload the
-    // page and stop the music.
-    h.showPlaylists = () => {
-        const link = document.querySelector('a[href$="/library/playlists"]');
+    // page and stop the music. The page's own link when it has one, else the
+    // router follows the address.
+    const openPage = (path, link) => {
         if (link) {
             link.click();
             return;
         }
         const lang = location.pathname.split('/')[1] || 'fr';
-        history.pushState(null, '', `/${lang}/library/playlists`);
+        history.pushState(null, '', `/${lang}/${path}`);
         window.dispatchEvent(new PopStateEvent('popstate'));
+    };
+    const playerBarLink = path => document.querySelector(`[data-testid="miniplayer_container"] a[href$="/${path}"]`);
+
+    h.showPlaylists = () => openPage('library/playlists', document.querySelector('a[href$="/library/playlists"]'));
+    // The album and artists of the playing track, linked in the site's player bar.
+    h.showAlbum = id => openPage(`album/${id}`, playerBarLink(`album/${id}`));
+    h.showArtist = id => openPage(`artist/${id}`, playerBarLink(`artist/${id}`));
+
+    h.focusSearch = () => {
+        const field = document.querySelector('input[data-testid="search_field"]');
+        if (field) {
+            field.focus();
+            field.select();
+        }
     };
 
     // Clicking Deezer's own heart lets the page pick the right API

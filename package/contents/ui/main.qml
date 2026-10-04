@@ -42,6 +42,9 @@ PlasmoidItem {
     property string title: ""
     property string artist: ""
     property string album: ""
+    // For the links to the site's pages: album id, and {id, name} per artist.
+    property string albumId: ""
+    property var artists: []
     property string cover: ""
     property real position: 0
     property real duration: 0
@@ -125,6 +128,7 @@ PlasmoidItem {
     // Change detection, so list models are not rebuilt on every poll.
     property string queueJson: ""
     property string playlistsJson: ""
+    property string artistsJson: ""
     property int lastNoticeId: -1
     // The page load the state comes from (see refresh).
     property string pageLoadId: ""
@@ -208,6 +212,21 @@ PlasmoidItem {
         queueRefreshSoon.restart();
     }
 
+    // A page of the site (see page.js), shown in the popup.
+    function showOnDeezer(name, args) {
+        run(Deezer.call(name, args));
+        page = pageWeb;
+    }
+
+    // The site's search field, ready for typing.
+    function searchDeezer() {
+        page = pageWeb;
+        if (webView) {
+            webView.forceActiveFocus();
+        }
+        run(Deezer.call("focusSearch"));
+    }
+
     // Volume change from the panel icon's wheel, shown at once and clamped.
     function changeVolume(delta) {
         const level = Math.max(0, Math.min(1, (muted ? 0 : volume) + delta));
@@ -252,6 +271,12 @@ PlasmoidItem {
             root.title = state.title;
             root.artist = state.artist;
             root.album = state.album;
+            root.albumId = state.albumId;
+            const artists = JSON.stringify(state.artists);
+            if (artists !== root.artistsJson) {
+                root.artistsJson = artists;
+                root.artists = state.artists;
+            }
             root.cover = state.cover;
             root.position = state.position;
             root.duration = state.duration;
@@ -490,6 +515,9 @@ PlasmoidItem {
         title = "";
         artist = "";
         album = "";
+        albumId = "";
+        artists = [];
+        artistsJson = "";
         cover = "";
         position = 0;
         duration = 0;
@@ -952,7 +980,7 @@ PlasmoidItem {
                     }
 
                     // Heart and "+" centred at a fifth of the width from each
-                    // edge, the track text between them.
+                    // edge, the track text between them, the search after the "+".
                     Item {
                         Layout.fillWidth: true
                         Layout.topMargin: Kirigami.Units.smallSpacing
@@ -986,27 +1014,49 @@ PlasmoidItem {
                             anchors.rightMargin: Kirigami.Units.smallSpacing
                             spacing: 0
 
-                            Kirigami.Heading {
-                                Layout.fillWidth: true
-                                level: 3
-                                horizontalAlignment: Text.AlignHCenter
-                                elide: Text.ElideRight
+                            // As on the site: the title opens the album, the
+                            // artist their page (a menu when there are several).
+                            TrackLink {
+                                // The size of a level 3 Kirigami.Heading.
+                                font.pointSize: Kirigami.Theme.defaultFont.pointSize * 1.15
                                 text: root.title
+                                linked: root.albumId !== ""
+                                onActivated: root.showOnDeezer("showAlbum", [root.albumId])
                             }
 
-                            PlasmaComponents.Label {
-                                Layout.fillWidth: true
-                                horizontalAlignment: Text.AlignHCenter
-                                elide: Text.ElideRight
+                            TrackLink {
+                                id: artistLink
                                 text: root.artist
+                                linked: root.artists.length > 0
+                                onActivated: {
+                                    if (root.artists.length > 1) {
+                                        artistMenu.popup(artistLink, 0, artistLink.height);
+                                    } else {
+                                        root.showOnDeezer("showArtist", [root.artists[0].id]);
+                                    }
+                                }
+
+                                PlasmaComponents.Menu {
+                                    id: artistMenu
+
+                                    Instantiator {
+                                        model: root.artists
+                                        delegate: PlasmaComponents.MenuItem {
+                                            required property var modelData
+                                            text: modelData.name
+                                            onTriggered: root.showOnDeezer("showArtist", [modelData.id])
+                                        }
+                                        onObjectAdded: (index, object) => artistMenu.insertItem(index, object)
+                                        onObjectRemoved: (index, object) => artistMenu.removeItem(object)
+                                    }
+                                }
                             }
 
-                            PlasmaComponents.Label {
-                                Layout.fillWidth: true
-                                horizontalAlignment: Text.AlignHCenter
-                                elide: Text.ElideRight
+                            TrackLink {
                                 opacity: 0.7
                                 text: root.album
+                                linked: root.albumId !== ""
+                                onActivated: root.showOnDeezer("showAlbum", [root.albumId])
                             }
                         }
 
@@ -1046,6 +1096,20 @@ PlasmoidItem {
                                     onObjectAdded: (index, object) => playlistMenu.insertItem(index + 1, object)
                                     onObjectRemoved: (index, object) => playlistMenu.removeItem(object)
                                 }
+                            }
+                        }
+
+                        PlasmaComponents.ToolButton {
+                            anchors.left: addButton.right
+                            anchors.leftMargin: Kirigami.Units.smallSpacing
+                            anchors.verticalCenter: parent.verticalCenter
+                            icon.name: "search"
+                            display: QQC2.AbstractButton.IconOnly
+                            text: i18n("Search on Deezer")
+                            onClicked: root.searchDeezer()
+
+                            PlasmaComponents.ToolTip {
+                                text: parent.text
                             }
                         }
                     }
