@@ -1561,10 +1561,13 @@ PlasmoidItem {
                     request.openIn(popupView);
                     root.page = root.pagePopup;
                 }
+                // Not at once: when plasmashell is stopped, its web processes are
+                // killed with it, and each reload would fail at once and start
+                // another, holding up the stop until systemd kills it.
                 onRenderProcessTerminated: (status, code) => {
-                    console.warn("[deezer] render process terminated", status, code, "- reloading");
+                    console.warn("[deezer] render process terminated", status, code, "- reloading soon");
                     root.pageLoaded = false;
-                    reload();
+                    reloadLater.restart();
                 }
 
                 Component.onCompleted: {
