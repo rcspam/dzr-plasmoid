@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.rcspam.deezerplasmoid\n"
 "Report-Msgid-Bugs-To: https://github.com/rcspam\n"
-"POT-Creation-Date: 2026-10-04 13:31+0200\n"
+"POT-Creation-Date: 2026-10-25 10:07+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,19 +42,19 @@ msgstr ""
 msgid "Sync the queue"
 msgstr ""
 
-#: package/contents/ui/CompactToolTip.qml:97 package/contents/ui/main.qml:1200
+#: package/contents/ui/CompactToolTip.qml:97 package/contents/ui/main.qml:1230
 msgid "Previous track"
 msgstr ""
 
-#: package/contents/ui/CompactToolTip.qml:105 package/contents/ui/main.qml:1213
+#: package/contents/ui/CompactToolTip.qml:105 package/contents/ui/main.qml:1243
 msgid "Pause"
 msgstr ""
 
-#: package/contents/ui/CompactToolTip.qml:105 package/contents/ui/main.qml:1213
+#: package/contents/ui/CompactToolTip.qml:105 package/contents/ui/main.qml:1243
 msgid "Play"
 msgstr ""
 
-#: package/contents/ui/CompactToolTip.qml:113 package/contents/ui/main.qml:1226
+#: package/contents/ui/CompactToolTip.qml:113 package/contents/ui/main.qml:1256
 msgid "Next track"
 msgstr ""
 
@@ -87,192 +87,192 @@ msgid "Sign out of Deezer"
 msgstr ""
 
 #: package/contents/ui/main.qml:171 package/contents/ui/main.qml:181
-#: package/contents/ui/main.qml:883
+#: package/contents/ui/main.qml:913
 msgid "Nothing playing"
 msgstr ""
 
-#: package/contents/ui/main.qml:181 package/contents/ui/main.qml:883
+#: package/contents/ui/main.qml:181 package/contents/ui/main.qml:913
 msgid "Not signed in"
 msgstr ""
 
-#: package/contents/ui/main.qml:665
+#: package/contents/ui/main.qml:695
 msgctxt "@info:tooltip a button's name, then its keyboard shortcut"
 msgid "%1 (%2)"
 msgstr ""
 
-#: package/contents/ui/main.qml:819
+#: package/contents/ui/main.qml:849
 msgid "Deezer"
 msgstr ""
 
-#: package/contents/ui/main.qml:819
+#: package/contents/ui/main.qml:849
 msgid "Player"
 msgstr ""
 
-#: package/contents/ui/main.qml:827
+#: package/contents/ui/main.qml:857
 msgid "Show the Deezer page"
 msgstr ""
 
-#: package/contents/ui/main.qml:839
+#: package/contents/ui/main.qml:869
 msgid "Queue"
 msgstr ""
 
-#: package/contents/ui/main.qml:849
+#: package/contents/ui/main.qml:879
 msgid "Keep Open"
 msgstr ""
 
-#: package/contents/ui/main.qml:886
+#: package/contents/ui/main.qml:916
 msgid "Open Deezer"
 msgstr ""
 
-#: package/contents/ui/main.qml:886
+#: package/contents/ui/main.qml:916
 msgid "Sign in"
 msgstr ""
 
-#: package/contents/ui/main.qml:974
+#: package/contents/ui/main.qml:1004
 msgid "Added to %1"
 msgstr ""
 
-#: package/contents/ui/main.qml:975
+#: package/contents/ui/main.qml:1005
 msgid "Could not add to %1"
 msgstr ""
 
-#: package/contents/ui/main.qml:1000 package/contents/ui/main.qml:1491
+#: package/contents/ui/main.qml:1030 package/contents/ui/main.qml:1521
 msgid "Remove from favorites"
 msgstr ""
 
-#: package/contents/ui/main.qml:1000 package/contents/ui/main.qml:1491
+#: package/contents/ui/main.qml:1030 package/contents/ui/main.qml:1521
 msgid "Add to favorites"
 msgstr ""
 
-#: package/contents/ui/main.qml:1069
+#: package/contents/ui/main.qml:1099
 msgid "Add to a playlist"
 msgstr ""
 
-#: package/contents/ui/main.qml:1086
+#: package/contents/ui/main.qml:1116
 msgid "No playlist"
 msgstr ""
 
-#: package/contents/ui/main.qml:1086
+#: package/contents/ui/main.qml:1116
 msgid "Loading playlists…"
 msgstr ""
 
-#: package/contents/ui/main.qml:1093
+#: package/contents/ui/main.qml:1123
 msgid "%2 (%1 track)"
 msgid_plural "%2 (%1 tracks)"
 msgstr[0] ""
 msgstr[1] ""
 
-#: package/contents/ui/main.qml:1108
+#: package/contents/ui/main.qml:1138
 msgid "Search on Deezer"
 msgstr ""
 
-#: package/contents/ui/main.qml:1185
+#: package/contents/ui/main.qml:1215
 msgid "Shuffle: on"
 msgstr ""
 
-#: package/contents/ui/main.qml:1185
+#: package/contents/ui/main.qml:1215
 msgid "Shuffle: off"
 msgstr ""
 
-#: package/contents/ui/main.qml:1240
+#: package/contents/ui/main.qml:1270
 msgid "Repeat: current track"
 msgstr ""
 
-#: package/contents/ui/main.qml:1241
+#: package/contents/ui/main.qml:1271
 msgid "Repeat: all"
 msgstr ""
 
-#: package/contents/ui/main.qml:1242
+#: package/contents/ui/main.qml:1272
 msgid "Repeat: off"
 msgstr ""
 
-#: package/contents/ui/main.qml:1266
+#: package/contents/ui/main.qml:1296
 msgid "Audio settings"
 msgstr ""
 
-#: package/contents/ui/main.qml:1290
+#: package/contents/ui/main.qml:1320
 msgid "Show your playlists"
 msgstr ""
 
-#: package/contents/ui/main.qml:1312
+#: package/contents/ui/main.qml:1342
 msgid "Unmute"
 msgstr ""
 
-#: package/contents/ui/main.qml:1312
+#: package/contents/ui/main.qml:1342
 msgid "Mute"
 msgstr ""
 
-#: package/contents/ui/main.qml:1336
+#: package/contents/ui/main.qml:1366
 msgid "Show the queue"
 msgstr ""
 
-#: package/contents/ui/main.qml:1357
+#: package/contents/ui/main.qml:1387
 msgid "Show the cover"
 msgstr ""
 
-#: package/contents/ui/main.qml:1357
+#: package/contents/ui/main.qml:1387
 msgid "Show the lyrics"
 msgstr ""
 
-#: package/contents/ui/main.qml:1502
+#: package/contents/ui/main.qml:1532
 msgid "Remove from the queue"
 msgstr ""
 
-#: package/contents/ui/config/ConfigGeneral.qml:26
+#: package/contents/ui/config/ConfigGeneral.qml:28
 msgid "Same as the system"
 msgstr ""
 
-#: package/contents/ui/config/ConfigGeneral.qml:58
+#: package/contents/ui/config/ConfigGeneral.qml:60
 msgid "Deezer language:"
 msgstr ""
 
-#: package/contents/ui/config/ConfigGeneral.qml:71
+#: package/contents/ui/config/ConfigGeneral.qml:73
 msgid ""
 "The language of the Deezer page and its menus, which can differ from the "
 "system's. Changing it reloads the page, which stops the music."
 msgstr ""
 
-#: package/contents/ui/config/ConfigGeneral.qml:76
+#: package/contents/ui/config/ConfigGeneral.qml:78
 msgid "Panel icon"
 msgstr ""
 
-#: package/contents/ui/config/ConfigGeneral.qml:80
+#: package/contents/ui/config/ConfigGeneral.qml:82
 msgid "Icon:"
 msgstr ""
 
-#: package/contents/ui/config/ConfigGeneral.qml:82
+#: package/contents/ui/config/ConfigGeneral.qml:84
 msgid "Deezer site icon"
 msgstr ""
 
-#: package/contents/ui/config/ConfigGeneral.qml:90
+#: package/contents/ui/config/ConfigGeneral.qml:92
 msgid ""
 "Loaded with the Deezer page, as in a browser tab. The widget icon stands in "
 "until then."
 msgstr ""
 
-#: package/contents/ui/config/ConfigGeneral.qml:98
+#: package/contents/ui/config/ConfigGeneral.qml:100
 msgid ""
 "The Deezer logo is a trademark of Deezer SA, and this widget is not made by "
 "Deezer. Show it for your own use only."
 msgstr ""
 
-#: package/contents/ui/config/ConfigGeneral.qml:103
+#: package/contents/ui/config/ConfigGeneral.qml:105
 msgid "Widget icon"
 msgstr ""
 
-#: package/contents/ui/config/ConfigGeneral.qml:110
+#: package/contents/ui/config/ConfigGeneral.qml:112
 msgid "Custom icon:"
 msgstr ""
 
-#: package/contents/ui/config/ConfigGeneral.qml:123
+#: package/contents/ui/config/ConfigGeneral.qml:125
 msgid "Choose an icon"
 msgstr ""
 
-#: package/contents/ui/config/ConfigGeneral.qml:140
+#: package/contents/ui/config/ConfigGeneral.qml:142
 msgid "Volume change per wheel notch:"
 msgstr ""
 
-#: package/contents/ui/config/ConfigGeneral.qml:143
+#: package/contents/ui/config/ConfigGeneral.qml:145
 #: package/contents/ui/config/ConfigLyrics.qml:68
 #: package/contents/ui/config/ConfigLyrics.qml:85
 #: package/contents/ui/config/ConfigLyrics.qml:101
@@ -280,8 +280,24 @@ msgctxt "percentage"
 msgid "%1 %"
 msgstr ""
 
-#: package/contents/ui/config/ConfigGeneral.qml:149
+#: package/contents/ui/config/ConfigGeneral.qml:151
 msgid "Invert the wheel direction"
+msgstr ""
+
+#: package/contents/ui/config/ConfigGeneral.qml:156
+msgid "When Plasma starts"
+msgstr ""
+
+#: package/contents/ui/config/ConfigGeneral.qml:161
+msgid "Resume the music if it was playing just before"
+msgstr ""
+
+#: package/contents/ui/config/ConfigGeneral.qml:169
+msgid "When Plasma restarts within two minutes, after an update for instance."
+msgstr ""
+
+#: package/contents/ui/config/ConfigGeneral.qml:174
+msgid "Start the music when the session opens"
 msgstr ""
 
 #: package/contents/ui/config/ConfigLyrics.qml:36

@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls as QQC2
+import QtQuick.LocalStorage
 import QtWebEngine
 import org.kde.plasma.plasmoid
 import org.kde.plasma.core as PlasmaCore
@@ -334,7 +335,53 @@ PlasmoidItem {
                 root.playlistsRequested = true;
                 root.act("loadPlaylists");
             }
+
+            if (root.loggedIn && !root.startPlaybackDone) {
+                root.startPlayback(state.playing);
+            }
         });
+    }
+
+    // Music when Plasma starts, decided once, when the page has restored the
+    // listener's queue. plasmashell quit less than two minutes ago is a
+    // restart, resumed if the music was playing; anything else is a login.
+    // The state at quit is kept in SQLite, written at once: Plasma saves the
+    // widget's settings a little later, which never comes at quit.
+    property bool startPlaybackDone: false
+
+    function quitStateDatabase() {
+        const db = LocalStorage.openDatabaseSync("dzplasmoid", "1.0", "DZR state at quit", 4096);
+        db.transaction(tx => tx.executeSql("CREATE TABLE IF NOT EXISTS quit(applet INTEGER PRIMARY KEY, playing INTEGER NOT NULL, at INTEGER NOT NULL)"));
+        return db;
+    }
+
+    function saveQuitState() {
+        quitStateDatabase().transaction(tx => {
+            tx.executeSql("INSERT OR REPLACE INTO quit VALUES(?, ?, ?)", [Plasmoid.id, playing ? 1 : 0, Date.now()]);
+        });
+        console.log("[deezer] state at quit saved, playing:", playing);
+    }
+
+    function startPlayback(playing) {
+        startPlaybackDone = true;
+        let quit = null;
+        quitStateDatabase().readTransaction(tx => {
+            const rows = tx.executeSql("SELECT playing, at FROM quit WHERE applet = ?", [Plasmoid.id]).rows;
+            quit = rows.length > 0 ? rows.item(0) : null;
+        });
+        const restart = quit !== null && Date.now() - quit.at < 120000;
+        const wanted = restart ? Plasmoid.configuration.resumePlayback && quit.playing === 1 : Plasmoid.configuration.playAtLogin;
+        console.log("[deezer] start:", restart ? "restart" : "login", wanted && !playing ? "- playing" : "");
+        if (wanted && !playing) {
+            act("togglePause");
+        }
+    }
+
+    Connections {
+        target: Qt.application
+        function onAboutToQuit() {
+            root.saveQuitState();
+        }
     }
 
     function refreshLyrics() {

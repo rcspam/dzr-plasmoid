@@ -13,6 +13,8 @@ KCM.SimpleKCM {
     property string cfg_deezerLanguage
     property alias cfg_wheelStep: wheelStep.value
     property alias cfg_invertWheel: invertWheel.checked
+    property alias cfg_resumePlayback: resumePlayback.checked
+    property alias cfg_playAtLogin: playAtLogin.checked
     property string cfg_panelIcon
     property string cfg_panelIconCustom
 
@@ -147,6 +149,29 @@ KCM.SimpleKCM {
         QQC2.CheckBox {
             id: invertWheel
             text: i18n("Invert the wheel direction")
+        }
+
+        Item {
+            Kirigami.FormData.isSection: true
+            Kirigami.FormData.label: i18n("When Plasma starts")
+        }
+
+        QQC2.CheckBox {
+            id: resumePlayback
+            text: i18n("Resume the music if it was playing just before")
+        }
+
+        QQC2.Label {
+            Layout.fillWidth: true
+            Layout.maximumWidth: Kirigami.Units.gridUnit * 24
+            wrapMode: Text.WordWrap
+            font: Kirigami.Theme.smallFont
+            text: i18n("When Plasma restarts within two minutes, after an update for instance.")
+        }
+
+        QQC2.CheckBox {
+            id: playAtLogin
+            text: i18n("Start the music when the session opens")
         }
     }
 }

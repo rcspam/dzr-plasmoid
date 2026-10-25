@@ -28,6 +28,15 @@
             <default></default>
         </entry>
 
+        <!-- Music when Plasma starts: resumed after a plasmashell restart if it
+             was playing, or started when the session opens. -->
+        <entry name="resumePlayback" type="Bool">
+            <default>true</default>
+        </entry>
+        <entry name="playAtLogin" type="Bool">
+            <default>false</default>
+        </entry>
+
         <!-- Panel icon wheel: volume step in percent, and direction. -->
         <entry name="wheelStep" type="Int">
             <default>5</default>
