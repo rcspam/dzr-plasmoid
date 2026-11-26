@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.github.rcspam.deezerplasmoid\n"
 "Report-Msgid-Bugs-To: https://github.com/rcspam\n"
-"POT-Creation-Date: 2026-10-25 10:07+0100\n"
+"POT-Creation-Date: 2026-11-26 13:27+0100\n"
 "PO-Revision-Date: 2026-09-29 16:01+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -42,19 +42,19 @@ msgstr "Normaliser le volume"
 msgid "Sync the queue"
 msgstr "Synchronisation de la file d'attente"
 
-#: package/contents/ui/CompactToolTip.qml:97 package/contents/ui/main.qml:1230
+#: package/contents/ui/CompactToolTip.qml:97 package/contents/ui/main.qml:1247
 msgid "Previous track"
 msgstr "Piste précédente"
 
-#: package/contents/ui/CompactToolTip.qml:105 package/contents/ui/main.qml:1243
+#: package/contents/ui/CompactToolTip.qml:105 package/contents/ui/main.qml:1260
 msgid "Pause"
 msgstr "Pause"
 
-#: package/contents/ui/CompactToolTip.qml:105 package/contents/ui/main.qml:1243
+#: package/contents/ui/CompactToolTip.qml:105 package/contents/ui/main.qml:1260
 msgid "Play"
 msgstr "Lecture"
 
-#: package/contents/ui/CompactToolTip.qml:113 package/contents/ui/main.qml:1256
+#: package/contents/ui/CompactToolTip.qml:113 package/contents/ui/main.qml:1273
 msgid "Next track"
 msgstr "Piste suivante"
 
@@ -82,139 +82,139 @@ msgstr "Traduire"
 msgid "No lyrics for this track"
 msgstr "Pas de paroles pour ce titre"
 
-#: package/contents/ui/main.qml:146
+#: package/contents/ui/main.qml:147
 msgid "Sign out of Deezer"
 msgstr "Se déconnecter de Deezer"
 
-#: package/contents/ui/main.qml:171 package/contents/ui/main.qml:181
-#: package/contents/ui/main.qml:913
+#: package/contents/ui/main.qml:172 package/contents/ui/main.qml:182
+#: package/contents/ui/main.qml:930
 msgid "Nothing playing"
 msgstr "Aucune lecture en cours"
 
-#: package/contents/ui/main.qml:181 package/contents/ui/main.qml:913
+#: package/contents/ui/main.qml:182 package/contents/ui/main.qml:930
 msgid "Not signed in"
 msgstr "Non connecté"
 
-#: package/contents/ui/main.qml:695
+#: package/contents/ui/main.qml:712
 msgctxt "@info:tooltip a button's name, then its keyboard shortcut"
 msgid "%1 (%2)"
 msgstr "%1 (%2)"
 
-#: package/contents/ui/main.qml:849
+#: package/contents/ui/main.qml:866
 msgid "Deezer"
 msgstr "Deezer"
 
-#: package/contents/ui/main.qml:849
+#: package/contents/ui/main.qml:866
 msgid "Player"
 msgstr "Lecteur"
 
-#: package/contents/ui/main.qml:857
+#: package/contents/ui/main.qml:874
 msgid "Show the Deezer page"
 msgstr "Afficher la page Deezer"
 
-#: package/contents/ui/main.qml:869
+#: package/contents/ui/main.qml:886
 msgid "Queue"
 msgstr "File d'attente"
 
-#: package/contents/ui/main.qml:879
+#: package/contents/ui/main.qml:896
 msgid "Keep Open"
 msgstr "Garder ouvert"
 
-#: package/contents/ui/main.qml:916
+#: package/contents/ui/main.qml:933
 msgid "Open Deezer"
 msgstr "Ouvrir Deezer"
 
-#: package/contents/ui/main.qml:916
+#: package/contents/ui/main.qml:933
 msgid "Sign in"
 msgstr "Se connecter"
 
-#: package/contents/ui/main.qml:1004
+#: package/contents/ui/main.qml:1021
 msgid "Added to %1"
 msgstr "Ajouté à %1"
 
-#: package/contents/ui/main.qml:1005
+#: package/contents/ui/main.qml:1022
 msgid "Could not add to %1"
 msgstr "Impossible d'ajouter à %1"
 
-#: package/contents/ui/main.qml:1030 package/contents/ui/main.qml:1521
+#: package/contents/ui/main.qml:1047 package/contents/ui/main.qml:1538
 msgid "Remove from favorites"
 msgstr "Retirer des coups de cœur"
 
-#: package/contents/ui/main.qml:1030 package/contents/ui/main.qml:1521
+#: package/contents/ui/main.qml:1047 package/contents/ui/main.qml:1538
 msgid "Add to favorites"
 msgstr "Ajouter aux coups de cœur"
 
-#: package/contents/ui/main.qml:1099
+#: package/contents/ui/main.qml:1116
 msgid "Add to a playlist"
 msgstr "Ajouter à une playlist"
 
-#: package/contents/ui/main.qml:1116
+#: package/contents/ui/main.qml:1133
 msgid "No playlist"
 msgstr "Aucune playlist"
 
-#: package/contents/ui/main.qml:1116
+#: package/contents/ui/main.qml:1133
 msgid "Loading playlists…"
 msgstr "Chargement des playlists…"
 
-#: package/contents/ui/main.qml:1123
+#: package/contents/ui/main.qml:1140
 msgid "%2 (%1 track)"
 msgid_plural "%2 (%1 tracks)"
 msgstr[0] "%2 (%1 titre)"
 msgstr[1] "%2 (%1 titres)"
 
-#: package/contents/ui/main.qml:1138
+#: package/contents/ui/main.qml:1155
 msgid "Search on Deezer"
 msgstr "Rechercher sur Deezer"
 
-#: package/contents/ui/main.qml:1215
+#: package/contents/ui/main.qml:1232
 msgid "Shuffle: on"
 msgstr "Lecture aléatoire : activée"
 
-#: package/contents/ui/main.qml:1215
+#: package/contents/ui/main.qml:1232
 msgid "Shuffle: off"
 msgstr "Lecture aléatoire : désactivée"
 
-#: package/contents/ui/main.qml:1270
+#: package/contents/ui/main.qml:1287
 msgid "Repeat: current track"
 msgstr "Répétition : titre en cours"
 
-#: package/contents/ui/main.qml:1271
+#: package/contents/ui/main.qml:1288
 msgid "Repeat: all"
 msgstr "Répétition : tout"
 
-#: package/contents/ui/main.qml:1272
+#: package/contents/ui/main.qml:1289
 msgid "Repeat: off"
 msgstr "Répétition : désactivée"
 
-#: package/contents/ui/main.qml:1296
+#: package/contents/ui/main.qml:1313
 msgid "Audio settings"
 msgstr "Réglages audio"
 
-#: package/contents/ui/main.qml:1320
+#: package/contents/ui/main.qml:1337
 msgid "Show your playlists"
 msgstr "Afficher vos playlists"
 
-#: package/contents/ui/main.qml:1342
+#: package/contents/ui/main.qml:1359
 msgid "Unmute"
 msgstr "Rétablir le son"
 
-#: package/contents/ui/main.qml:1342
+#: package/contents/ui/main.qml:1359
 msgid "Mute"
 msgstr "Couper le son"
 
-#: package/contents/ui/main.qml:1366
+#: package/contents/ui/main.qml:1383
 msgid "Show the queue"
 msgstr "Afficher la file d'attente"
 
-#: package/contents/ui/main.qml:1387
+#: package/contents/ui/main.qml:1404
 msgid "Show the cover"
 msgstr "Afficher la pochette"
 
-#: package/contents/ui/main.qml:1387
+#: package/contents/ui/main.qml:1404
 msgid "Show the lyrics"
 msgstr "Afficher les paroles"
 
-#: package/contents/ui/main.qml:1532
+#: package/contents/ui/main.qml:1549
 msgid "Remove from the queue"
 msgstr "Retirer de la file d'attente"
 
@@ -243,10 +243,14 @@ msgid "Icon:"
 msgstr "Icône :"
 
 #: package/contents/ui/config/ConfigGeneral.qml:84
+msgid "Widget icon"
+msgstr "Icône du widget"
+
+#: package/contents/ui/config/ConfigGeneral.qml:89
 msgid "Deezer site icon"
 msgstr "Icône du site Deezer"
 
-#: package/contents/ui/config/ConfigGeneral.qml:92
+#: package/contents/ui/config/ConfigGeneral.qml:97
 msgid ""
 "Loaded with the Deezer page, as in a browser tab. The widget icon stands in "
 "until then."
@@ -254,17 +258,13 @@ msgstr ""
 "Chargée avec la page Deezer, comme dans un onglet de navigateur. L'icône du "
 "widget la remplace jusque-là."
 
-#: package/contents/ui/config/ConfigGeneral.qml:100
+#: package/contents/ui/config/ConfigGeneral.qml:105
 msgid ""
 "The Deezer logo is a trademark of Deezer SA, and this widget is not made by "
 "Deezer. Show it for your own use only."
 msgstr ""
 "Le logo Deezer est une marque de Deezer SA, et ce widget n'est pas fait par "
 "Deezer. Affichez-le seulement pour votre usage personnel."
-
-#: package/contents/ui/config/ConfigGeneral.qml:105
-msgid "Widget icon"
-msgstr "Icône du widget"
 
 #: package/contents/ui/config/ConfigGeneral.qml:112
 msgid "Custom icon:"
@@ -300,7 +300,9 @@ msgstr "Reprendre la musique si elle jouait juste avant"
 
 #: package/contents/ui/config/ConfigGeneral.qml:169
 msgid "When Plasma restarts within two minutes, after an update for instance."
-msgstr "Quand Plasma redémarre en moins de deux minutes, après une mise à jour par exemple."
+msgstr ""
+"Quand Plasma redémarre en moins de deux minutes, après une mise à jour par "
+"exemple."
 
 #: package/contents/ui/config/ConfigGeneral.qml:174
 msgid "Start the music when the session opens"
