@@ -121,7 +121,11 @@ not install with Plasma. Without it, the widget only shows an error.
 - Fedora: `qt6-qtwebengine`
 - Arch Linux: `qt6-webengine`
 
-Then install the `.plasmoid` file of the latest release
+From Plasma: right-click the panel, Add Widgets, Get New Widgets, Download
+New Plasma Widgets, and search for "DZR". It comes from the KDE Store
+(https://store.kde.org/p/2382799/).
+
+Or install the `.plasmoid` file of the latest release
 (https://github.com/rcspam/dzr-plasmoid/releases):
 
 ```sh
