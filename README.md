@@ -9,8 +9,6 @@ and the lyrics in native Plasma controls.
 
 ![The player, the lyrics and the queue](screenshots/overview.png)
 
-The track, covers and lyrics in these screenshots are made up.
-
 > **Not affiliated with Deezer.** This is a personal project. It is not made,
 > endorsed or supported by Deezer SA, and has no link with the company.
 > "Deezer" is a trademark of Deezer SA; the name only says which service the
