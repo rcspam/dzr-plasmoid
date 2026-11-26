@@ -2,6 +2,15 @@
 
 An unofficial Plasma 6 panel widget to listen to Deezer with your own account.
 
+Plasma has panel widgets for Spotify, YouTube Music and other music services.
+This one is for Deezer: it runs Deezer's official web player in its own
+Chromium profile (Qt WebEngine), out of sight, and shows the player, the queue
+and the lyrics in native Plasma controls.
+
+![The player, the lyrics with their translation, and the queue](screenshots/overview.png)
+
+The track, covers and lyrics in these screenshots are made up.
+
 > **Not affiliated with Deezer.** This is a personal project. It is not made,
 > endorsed or supported by Deezer SA, and has no link with the company.
 > "Deezer" is a trademark of Deezer SA; the name only says which service the
