@@ -7,7 +7,7 @@ This one is for Deezer: it runs Deezer's official web player in its own
 Chromium profile (Qt WebEngine), out of sight, and shows the player, the queue
 and the lyrics in native Plasma controls.
 
-![The player, the lyrics with their translation, and the queue](screenshots/overview.png)
+![The player, the lyrics and the queue](screenshots/overview.png)
 
 The track, covers and lyrics in these screenshots are made up.
 
