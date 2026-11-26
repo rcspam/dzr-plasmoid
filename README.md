@@ -105,10 +105,29 @@ Open http://127.0.0.1:9333 in Chromium to get DevTools on the hidden page.
 
 ## Install
 
+The widget needs the QML module of Qt WebEngine, which many distributions do
+not install with Plasma. Without it, the widget only shows an error.
+
+- Debian, Ubuntu, KDE neon: `qml6-module-qtwebengine`
+- Fedora: `qt6-qtwebengine`
+- Arch Linux: `qt6-webengine`
+
+Then install the `.plasmoid` file of the latest release
+(https://github.com/rcspam/dzr-plasmoid/releases):
+
+```sh
+kpackagetool6 -t Plasma/Applet -i dzr-plasmoid-0.2.0.plasmoid   # first time
+kpackagetool6 -t Plasma/Applet -u dzr-plasmoid-0.2.0.plasmoid   # update
+```
+
+Or from a clone of this repository:
+
 ```sh
 kpackagetool6 -t Plasma/Applet -i package/   # first time
 kpackagetool6 -t Plasma/Applet -u package/   # update
 ```
+
+Then add "DZR" to a panel.
 
 Sign in once through the Deezer page button at the top of the popup. The
 session is stored in the `deezer-plasmoid` QtWebEngine profile of the host

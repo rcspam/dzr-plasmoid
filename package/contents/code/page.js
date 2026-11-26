@@ -174,7 +174,7 @@
     // for the Retry-After it gives. no-store: the web engine would otherwise
     // keep the lyrics on disk (GET), for about 60 ms saved on a song heard
     // again, since LRCLIB sends no cache headers.
-    const LRCLIB_CLIENT = 'DZR plasmoid 0.1.0 (https://github.com/rcspam/dzr-plasmoid)';
+    const LRCLIB_CLIENT = 'DZR plasmoid 0.2.0 (https://github.com/rcspam/dzr-plasmoid)';
     let lrclibPausedUntil = 0;
 
     // One LRCLIB call; the parsed answer, or null (404, error, 429).

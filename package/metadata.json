@@ -12,7 +12,7 @@
         "Id": "io.github.rcspam.deezerplasmoid",
         "Name": "DZR",
         "Name[fr]": "DZR",
-        "Version": "0.1.0",
+        "Version": "0.2.0",
         "EnabledByDefault": true,
         "Copyright": "2026 rcspam",
         "License": "GPL-3.0-or-later",
